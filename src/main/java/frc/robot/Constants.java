@@ -33,7 +33,6 @@ public final class Constants {
 
   public static final boolean useTurret = false;
   public static final boolean useShooter = false;
-  
 
   public static final boolean useIntakeLift = false;
   public static final boolean useIntake = false;
@@ -42,5 +41,4 @@ public final class Constants {
   public static final boolean useClimber = false;
 
   public static final boolean useVision = false;
-
 }
