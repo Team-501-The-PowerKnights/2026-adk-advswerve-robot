@@ -4,30 +4,25 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.turret.Turret;
+import java.util.function.DoubleSupplier;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TurretCommands extends Command {
-  /** Creates a new TurretCommands. */
-  public TurretCommands() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+public class TurretCommands {
+  /** Deadband for joystick inputs */
+  private static final double DEADBAND = 0.1;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+  /** Private constructor so can't be instantiated externally */
+  private TurretCommands() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+  public static Command manual(Turret turret, DoubleSupplier speedSupplier) {
+    return Commands.run(
+        () -> {
+          double speed = MathUtil.applyDeadband(speedSupplier.getAsDouble(), DEADBAND);
+          turret.acceptTeleopInput(speed);
+        },
+        turret);
   }
 }
