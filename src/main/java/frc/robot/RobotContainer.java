@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.HopperCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -24,6 +25,8 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.vision.Vision;
@@ -43,9 +46,12 @@ public class RobotContainer {
   private final Vision vision;
   private final Shooter shooter;
   private final Turret turret;
+  private final Hopper hopper;
+  private final Feeder feeder;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController operator = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -66,14 +72,22 @@ public class RobotContainer {
         vision = new Vision(new VisionIOLimelight("limelight"));
         if (Constants.ENABLE_SHOOTER) {
           shooter = new Shooter();
+          feeder = new Feeder();
         } else {
           shooter = null;
+          feeder = null;
         }
         if (Constants.ENABLE_TURRET) {
           turret = new Turret();
         } else {
           turret = null;
         }
+        if (Constants.ENABLE_HOPPER) {
+          hopper = new Hopper();
+        } else {
+          hopper = null;
+        }
+
         break;
 
       case SIM:
@@ -89,6 +103,9 @@ public class RobotContainer {
         vision = new Vision(new VisionIO() {});
         shooter = null;
         turret = null;
+        hopper = null;
+        feeder = null;
+
         break;
 
       default:
@@ -104,6 +121,8 @@ public class RobotContainer {
         vision = new Vision(new VisionIO() {});
         shooter = null;
         turret = null;
+        hopper = null;
+        feeder = null;
         break;
     }
 
@@ -172,7 +191,7 @@ public class RobotContainer {
     if (Constants.ENABLE_SHOOTER) {
       shooter.setDefaultCommand(
           ShooterCommands.triggerDrive(
-              shooter, controller::getLeftTriggerAxis, controller::getRightTriggerAxis));
+              shooter, feeder, controller::getLeftTriggerAxis, controller::getRightTriggerAxis));
     }
     // Turret manual controls, if enabled
     if (Constants.ENABLE_TURRET) {
@@ -180,6 +199,11 @@ public class RobotContainer {
       controller
           .rightBumper()
           .whileTrue(Commands.startEnd(turret::turnRight, turret::stop, turret));
+    }
+    // Hopper manual controls, if enabled
+    if (Constants.ENABLE_HOPPER) {
+      operator.x().whileTrue(HopperCommands.forward(hopper));
+      operator.y().whileTrue(HopperCommands.reverse(hopper));
     }
   }
 

@@ -33,4 +33,6 @@ public final class Constants {
   public static final boolean ENABLE_VISION = true;
   public static final boolean ENABLE_SHOOTER = true;
   public static final boolean ENABLE_TURRET = false;
+  public static final boolean ENABLE_HOPPER = false;
+  public static final boolean ENABLE_FEEDER = false;
 }
