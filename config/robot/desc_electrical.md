@@ -17,7 +17,7 @@
 |   (M3) Turn      | Rev Spark Flex  | NEO Brushless 550 | 24     | Right Rear  | 18     |
 | Lift             | Rev Spark Max   | NEO Brushless     | 33     | --          | 17     |
 | Shoulder         | Rev Spark Max   | NEO Brushless     | 34     | --          |  0     |
-| Gripper          | Rev Spark Max   | NEO Brushless 550 | 35     | --          |  1     |  5*4*4
+| Turret           | Rev Spark Max   | NEO Brushless 550 | 35     | --          |  1     |  5*5
 | Intake Lift      | Rev Spark Flex  | NEO Brushless?    | 37     | --          | 06?    |
 | Intake           | Rev Spark Flex  | NEO Brushless?    | 40     | --          | 15?    |
 | Climber          | Rev Spark Max   | NEO Brushless     | 38     | --          | 16?    |
