@@ -20,7 +20,7 @@ package frc.robot.subsystems.turret;
 public class TurretConstants {
 
   /** CAN ID of the intake speed controller */
-  static final int canId = 33;
+  static final int canId = 32;
 
   /** Is the motor inverted? (should be positive pulling in) */
   static final boolean turretInverted = false;
