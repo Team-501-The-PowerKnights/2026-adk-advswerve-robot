@@ -15,10 +15,10 @@ public class Hopper extends SubsystemBase {
 
   public Hopper() {
     SparkMaxConfig leaderConfig = new SparkMaxConfig();
-    leaderConfig.idleMode(IdleMode.kBrake);
+    leaderConfig.idleMode(IdleMode.kCoast);
 
     SparkMaxConfig followerConfig = new SparkMaxConfig();
-    followerConfig.idleMode(IdleMode.kBrake);
+    followerConfig.idleMode(IdleMode.kCoast);
     followerConfig.follow(leader, HopperConstants.kFollowerInverted);
 
     leader.configure(

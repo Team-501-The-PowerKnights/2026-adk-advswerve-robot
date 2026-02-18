@@ -18,7 +18,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
+import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.ShooterCommands;
+import frc.robot.commands.SuperstructureCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -27,6 +29,8 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.lift.Lift;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.vision.Vision;
@@ -48,6 +52,8 @@ public class RobotContainer {
   private final Turret turret;
   private final Hopper hopper;
   private final Feeder feeder;
+  private final Lift lift;
+  private final Intake intake;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -87,7 +93,16 @@ public class RobotContainer {
         } else {
           hopper = null;
         }
-
+        if (Constants.ENABLE_LIFT) {
+          lift = new Lift();
+        } else {
+          lift = null;
+        }
+        if (Constants.ENABLE_INTAKE) {
+          intake = new Intake();
+        } else {
+          intake = null;
+        }
         break;
 
       case SIM:
@@ -105,7 +120,8 @@ public class RobotContainer {
         turret = null;
         hopper = null;
         feeder = null;
-
+        intake = null;
+        lift = null;
         break;
 
       default:
@@ -123,6 +139,8 @@ public class RobotContainer {
         turret = null;
         hopper = null;
         feeder = null;
+        intake = null;
+        lift = null;
         break;
     }
 
@@ -144,7 +162,9 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
+    if (Constants.ENABLE_LIFT && Constants.ENABLE_INTAKE) {
+      intake.setDefaultCommand(IntakeCommands.autoRun(intake, lift));
+    }
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -155,6 +175,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
+  // MARK: - BUTTONS
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
@@ -204,6 +225,13 @@ public class RobotContainer {
     if (Constants.ENABLE_HOPPER) {
       operator.x().whileTrue(HopperCommands.forward(hopper));
       operator.y().whileTrue(HopperCommands.reverse(hopper));
+    }
+    if (Constants.ENABLE_LIFT) {
+      // A button → toggle lift + intake state
+      operator.a().onTrue(SuperstructureCommands.toggleLiftAndIntake(lift, intake));
+
+      // Hold B → reverse intake
+      operator.b().whileTrue(IntakeCommands.reverse(intake));
     }
   }
 

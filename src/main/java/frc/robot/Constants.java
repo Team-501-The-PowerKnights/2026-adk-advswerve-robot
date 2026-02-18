@@ -29,10 +29,12 @@ public final class Constants {
     REPLAY
   }
   // MARK: SUBSYSTEMS
-  public static final boolean ENABLE_DRIVE = true;
+  public static final boolean ENABLE_DRIVE = false;
   public static final boolean ENABLE_VISION = true;
   public static final boolean ENABLE_SHOOTER = true;
-  public static final boolean ENABLE_TURRET = false;
-  public static final boolean ENABLE_HOPPER = false;
-  public static final boolean ENABLE_FEEDER = false;
+  public static final boolean ENABLE_TURRET = true;
+  public static final boolean ENABLE_HOPPER = true;
+  public static final boolean ENABLE_FEEDER = true;
+  public static final boolean ENABLE_LIFT = false;
+  public static final boolean ENABLE_INTAKE = false;
 }
