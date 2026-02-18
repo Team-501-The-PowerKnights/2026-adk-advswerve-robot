@@ -8,7 +8,6 @@
 
 package frc.robot.subsystems.drive;
 
-import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystems.drive.DriveConstants.*;
 import static frc.robot.util.SparkUtil.*;
 import static frc.robot.util.SparkUtil.tryUntilOk;
@@ -167,10 +166,10 @@ public class ModuleIOSparkHybrid implements ModuleIO {
     drivePosition.refresh();
     driveVelocity.refresh();
 
-    inputs.drivePositionRad = drivePosition.getValue().in(Radians);
-    inputs.driveVelocityRadPerSec = driveVelocity.getValue().in(RadiansPerSecond);
-    inputs.driveAppliedVolts = driveTalon.getMotorVoltage().getValue().in(Volts);
-    inputs.driveCurrentAmps = driveTalon.getSupplyCurrent().getValue().in(Amps);
+    inputs.drivePositionRad = drivePosition.getValueAsDouble();
+    inputs.driveVelocityRadPerSec = driveVelocity.getValueAsDouble();
+    inputs.driveAppliedVolts = driveTalon.getMotorVoltage().getValueAsDouble();
+    inputs.driveCurrentAmps = driveTalon.getSupplyCurrent().getValueAsDouble();
 
     inputs.driveConnected = driveConnectedDebounce.calculate(driveTalon.isConnected());
 
@@ -191,7 +190,7 @@ public class ModuleIOSparkHybrid implements ModuleIO {
     // Odometry (timestamps + turn; drive from TalonFX as a single-sample array)
     inputs.odometryTimestamps =
         timestampQueue.stream().mapToDouble((Double value) -> value).toArray();
-    inputs.odometryDrivePositionsRad = new double[] {drivePosition.getValue().in(Radians)};
+    inputs.odometryDrivePositionsRad = new double[] {drivePosition.getValueAsDouble()};
     inputs.odometryTurnPositions =
         turnPositionQueue.stream()
             .map((Double value) -> new Rotation2d(value).minus(zeroRotation))
