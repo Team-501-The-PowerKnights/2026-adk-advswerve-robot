@@ -74,8 +74,12 @@ public class RobotContainer {
                 new ModuleIOKrakenDriveSparkTurn(1),
                 new ModuleIOKrakenDriveSparkTurn(2),
                 new ModuleIOKrakenDriveSparkTurn(3));
-        // Limelight table name is commonly "limelight" or "limelight-<name>"
-        vision = new Vision(new VisionIOLimelight("limelight"));
+        if (Constants.ENABLE_VISION) {
+          // Limelight table name is commonly "limelight" or "limelight-<name>"
+          vision = new Vision(new VisionIOLimelight("limelight"));
+        } else {
+          vision = null; // new Vision(new VisionIO() {});
+        }
         if (Constants.ENABLE_SHOOTER) {
           shooter = new Shooter();
           feeder = new Feeder();
@@ -246,19 +250,21 @@ public class RobotContainer {
 
   /** Call this once per loop from Robot.robotPeriodic() to fuse vision into odometry. */
   public void robotPeriodic() {
-    vision
-        .getMeasurement()
-        .ifPresent(
-            meas -> {
-              // Optional sanity gate: ignore huge jumps
-              Pose2d current = drive.getPose();
-              double dx = meas.pose().getX() - current.getX();
-              double dy = meas.pose().getY() - current.getY();
-              double dist = Math.hypot(dx, dy);
+    if (Constants.ENABLE_VISION) {
+      vision
+          .getMeasurement()
+          .ifPresent(
+              meas -> {
+                // Optional sanity gate: ignore huge jumps
+                Pose2d current = drive.getPose();
+                double dx = meas.pose().getX() - current.getX();
+                double dy = meas.pose().getY() - current.getY();
+                double dist = Math.hypot(dx, dy);
 
-              if (dist < 2.5) { // tune if needed
-                drive.addVisionMeasurement(meas.pose(), meas.timestampSec(), meas.stdDevs());
-              }
-            });
+                if (dist < 2.5) { // tune if needed
+                  drive.addVisionMeasurement(meas.pose(), meas.timestampSec(), meas.stdDevs());
+                }
+              });
+    }
   }
 }
