@@ -25,8 +25,8 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
+import frc.robot.subsystems.drive.ModuleIOKrakenDriveSparkTurn;
 import frc.robot.subsystems.drive.ModuleIOSim;
-import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
@@ -70,10 +70,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new ModuleIOSpark(0),
-                new ModuleIOSpark(1),
-                new ModuleIOSpark(2),
-                new ModuleIOSpark(3));
+                new ModuleIOKrakenDriveSparkTurn(0),
+                new ModuleIOKrakenDriveSparkTurn(1),
+                new ModuleIOKrakenDriveSparkTurn(2),
+                new ModuleIOKrakenDriveSparkTurn(3));
         // Limelight table name is commonly "limelight" or "limelight-<name>"
         vision = new Vision(new VisionIOLimelight("limelight"));
         if (Constants.ENABLE_SHOOTER) {

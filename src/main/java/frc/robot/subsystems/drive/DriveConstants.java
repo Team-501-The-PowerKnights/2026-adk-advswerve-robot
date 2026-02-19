@@ -68,7 +68,8 @@ public class DriveConstants {
   | Upgrade | Extra High 5 | 3.56:1     | 7.60 m/s (24.93 ft/s)   | 16T          | 19T (20)   |
   */
 
-  public static final DCMotor driveGearbox = DCMotor.getNeoVortex(1);
+  // public static final DCMotor driveGearbox = DCMotor.getNeoVortex(1);
+  public static final DCMotor driveGearbox = DCMotor.getKrakenX60(1);
 
   // Drive encoder configuration
   public static final double driveEncoderPositionFactor =
