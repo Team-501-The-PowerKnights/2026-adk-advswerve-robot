@@ -166,9 +166,9 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    if (Constants.ENABLE_LIFT && Constants.ENABLE_INTAKE) {
-      intake.setDefaultCommand(IntakeCommands.autoRun(intake, lift));
-    }
+    // if (Constants.ENABLE_LIFT && Constants.ENABLE_INTAKE) {
+    //   intake.setDefaultCommand(IntakeCommands.autoRun(intake, lift));
+    // }
     // Configure the button bindings
     configureButtonBindings();
   }

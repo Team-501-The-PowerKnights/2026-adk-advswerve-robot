@@ -229,7 +229,8 @@ public class ModuleIOKrakenDriveSparkTurn implements ModuleIO {
     // --- Odometry samples ---
     // To keep this drop-in simple, we publish a single sample per cycle.
     // (The stock template uses SparkOdometryThread to get a higher-rate queue.)
-    double now = Timer.getFPGATimestamp();
+    //    double now = Timer.getFPGATimestamp();
+    double now = Timer.getTimestamp();
     inputs.odometryTimestamps = new double[] {now};
     inputs.odometryDrivePositionsRad = new double[] {inputs.drivePositionRad};
     inputs.odometryTurnPositions = new Rotation2d[] {inputs.turnPosition};
