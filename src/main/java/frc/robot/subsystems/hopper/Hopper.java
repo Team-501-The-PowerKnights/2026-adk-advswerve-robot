@@ -2,22 +2,23 @@ package frc.robot.subsystems.hopper;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Hopper extends SubsystemBase {
-  private final SparkMax leader = new SparkMax(HopperConstants.kLeaderCanId, MotorType.kBrushless);
-  private final SparkMax follower =
-      new SparkMax(HopperConstants.kFollowerCanId, MotorType.kBrushless);
+  private final SparkFlex leader =
+      new SparkFlex(HopperConstants.kLeaderCanId, MotorType.kBrushless);
+  private final SparkFlex follower =
+      new SparkFlex(HopperConstants.kFollowerCanId, MotorType.kBrushless);
 
   public Hopper() {
-    SparkMaxConfig leaderConfig = new SparkMaxConfig();
+    SparkFlexConfig leaderConfig = new SparkFlexConfig();
     leaderConfig.idleMode(IdleMode.kCoast);
 
-    SparkMaxConfig followerConfig = new SparkMaxConfig();
+    SparkFlexConfig followerConfig = new SparkFlexConfig();
     followerConfig.idleMode(IdleMode.kCoast);
     followerConfig.follow(leader, HopperConstants.kFollowerInverted);
 

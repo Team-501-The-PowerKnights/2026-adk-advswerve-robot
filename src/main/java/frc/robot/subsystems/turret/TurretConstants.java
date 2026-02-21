@@ -6,7 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 public final class TurretConstants {
   private TurretConstants() {}
 
-  public static final int kMotorCanId = 40;
+  public static final int kMotorCanId = 32;
 
   // Set correctly for accurate degrees
   // Turret Motor Gear Teeth = 30

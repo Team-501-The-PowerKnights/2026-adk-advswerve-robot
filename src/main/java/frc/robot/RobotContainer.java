@@ -78,7 +78,7 @@ public class RobotContainer {
           // Limelight table name is commonly "limelight" or "limelight-<name>"
           vision = new Vision(new VisionIOLimelight("limelight"));
         } else {
-          vision = null; // new Vision(new VisionIO() {});
+          vision = new Vision(new VisionIO() {});
         }
         if (Constants.ENABLE_SHOOTER) {
           shooter = new Shooter();
@@ -216,14 +216,12 @@ public class RobotContainer {
     if (Constants.ENABLE_SHOOTER) {
       shooter.setDefaultCommand(
           ShooterCommands.triggerDrive(
-              shooter, feeder, controller::getLeftTriggerAxis, controller::getRightTriggerAxis));
+              shooter, feeder, operator::getLeftTriggerAxis, operator::getRightTriggerAxis));
     }
     // Turret manual controls, if enabled
     if (Constants.ENABLE_TURRET) {
-      controller.leftBumper().whileTrue(Commands.startEnd(turret::turnLeft, turret::stop, turret));
-      controller
-          .rightBumper()
-          .whileTrue(Commands.startEnd(turret::turnRight, turret::stop, turret));
+      operator.leftBumper().whileTrue(Commands.startEnd(turret::turnLeft, turret::stop, turret));
+      operator.rightBumper().whileTrue(Commands.startEnd(turret::turnRight, turret::stop, turret));
     }
     // Hopper manual controls, if enabled
     if (Constants.ENABLE_HOPPER) {
@@ -250,21 +248,19 @@ public class RobotContainer {
 
   /** Call this once per loop from Robot.robotPeriodic() to fuse vision into odometry. */
   public void robotPeriodic() {
-    if (Constants.ENABLE_VISION) {
-      vision
-          .getMeasurement()
-          .ifPresent(
-              meas -> {
-                // Optional sanity gate: ignore huge jumps
-                Pose2d current = drive.getPose();
-                double dx = meas.pose().getX() - current.getX();
-                double dy = meas.pose().getY() - current.getY();
-                double dist = Math.hypot(dx, dy);
+    vision
+        .getMeasurement()
+        .ifPresent(
+            meas -> {
+              // Optional sanity gate: ignore huge jumps
+              Pose2d current = drive.getPose();
+              double dx = meas.pose().getX() - current.getX();
+              double dy = meas.pose().getY() - current.getY();
+              double dist = Math.hypot(dx, dy);
 
-                if (dist < 2.5) { // tune if needed
-                  drive.addVisionMeasurement(meas.pose(), meas.timestampSec(), meas.stdDevs());
-                }
-              });
-    }
+              if (dist < 2.5) { // tune if needed
+                drive.addVisionMeasurement(meas.pose(), meas.timestampSec(), meas.stdDevs());
+              }
+            });
   }
 }
