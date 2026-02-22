@@ -22,7 +22,15 @@ public final class SubsystemConstants {
 
   public static final boolean doSysId = false;
 
+  /*
+   * Subsystem Overall Control Constants
+   *
+   * <p> Each subsystem gets a boolean to control whether to use it (create and enable) as well as a
+   * name (used for ensuring that telemetry all ends up in the same location in the tree and
+   * prevents typos - these are used to auto-populate the dashboard tabs).
+   */
   public static final boolean useVision = false;
+
   public static final String visionName = "Vision";
 
   public static final boolean useShooter = false;
@@ -39,4 +47,11 @@ public final class SubsystemConstants {
 
   public static final boolean useClimber = false;
   public static final String climberName = "Climber";
+
+  /*
+   * Standard telemetry names.
+   */
+  public static final String tlmStatusName = "/Status";
+  public static final String tlmRevLibErrorName = "/isRevLibError";
+  // TODO: Is there an equivalent CTRE library error to capture?
 }

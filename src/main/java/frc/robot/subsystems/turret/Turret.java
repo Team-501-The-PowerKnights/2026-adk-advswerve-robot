@@ -8,6 +8,7 @@
 
 package frc.robot.subsystems.turret;
 
+import static frc.robot.subsystems.SubsystemConstants.*;
 import static frc.robot.util.SparkUtil501.sparkStickyError;
 import static frc.robot.util.SparkUtil501.sparkStickyFault;
 
@@ -42,7 +43,10 @@ public class Turret extends SubsystemBase implements ISubsystem {
   private double currentSpeed;
 
   /** Constructs a new instance of the subsystem. */
+  @SuppressWarnings("resource")
   public Turret() {
+    // Initialize status for capturing class construction
+    Logger.recordOutput(turretName + tlmStatusName, false);
     boolean origSparkStickyFault = SparkUtil501.sparkStickyFault;
 
     // Create controller
@@ -62,7 +66,7 @@ public class Turret extends SubsystemBase implements ISubsystem {
                 config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     // Log this subsystem's status and return global
-    Logger.recordOutput("Turret/isREVLibError", !sparkStickyFault); // green=OK
+    Logger.recordOutput(turretName + tlmRevLibErrorName, !sparkStickyFault); // green=OK
     if (sparkStickyFault) {
       new Alert(
               "REVLib problems in Turret construction (error = " + sparkStickyError + ")",
@@ -71,7 +75,11 @@ public class Turret extends SubsystemBase implements ISubsystem {
     } else {
       new Alert("Successful REVLib Turret construction", AlertType.kInfo).set(true);
     }
+    boolean mySparkStickyFault = SparkUtil501.sparkStickyFault;
     SparkUtil501.sparkStickyFault |= origSparkStickyFault;
+
+    boolean constructStatus = true && mySparkStickyFault;
+    Logger.recordOutput(turretName + tlmStatusName, constructStatus);
   }
 
   /**
