@@ -6,13 +6,15 @@
 /*- of this project.                                                      */
 /*------------------------------------------------------------------------*/
 
+package frc.robot.subsystems.intakelift;
+
 /**
- * This package contains the implementation of the <code>Climber</code> subsystem.
+ * This class contains the constants for the <code>IntakeLift</code> subsystem.
  *
  * <p>More detail ...
  *
  * @since 2026.0.0
- * @author first.stu
+ * @author first.brian Buzzell
  * @version 2026.0.0
  */
-package frc.robot.subsystems.climber;
+public class IntakeLiftConstants {}

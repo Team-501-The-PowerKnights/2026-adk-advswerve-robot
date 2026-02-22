@@ -28,17 +28,4 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
-
-  public static final boolean doSysId = false;
-
-  public static final boolean useTurret = false;
-  public static final boolean useShooter = false;
-
-  public static final boolean useIntakeLift = false;
-  public static final boolean useIntake = false;
-  public static final boolean useHopper = false;
-
-  public static final boolean useClimber = false;
-
-  public static final boolean useVision = false;
 }

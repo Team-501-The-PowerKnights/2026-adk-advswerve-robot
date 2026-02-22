@@ -7,7 +7,7 @@
 /*------------------------------------------------------------------------*/
 
 /**
- * This package contains the implementation of the <code>Intake</code> subsystem.
+ * This package contains the implementation of the <code>IntakeLift</code> subsystem.
  *
  * <p>More detail ...
  *
@@ -15,4 +15,4 @@
  * @author first.stu
  * @version 2026.0.0
  */
-package frc.robot.subsystems.intakeLift;
+package frc.robot.subsystems.intakelift;

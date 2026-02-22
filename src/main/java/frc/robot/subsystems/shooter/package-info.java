@@ -7,7 +7,7 @@
 /*------------------------------------------------------------------------*/
 
 /**
- * This package contains the implementation of the <code>Intake</code> subsystem.
+ * This package contains the implementation of the <code>Shooter</code> subsystem.
  *
  * <p>More detail ...
  *
