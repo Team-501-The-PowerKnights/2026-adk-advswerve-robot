@@ -17,7 +17,7 @@ package frc.robot.subsystems.turret;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class TurretConstants {
+public final class TurretConstants {
 
   /** CAN ID of the intake speed controller */
   static final int canId = 32;

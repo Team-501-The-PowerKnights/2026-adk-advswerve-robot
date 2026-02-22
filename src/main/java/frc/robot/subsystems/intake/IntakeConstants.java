@@ -17,4 +17,4 @@ package frc.robot.subsystems.intake;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class IntakeConstants {}
+public final class IntakeConstants {}

@@ -17,4 +17,4 @@ package frc.robot.subsystems.shooter;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class ShooterConstants {}
+public final class ShooterConstants {}

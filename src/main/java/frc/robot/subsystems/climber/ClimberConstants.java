@@ -17,4 +17,4 @@ package frc.robot.subsystems.climber;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class ClimberConstants {}
+public final class ClimberConstants {}

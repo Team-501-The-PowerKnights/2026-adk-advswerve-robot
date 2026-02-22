@@ -17,4 +17,4 @@ package frc.robot.subsystems.vision;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class VisionConstants {}
+public final class VisionConstants {}

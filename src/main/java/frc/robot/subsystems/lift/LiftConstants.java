@@ -17,4 +17,4 @@ package frc.robot.subsystems.lift;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class LiftConstants {}
+public final class LiftConstants {}

@@ -17,4 +17,4 @@ package frc.robot.subsystems.hopper;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class HopperConstants {}
+public final class HopperConstants {}
