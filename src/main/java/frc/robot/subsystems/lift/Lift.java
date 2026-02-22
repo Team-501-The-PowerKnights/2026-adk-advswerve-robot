@@ -9,6 +9,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Lift extends SubsystemBase {
   public enum Position {
@@ -58,6 +59,9 @@ public class Lift extends SubsystemBase {
     output = MathUtil.clamp(output, LiftConstants.kMinOutput, LiftConstants.kMaxOutput);
 
     leader.set(output);
+    Logger.recordOutput("Lift/Target", setpoint);
+    Logger.recordOutput("Lift/Position", absEncoder.get()); // Spos);
+    Logger.recordOutput("Lift/Output", leader.getAppliedOutput());
   }
 
   /** Shaft position in rotations, zeroed at UP via offset. */
