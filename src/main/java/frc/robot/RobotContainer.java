@@ -9,7 +9,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -64,8 +63,9 @@ public class RobotContainer {
   /** */
   public final List<ISubsystem> subsystems;
 
-  // Controller
-  private final CommandXboxController driverPad = new CommandXboxController(0);
+  // Controllers
+  private final CommandXboxController driverPad;
+  private final CommandXboxController operPad;
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -107,6 +107,9 @@ public class RobotContainer {
         break;
     }
 
+    /*
+     * Create all the subsystems based on whether enabled or not.
+     */
     subsystems = new ArrayList<ISubsystem>();
     boolean useSubsystem;
     String useSubsystemTlmName;
@@ -176,26 +179,40 @@ public class RobotContainer {
     }
 
     // Set up auto routines
+    /*
+     * Create all the subsystems based on whether enabled or not.
+     */
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    // Set up SysId routines
-    autoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
-    autoChooser.addOption(
-        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Forward)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Reverse)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
+    /*
+     * Create the controllers and configure them.
+     */
+    driverPad = new CommandXboxController(0);
+    operPad = new CommandXboxController(1);
     // Configure the button bindings
     configureButtonBindings();
+
+    /*
+     * Create and set up the SysId functionality (if enabled).
+     */
+    // TODO: SysId routines
+    if (SubsystemConstants.doSysId) {
+      // Set up SysId routines
+      autoChooser.addOption(
+          "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+      autoChooser.addOption(
+          "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
+      autoChooser.addOption(
+          "Drive SysId (Quasistatic Forward)",
+          drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+      autoChooser.addOption(
+          "Drive SysId (Quasistatic Reverse)",
+          drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+      autoChooser.addOption(
+          "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+      autoChooser.addOption(
+          "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    }
   }
 
   /**
@@ -253,7 +270,6 @@ public class RobotContainer {
     return autoChooser.get();
   }
 
-  
   /***************************************************************************
    * Auto Delay Chooser Stuff
    ***************************************************************************/
@@ -332,7 +348,6 @@ public class RobotContainer {
     }
   }
 
-  
   /***************************************************************************
    * Path Planner Stuff
    ***************************************************************************/
@@ -345,6 +360,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand(
     //     "Release Climber Latch",
     //     Commands.sequence(
-    //         ClimberCommands.unlatch(climber), new WaitCommand(0.5), ClimberCommands.stop(climber)));
+    //         ClimberCommands.unlatch(climber), new WaitCommand(0.5),
+    // ClimberCommands.stop(climber)));
   }
 }
