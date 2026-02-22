@@ -8,8 +8,10 @@
 
 package frc.robot.subsystems.hopper;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.subsystems.SubsystemConstants.hopperName;
+
 import frc.robot.subsystems.ISubsystem;
+import frc.robot.subsystems.RevRoboticsSubsystem;
 
 /**
  * This class contains the implementation of the <code>Hopper</code> subsystem.
@@ -20,10 +22,15 @@ import frc.robot.subsystems.ISubsystem;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class Hopper extends SubsystemBase implements ISubsystem {
+public class Hopper extends RevRoboticsSubsystem implements ISubsystem {
 
   /** Constructs a new instance of the subsystem. */
-  public Hopper() {}
+  public Hopper() {
+    super(hopperName);
+    initConstruction();
+
+    finishConstruction();
+  }
 
   @Override
   public void periodic() {}
