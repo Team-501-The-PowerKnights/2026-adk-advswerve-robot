@@ -2,21 +2,23 @@ package frc.robot.subsystems.feeder;
 
 import com.revrobotics.PersistMode; // ✅ note package
 import com.revrobotics.ResetMode; // ✅ note package
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Feeder extends SubsystemBase {
-  private final SparkMax leader;
+  private final SparkFlex leader;
   private final SparkMax follower;
 
   public Feeder() {
-    leader = new SparkMax(FeederConstants.kMotorLeaderCanId, MotorType.kBrushless);
+    leader = new SparkFlex(FeederConstants.kMotorLeaderCanId, MotorType.kBrushless);
     follower = new SparkMax(FeederConstants.kMotorFollowerCanId, MotorType.kBrushless);
 
-    SparkMaxConfig config = new SparkMaxConfig();
+    SparkFlexConfig config = new SparkFlexConfig();
     config
         .inverted(FeederConstants.kInvertMotor)
         .idleMode(IdleMode.kBrake)

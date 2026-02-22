@@ -25,8 +25,8 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
+import frc.robot.subsystems.drive.ModuleIOKrakenDriveSparkTurn;
 import frc.robot.subsystems.drive.ModuleIOSim;
-import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
@@ -70,12 +70,16 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new ModuleIOSpark(0),
-                new ModuleIOSpark(1),
-                new ModuleIOSpark(2),
-                new ModuleIOSpark(3));
-        // Limelight table name is commonly "limelight" or "limelight-<name>"
-        vision = new Vision(new VisionIOLimelight("limelight"));
+                new ModuleIOKrakenDriveSparkTurn(0),
+                new ModuleIOKrakenDriveSparkTurn(1),
+                new ModuleIOKrakenDriveSparkTurn(2),
+                new ModuleIOKrakenDriveSparkTurn(3));
+        if (Constants.ENABLE_VISION) {
+          // Limelight table name is commonly "limelight" or "limelight-<name>"
+          vision = new Vision(new VisionIOLimelight("limelight"));
+        } else {
+          vision = new Vision(new VisionIO() {});
+        }
         if (Constants.ENABLE_SHOOTER) {
           shooter = new Shooter();
           feeder = new Feeder();
@@ -162,9 +166,9 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    if (Constants.ENABLE_LIFT && Constants.ENABLE_INTAKE) {
-      intake.setDefaultCommand(IntakeCommands.autoRun(intake, lift));
-    }
+    // if (Constants.ENABLE_LIFT && Constants.ENABLE_INTAKE) {
+    //   intake.setDefaultCommand(IntakeCommands.autoRun(intake, lift));
+    // }
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -212,14 +216,12 @@ public class RobotContainer {
     if (Constants.ENABLE_SHOOTER) {
       shooter.setDefaultCommand(
           ShooterCommands.triggerDrive(
-              shooter, feeder, controller::getLeftTriggerAxis, controller::getRightTriggerAxis));
+              shooter, feeder, operator::getLeftTriggerAxis, operator::getRightTriggerAxis));
     }
     // Turret manual controls, if enabled
     if (Constants.ENABLE_TURRET) {
-      controller.leftBumper().whileTrue(Commands.startEnd(turret::turnLeft, turret::stop, turret));
-      controller
-          .rightBumper()
-          .whileTrue(Commands.startEnd(turret::turnRight, turret::stop, turret));
+      operator.leftBumper().whileTrue(Commands.startEnd(turret::turnLeft, turret::stop, turret));
+      operator.rightBumper().whileTrue(Commands.startEnd(turret::turnRight, turret::stop, turret));
     }
     // Hopper manual controls, if enabled
     if (Constants.ENABLE_HOPPER) {

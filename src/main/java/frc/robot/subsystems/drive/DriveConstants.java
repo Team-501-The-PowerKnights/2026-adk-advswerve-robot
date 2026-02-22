@@ -35,7 +35,7 @@ public class DriveConstants {
   public static final Rotation2d backRightZeroRotation = new Rotation2d(0.0);
 
   // Device CAN IDs
-  public static final int pigeonCanId = 9;
+  public static final int pigeonCanId = 10;
 
   public static final int frontLeftDriveCanId = 11;
   public static final int backLeftDriveCanId = 12;
@@ -68,7 +68,8 @@ public class DriveConstants {
   | Upgrade | Extra High 5 | 3.56:1     | 7.60 m/s (24.93 ft/s)   | 16T          | 19T (20)   |
   */
 
-  public static final DCMotor driveGearbox = DCMotor.getNeoVortex(1);
+  // public static final DCMotor driveGearbox = DCMotor.getNeoVortex(1);
+  public static final DCMotor driveGearbox = DCMotor.getKrakenX60(1);
 
   // Drive encoder configuration
   public static final double driveEncoderPositionFactor =

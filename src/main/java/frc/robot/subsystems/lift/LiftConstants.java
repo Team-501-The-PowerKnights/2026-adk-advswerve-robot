@@ -26,12 +26,12 @@ public final class LiftConstants {
   public static final double kToleranceShaftRot = 0.02;
 
   // PID driving percent output
-  public static final double kP = 4.0; // CALIBRATE
+  public static final double kP = 0.0; // CALIBRATE
   public static final double kI = 0.0;
-  public static final double kD = 0.2;
+  public static final double kD = 0.0;
 
   public static final double kMaxOutput = 1.0;
   public static final double kMinOutput = -1.0;
 
-  public static final boolean kFollowerInverted = false;
+  public static final boolean kFollowerInverted = true;
 }
