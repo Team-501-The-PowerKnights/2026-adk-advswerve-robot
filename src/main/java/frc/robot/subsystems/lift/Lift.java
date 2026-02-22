@@ -6,10 +6,13 @@
 /*- of this project.                                                      */
 /*------------------------------------------------------------------------*/
 
-package frc.robot.subsystems.intakelift;
+package frc.robot.subsystems.lift;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.ISubsystem;
 
 /**
- * This class contains the constants for the <code>IntakeLift</code> subsystem.
+ * This class contains the implementation of the <i>Intake</i> <code>Lift</code> subsystem.
  *
  * <p>More detail ...
  *
@@ -17,4 +20,11 @@ package frc.robot.subsystems.intakelift;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class IntakeLiftConstants {}
+public class Lift extends SubsystemBase implements ISubsystem {
+
+  /** Constructs a new instance of the subsystem. */
+  public Lift() {}
+
+  @Override
+  public void periodic() {}
+}

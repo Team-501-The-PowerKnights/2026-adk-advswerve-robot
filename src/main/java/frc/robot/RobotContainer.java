@@ -34,7 +34,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intakelift.IntakeLift;
+import frc.robot.subsystems.lift.Lift;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.vision.Vision;
@@ -58,13 +58,15 @@ public class RobotContainer {
   private final Turret turret;
   private final Hopper hopper;
   private final Intake intake;
-  private final IntakeLift intakeLift;
+  private final Lift lift;
   private final Climber climber;
   /** */
   public final List<ISubsystem> subsystems;
 
   // Controllers
   private final CommandXboxController driverPad;
+
+  @SuppressWarnings("unused")
   private final CommandXboxController operPad;
 
   // Dashboard inputs
@@ -159,14 +161,14 @@ public class RobotContainer {
     } else {
       intake = null;
     }
-    useSubsystem = SubsystemConstants.useIntakeLift;
-    useSubsystemTlmName = SubsystemConstants.intakeLiftName + "/useSubsystem";
+    useSubsystem = SubsystemConstants.useLift;
+    useSubsystemTlmName = SubsystemConstants.liftName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
-      intakeLift = new IntakeLift();
-      subsystems.add(intakeLift);
+      lift = new Lift();
+      subsystems.add(lift);
     } else {
-      intakeLift = null;
+      lift = null;
     }
     useSubsystem = SubsystemConstants.useClimber;
     useSubsystemTlmName = SubsystemConstants.climberName + "/useSubsystem";

@@ -45,7 +45,7 @@ public abstract class RevRoboticsSubsystem extends SubsystemBase {
    */
   protected void initConstruction() {
     // Initialize status for capturing class construction
-    Logger.recordOutput(name + tlmStatusName, false);  // red=not OK
+    Logger.recordOutput(name + tlmStatusName, false); // red=not OK
     origSparkStickyFault = sparkStickyFault;
   }
 
