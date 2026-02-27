@@ -6,18 +6,18 @@
 /*- of this project.                                                      */
 /*------------------------------------------------------------------------*/
 
+package frc.robot.subsystems.turret;
+
 /**
- * This package contains the constants for the <code>Intake</code> subsystem.
+ * This package contains the constants for the <code>Turret</code> subsystem.
  *
  * <p>More detail ...
  *
  * @since 2026.0.0
- * @author first.Brian
+ * @author first.brian Buzzell
  * @version 2026.0.0
  */
-package frc.robot.subsystems.turret;
-
-public class TurretConstants {
+public final class TurretConstants {
 
   /** CAN ID of the intake speed controller */
   static final int canId = 32;

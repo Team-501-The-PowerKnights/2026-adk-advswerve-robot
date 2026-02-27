@@ -6,13 +6,25 @@
 /*- of this project.                                                      */
 /*------------------------------------------------------------------------*/
 
+package frc.robot.subsystems.lift;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.ISubsystem;
+
 /**
- * This package contains the implementation of the <code>Climber</code> subsystem.
+ * This class contains the implementation of the <i>Intake</i> <code>Lift</code> subsystem.
  *
  * <p>More detail ...
  *
  * @since 2026.0.0
- * @author first.stu
+ * @author first.brian Buzzell
  * @version 2026.0.0
  */
-package frc.robot.subsystems.climber;
+public class Lift extends SubsystemBase implements ISubsystem {
+
+  /** Constructs a new instance of the subsystem. */
+  public Lift() {}
+
+  @Override
+  public void periodic() {}
+}

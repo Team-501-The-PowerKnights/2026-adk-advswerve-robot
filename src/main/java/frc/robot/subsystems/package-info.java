@@ -7,7 +7,7 @@
 /*------------------------------------------------------------------------*/
 
 /**
- * This package contains the implementation of the <code>Climber</code> subsystem.
+ * This package contains the implementation of the <code>Subsystem</code>(s) making up the robot.
  *
  * <p>More detail ...
  *
@@ -15,4 +15,4 @@
  * @author first.stu
  * @version 2026.0.0
  */
-package frc.robot.subsystems.climber;
+package frc.robot.subsystems;
