@@ -44,8 +44,8 @@ public class Hopper extends RevRoboticsSubsystem {
     super(hopperName);
     initConstruction();
 
-    // Create and configure leader
-    motor = new SparkFlex(leaderCanId, MotorType.kBrushless);
+    // Create and configure motor
+    motor = new SparkFlex(motorCanId, MotorType.kBrushless);
     SparkFlexConfig motorConfig = new SparkFlexConfig();
     motorConfig.idleMode(IdleMode.kCoast);
     // TODO - Configure additional motor parameters from Constants file

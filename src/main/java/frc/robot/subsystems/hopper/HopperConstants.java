@@ -19,9 +19,9 @@ package frc.robot.subsystems.hopper;
  */
 public final class HopperConstants {
 
-  /** CAN ID of the leader motor. All control is done through this one. */
-  public static final int leaderCanId = 50;
-  /** CAN ID of the follower motor. */
+  /** CAN ID of the motor. */
+  public static final int motorCanId = 50;
+  /** CAN ID of the follower motor. All control is through the leader one. */
   public static final int followerCanId = 51;
 
   /** Whether the <i>follower</i> needs to be reversed from the <i>leader</i>. */
