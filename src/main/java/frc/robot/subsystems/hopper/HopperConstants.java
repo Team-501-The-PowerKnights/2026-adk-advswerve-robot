@@ -29,4 +29,14 @@ public final class HopperConstants {
 
   /** Default speed for the subsystem if nothing else is controlling it. */
   public static final double defaultSpeed = 0.75;
+
+  /** */
+  // TODO - Set real value for motorCurrentLimit
+  static final int motorCurrentLimit = 30;
+  /** */
+  // TODO - Set real value for motorVoltageComp
+  static final double motorVoltageComp = 12.0;
+
+  /** Trigger value for motor overtemp (C) */
+  static final double motorOverTemp = 60.0; // seems to be < 50 in the pits
 }
