@@ -18,8 +18,8 @@ package frc.robot.subsystems.intake;
  * @version 2026.0.0
  */
 public final class IntakeConstants {
-    
-/** CAN ID of the motor. */
+
+  /** CAN ID of the motor. */
   public static final int motorCanId = 40;
 
   /** Default speed for the subsystem if nothing else is controlling it. */

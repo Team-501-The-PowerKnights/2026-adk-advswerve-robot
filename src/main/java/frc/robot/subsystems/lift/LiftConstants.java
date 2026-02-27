@@ -17,4 +17,26 @@ package frc.robot.subsystems.lift;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public final class LiftConstants {}
+public final class LiftConstants {
+
+  /** CAN ID of the motor. */
+  public static final int motorCanId = 50;
+  /** CAN ID of the follower motor. All control is through the leader one. */
+  public static final int followerCanId = 51;
+
+  /** Whether the <i>follower</i> needs to be reversed from the <i>leader</i>. */
+  public static final boolean followerInverted = true;
+
+  /** Default speed for the subsystem if nothing else is controlling it. */
+  public static final double defaultSpeed = 0.75;
+
+  /** */
+  // TODO - Set real value for motorCurrentLimit
+  static final int motorCurrentLimit = 30;
+  /** */
+  // TODO - Set real value for motorVoltageComp
+  static final double motorVoltageComp = 12.0;
+
+  /** Trigger value for motor overtemp (C) */
+  static final double motorOverTemp = 60.0; // seems to be < 50 in the pits
+}

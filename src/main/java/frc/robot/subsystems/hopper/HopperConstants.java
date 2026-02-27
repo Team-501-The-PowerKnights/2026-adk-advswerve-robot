@@ -22,7 +22,7 @@ public final class HopperConstants {
   /** CAN ID of the motor. */
   public static final int motorCanId = 50;
   /** CAN ID of the follower motor. All control is through the leader one. */
-  public static final int followerCanId = 51;
+  public static final int followerCanId = 51; // TODO - This is not a follower
 
   /** Whether the <i>follower</i> needs to be reversed from the <i>leader</i>. */
   public static final boolean followerInverted = false;

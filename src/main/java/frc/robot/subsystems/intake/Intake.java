@@ -11,8 +11,6 @@ package frc.robot.subsystems.intake;
 import static frc.robot.subsystems.SubsystemConstants.intakeName;
 import static frc.robot.subsystems.intake.IntakeConstants.*;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkBase;
@@ -20,10 +18,10 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.RevRoboticsSubsystem;
 import frc.robot.util.SparkUtil501;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * This class contains the implementation of the <code>Intake</code> subsystem.
@@ -36,12 +34,12 @@ import frc.robot.util.SparkUtil501;
  */
 public class Intake extends RevRoboticsSubsystem {
 
-    /** */
+  /** */
   private final SparkFlex motor;
 
   /** Constructs a new instance of the subsystem. */
   public Intake() {
-        super(intakeName);
+    super(intakeName);
     initConstruction();
 
     // Create and configure motor
@@ -62,7 +60,6 @@ public class Intake extends RevRoboticsSubsystem {
 
     finishConstruction();
   }
-
 
   // TODO - Document directions for +/- speed
   /**
@@ -126,4 +123,5 @@ public class Intake extends RevRoboticsSubsystem {
     Logger.recordOutput(tlmMotorTemp, motorTemp);
     // Invert so green is OK and red is too hot
     Logger.recordOutput(tlmMotorOvertemp, (!(motorTemp > IntakeConstants.motorOverTemp)));
-  }}
+  }
+}
