@@ -54,6 +54,9 @@ public class ModuleIOSpark implements ModuleIO {
   private final Queue<Double> drivePositionQueue;
   private final Queue<Double> turnPositionQueue;
 
+  public static final double turnEncoderPositionFactor = 2 * Math.PI / turnMotorReduction; // Rotor Rotations -> Wheel Radians
+  public static final double turnEncoderVelocityFactor = (2 * Math.PI) / 60.0 / turnMotorReduction; // Rotor RPM -> Wheel Rad/Sec
+
   // Connection debouncers
   private final Debouncer driveConnectedDebounce =
       new Debouncer(0.5, Debouncer.DebounceType.kFalling);
@@ -135,23 +138,22 @@ public class ModuleIOSpark implements ModuleIO {
         .smartCurrentLimit(turnMotorCurrentLimit)
         .voltageCompensation(12.0);
     turnConfig
-        .absoluteEncoder
-        .inverted(turnEncoderInverted)
+        .encoder
         .positionConversionFactor(turnEncoderPositionFactor)
         .velocityConversionFactor(turnEncoderVelocityFactor)
-        .averageDepth(2);
+        .uvwAverageDepth(2);
     turnConfig
         .closedLoop
-        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .positionWrappingEnabled(true)
         .positionWrappingInputRange(turnPIDMinInput, turnPIDMaxInput)
         .pid(turnKp, 0.0, turnKd);
     turnConfig
         .signals
-        .absoluteEncoderPositionAlwaysOn(true)
-        .absoluteEncoderPositionPeriodMs((int) (1000.0 / odometryFrequency))
-        .absoluteEncoderVelocityAlwaysOn(true)
-        .absoluteEncoderVelocityPeriodMs(20)
+        .primaryEncoderPositionAlwaysOn(true)
+        .primaryEncoderPositionPeriodMs((int) (1000.0 / odometryFrequency))
+        .primaryEncoderVelocityAlwaysOn(true)
+        .primaryEncoderVelocityPeriodMs(20)
         .appliedOutputPeriodMs(20)
         .busVoltagePeriodMs(20)
         .outputCurrentPeriodMs(20);
@@ -161,6 +163,7 @@ public class ModuleIOSpark implements ModuleIO {
         () ->
             turnSpark.configure(
                 turnConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+                
 
     // Create odometry queues
     timestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
