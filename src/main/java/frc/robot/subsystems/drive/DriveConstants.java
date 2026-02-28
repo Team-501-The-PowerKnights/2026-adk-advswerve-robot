@@ -35,24 +35,40 @@ public class DriveConstants {
   public static final Rotation2d backRightZeroRotation = new Rotation2d(0.0);
 
   // Device CAN IDs
-  public static final int pigeonCanId = 9;
+  public static final int pigeonCanId = 10;
 
-  public static final int frontLeftDriveCanId = 1;
-  public static final int backLeftDriveCanId = 3;
-  public static final int frontRightDriveCanId = 5;
-  public static final int backRightDriveCanId = 7;
+  public static final int frontLeftDriveCanId = 11;
+  public static final int backLeftDriveCanId = 12;
+  public static final int frontRightDriveCanId = 13;
+  public static final int backRightDriveCanId = 14;
 
-  public static final int frontLeftTurnCanId = 2;
-  public static final int backLeftTurnCanId = 4;
-  public static final int frontRightTurnCanId = 6;
-  public static final int backRightTurnCanId = 8;
+  public static final int frontLeftTurnCanId = 21;
+  public static final int backLeftTurnCanId = 22;
+  public static final int frontRightTurnCanId = 23;
+  public static final int backRightTurnCanId = 24;
 
   // Drive motor configuration
   public static final int driveMotorCurrentLimit = 50;
   public static final double wheelRadiusMeters = Units.inchesToMeters(1.5);
   public static final double driveMotorReduction =
-      (45.0 * 22.0) / (14.0 * 15.0); // MAXSwerve with 14 pinion teeth
-  // and 22 spur teeth
+      (45.0 * 20.0) / (15.0 * 15.0); // MAXSwerve with 14 pinion teeth  // and 20 spur teeth
+  // REV Gear Ratios:
+  // Current REV Gear Ratios: Upgrade Extra High 3 (4.00:1) with 15T pinion and 20T spur
+  /* https://www.revrobotics.com/rev-21-3008/
+  | Kit     | Speed Option | Gear Ratio | Free Speed (NEO Vortex) | Pinion Teeth | Spur Teeth |
+  |---------|--------------|------------|-------------------------|--------------|------------|
+  |  Base   | Low          | 5.50:1     | 4.92 m/s (16.15 ft/s)   | 12T (14)     | 22T        |
+  |  Base   | Medium       | 5.08:1     | 5.33 m/s (17.49 ft/s)   | 13T (14)     | 22T        |
+  |  Base   | High         | 4.71:1     | 5.74 m/s (18.84 ft/s)   | 14T          | 22T        |
+  |  Base   | Speed Option | Gear Ratio | Free Speed (NEO Vortex) | Pinion Teeth | Spur Teeth |
+  |---------|--------------|------------|-------------------------|--------------|------------|
+  | Upgrade | Extra High 1 | 4.50:1     | 6.01 m/s (19.73 ft/s)   | 14T          | 21T (22)   |
+  | Upgrade | Extra High 2 | 4.29:1     | 6.32 m/s (20.72 ft/s)   | 14T          | 20T (22)   |
+  | Upgrade | Extra High 3 | 4.00:1     | 6.77 m/s (22.20 ft/s)   | 15T (16)     | 20T        |
+  | Upgrade | Extra High 4 | 3.75:1     | 7.22 m/s (23.68 ft/s)   | 16T          | 20T        |
+  | Upgrade | Extra High 5 | 3.56:1     | 7.60 m/s (24.93 ft/s)   | 16T          | 19T (20)   |
+  */
+
   public static final DCMotor driveGearbox = DCMotor.getNeoVortex(1);
 
   // Drive encoder configuration
