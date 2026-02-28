@@ -92,7 +92,7 @@ public class Hopper extends RevRoboticsSubsystem implements ISubsystem {
 
   /**
    * Sets the desired speed on the motor.
-   * 
+   *
    * @param speed - The speed to set. Value should be between -1.0 and +1.0.
    */
   private void setSpeed(double speed) {
