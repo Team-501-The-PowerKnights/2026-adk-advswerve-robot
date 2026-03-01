@@ -9,7 +9,6 @@
 /*- of this project.                                                      */
 /*------------------------------------------------------------------------*/
 
-
 package frc.robot.subsystems.launcher;
 
 /**
@@ -21,7 +20,6 @@ package frc.robot.subsystems.launcher;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Launcher extends SubsystemBase {

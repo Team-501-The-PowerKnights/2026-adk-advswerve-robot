@@ -21,6 +21,5 @@ package frc.robot.subsystems.launcher;
  * @version 2026.0.0
  */
 
- 
 /** Add your docs here. */
 public class LauncherConstants {}

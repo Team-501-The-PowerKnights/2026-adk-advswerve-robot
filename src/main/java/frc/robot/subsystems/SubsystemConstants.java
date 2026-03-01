@@ -37,6 +37,8 @@ public final class SubsystemConstants {
   public static final String shooterName = "Shooter";
   public static final boolean useTurret = false;
   public static final String turretName = "Turret";
+  public static final boolean useLauncher = false;
+  public static final String launcherName = "Launcher";
 
   public static final boolean useHopper = false;
   public static final String hopperName = "Hopper";
@@ -47,6 +49,9 @@ public final class SubsystemConstants {
 
   public static final boolean useClimber = false;
   public static final String climberName = "Climber";
+
+  public static final boolean useDrive = true;
+  public static final String driveName = "Drive";
 
   /*
    * Standard telemetry names.

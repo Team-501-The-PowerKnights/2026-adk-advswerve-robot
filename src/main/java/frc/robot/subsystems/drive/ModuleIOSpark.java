@@ -54,10 +54,10 @@ public class ModuleIOSpark implements ModuleIO {
   private final Queue<Double> drivePositionQueue;
   private final Queue<Double> turnPositionQueue;
 
-  public static final double turnEncoderPositionFactor =
-      2 * Math.PI / turnMotorReduction; // Rotor Rotations -> Wheel Radians
-  public static final double turnEncoderVelocityFactor =
-      (2 * Math.PI) / 60.0 / turnMotorReduction; // Rotor RPM -> Wheel Rad/Sec
+  //   public static final double turnEncoderPositionFactor =
+  //       2 * Math.PI / turnMotorReduction; // Rotor Rotations -> Wheel Radians
+  //   public static final double turnEncoderVelocityFactor =
+  //       (2 * Math.PI) / 60.0 / turnMotorReduction; // Rotor RPM -> Wheel Rad/Sec
 
   // Connection debouncers
   private final Debouncer driveConnectedDebounce =
@@ -137,6 +137,7 @@ public class ModuleIOSpark implements ModuleIO {
     turnConfig
         .inverted(turnInverted)
         .idleMode(IdleMode.kBrake)
+        // .inverted(turnEncoderInverted)
         .smartCurrentLimit(turnMotorCurrentLimit)
         .voltageCompensation(12.0);
     turnConfig

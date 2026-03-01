@@ -52,133 +52,143 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
 
   // Subsystems
-  private final Vision vision;
-  private final Drive drive;
-  private final Shooter shooter;
-  private final Turret turret;
-  private final Hopper hopper;
-  private final Intake intake;
-  private final Lift lift;
-  private final Climber climber;
-  /** */
-  public final List<ISubsystem> subsystems;
-
-  // Controllers
-  private final CommandXboxController driverPad;
-
-  @SuppressWarnings("unused")
-  private final CommandXboxController operPad;
-
-  // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    switch (Constants.currentMode) {
-      case REAL:
-        // Real robot, instantiate hardware IO implementations
-        drive =
-            new Drive(
-                new GyroIOPigeon2(),
-                new ModuleIOSpark(0),
-                new ModuleIOSpark(1),
-                new ModuleIOSpark(2),
-                new ModuleIOSpark(3));
-        break;
-
-      case SIM:
-        // Sim robot, instantiate physics sim IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim());
-        break;
-
-      default:
-        // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
-        break;
-    }
-
-    /*
-     * Create all the subsystems based on whether enabled or not.
-     */
-    subsystems = new ArrayList<ISubsystem>();
-    boolean useSubsystem;
-    String useSubsystemTlmName;
-
-    useSubsystem = SubsystemConstants.useVision;
-    useSubsystemTlmName = SubsystemConstants.visionName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      vision = new Vision();
-      subsystems.add(vision);
+    private final Vision vision;
+    private Drive drive;
+    private final Shooter shooter;
+    private final Turret turret;
+    private final Hopper hopper;
+    private final Intake intake;
+    private final Lift lift;
+    private final Climber climber;
+    /** */
+    public final List<ISubsystem> subsystems;
+  
+    // Controllers
+    private final CommandXboxController driverPad;
+  
+    @SuppressWarnings("unused")
+    private final CommandXboxController operPad;
+  
+    // Dashboard inputs
+    private final LoggedDashboardChooser<Command> autoChooser;
+  
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    public RobotContainer() {
+      switch (Constants.currentMode) {
+        case REAL:
+          // Real robot, instantiate hardware IO implementations
+          drive =
+              new Drive(
+                  new GyroIOPigeon2(),
+                  new ModuleIOSpark(0),
+                  new ModuleIOSpark(1),
+                  new ModuleIOSpark(2),
+                  new ModuleIOSpark(3));
+          break;
+  
+        case SIM:
+          // Sim robot, instantiate physics sim IO implementations
+          drive =
+              new Drive(
+                  new GyroIO() {},
+                  new ModuleIOSim(),
+                  new ModuleIOSim(),
+                  new ModuleIOSim(),
+                  new ModuleIOSim());
+          break;
+  
+        default:
+          // Replayed robot, disable IO implementations
+          drive =
+              new Drive(
+                  new GyroIO() {},
+                  new ModuleIO() {},
+                  new ModuleIO() {},
+                  new ModuleIO() {},
+                  new ModuleIO() {});
+          break;
+      }
+  
+      /*
+       * Create all the subsystems based on whether enabled or not.
+       */
+      subsystems = new ArrayList<ISubsystem>();
+      boolean useSubsystem;
+      String useSubsystemTlmName;
+  
+      useSubsystem = SubsystemConstants.useVision;
+      useSubsystemTlmName = SubsystemConstants.visionName + "/useSubsystem";
+      Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+      if (useSubsystem) {
+        vision = new Vision();
+        subsystems.add(vision);
+      } else {
+        vision = null;
+      }
+      useSubsystem = SubsystemConstants.useShooter;
+      useSubsystemTlmName = SubsystemConstants.shooterName + "/useSubsystem";
+      Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+      if (useSubsystem) {
+        shooter = new Shooter();
+        subsystems.add(shooter);
+      } else {
+        shooter = null;
+      }
+      useSubsystem = SubsystemConstants.useTurret;
+      useSubsystemTlmName = SubsystemConstants.turretName + "/useSubsystem";
+      Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+      if (useSubsystem) {
+        turret = new Turret();
+        subsystems.add(turret);
+      } else {
+        turret = null;
+      }
+      useSubsystem = SubsystemConstants.useHopper;
+      useSubsystemTlmName = SubsystemConstants.hopperName + "/useSubsystem";
+      Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+      if (useSubsystem) {
+        hopper = new Hopper();
+        subsystems.add(hopper);
+      } else {
+        hopper = null;
+      }
+      useSubsystem = SubsystemConstants.useIntake;
+      useSubsystemTlmName = SubsystemConstants.intakeName + "/useSubsystem";
+      Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+      if (useSubsystem) {
+        intake = new Intake();
+        subsystems.add(intake);
+      } else {
+        intake = null;
+      }
+      useSubsystem = SubsystemConstants.useLift;
+      useSubsystemTlmName = SubsystemConstants.liftName + "/useSubsystem";
+      Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+      if (useSubsystem) {
+        lift = new Lift();
+        subsystems.add(lift);
+      } else {
+        lift = null;
+      }
+      useSubsystem = SubsystemConstants.useClimber;
+      useSubsystemTlmName = SubsystemConstants.climberName + "/useSubsystem";
+      Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+      if (useSubsystem) {
+        climber = new Climber();
+        subsystems.add(climber);
+      } else {
+        climber = null;
+      }
+      useSubsystem = SubsystemConstants.useDrive;
+      useSubsystemTlmName = SubsystemConstants.driveName + "/useSubsystem";
+      Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+      if (useSubsystem) {
+        drive = new Drive(null, null, null, null, null);
+      subsystems.add(drive);
     } else {
-      vision = null;
+      drive = null;
     }
-    useSubsystem = SubsystemConstants.useShooter;
-    useSubsystemTlmName = SubsystemConstants.shooterName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      shooter = new Shooter();
-      subsystems.add(shooter);
-    } else {
-      shooter = null;
-    }
-    useSubsystem = SubsystemConstants.useTurret;
-    useSubsystemTlmName = SubsystemConstants.turretName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      turret = new Turret();
-      subsystems.add(turret);
-    } else {
-      turret = null;
-    }
-    useSubsystem = SubsystemConstants.useHopper;
-    useSubsystemTlmName = SubsystemConstants.hopperName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      hopper = new Hopper();
-      subsystems.add(hopper);
-    } else {
-      hopper = null;
-    }
-    useSubsystem = SubsystemConstants.useIntake;
-    useSubsystemTlmName = SubsystemConstants.intakeName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      intake = new Intake();
-      subsystems.add(intake);
-    } else {
-      intake = null;
-    }
-    useSubsystem = SubsystemConstants.useLift;
-    useSubsystemTlmName = SubsystemConstants.liftName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      lift = new Lift();
-      subsystems.add(lift);
-    } else {
-      lift = null;
-    }
-    useSubsystem = SubsystemConstants.useClimber;
-    useSubsystemTlmName = SubsystemConstants.climberName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      climber = new Climber();
-      subsystems.add(climber);
-    } else {
-      climber = null;
-    }
+
 
     // Set up auto routines
     /*
@@ -228,9 +238,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -driverPad.getLeftY(),
-            () -> -driverPad.getLeftX(),
-            () -> -driverPad.getRightX()));
+            () -> -driverPad.getLeftY() * 0.8,
+            () -> -driverPad.getLeftX() * 0.8,
+            () -> -driverPad.getRightX() * 0.55));
 
     // Lock to 0° when A button is held
     driverPad
@@ -238,8 +248,8 @@ public class RobotContainer {
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> -driverPad.getLeftY(),
-                () -> -driverPad.getLeftX(),
+                () -> -driverPad.getLeftY() * 0.8,
+                () -> -driverPad.getLeftX() * 0.8,
                 () -> Rotation2d.kZero));
 
     // Switch to X pattern when X button is pressed
