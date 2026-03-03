@@ -22,6 +22,7 @@ public class Launcher extends TalonFXSubsystem implements ISubsystem {
   /** Creates a new Launcher. */
   public Launcher() {
     super(launcherName);
+    initConstruction();
     // Follow leader, inverted relative to leader
     follower.setControl(new Follower(leader.getDeviceID(), MotorAlignmentValue.Opposed));
   }
