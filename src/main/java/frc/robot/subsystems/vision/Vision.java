@@ -19,8 +19,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.ISubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,13 +35,14 @@ import org.littletonrobotics.junction.Logger;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class Vision extends SubsystemBase implements ISubsystem {
+public class Vision extends LimelightSubsystem implements ISubsystem {
   private final VisionConsumer consumer;
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
   private final Alert[] disconnectedAlerts;
 
-  public Vision(VisionConsumer consumer, VisionIO... io) {
+  public Vision(String name, VisionConsumer consumer, VisionIO... io) {
+    super(name);
     this.consumer = consumer;
     this.io = io;
 

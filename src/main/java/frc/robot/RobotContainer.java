@@ -131,12 +131,14 @@ public class RobotContainer {
     if (useSubsystem) {
       vision =
           new Vision(
+              "vision",
               drive::addVisionMeasurement,
               new VisionIOLimelight(camera0Name, drive::getRotation),
               new VisionIOLimelight(camera1Name, drive::getRotation));
       subsystems.add(vision);
     } else {
-      vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+      vision =
+          new Vision("vision", drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
       ;
     }
     useSubsystem = SubsystemConstants.useShooter;
