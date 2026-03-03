@@ -9,17 +9,18 @@ package frc.robot.subsystems;
 
 import static frc.robot.subsystems.SubsystemConstants.*;
 
+import com.ctre.phoenix6.wpiutils.MotorSafetyImplem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-public abstract class LimelightSubsystem extends SubsystemBase {
+public abstract class TalonFXSubsystem extends SubsystemBase {
   /** Name of the subsystem (saved from constructor) */
   private final String name;
-
-  /** Creates a new LimelightSubsystem. */
-  public LimelightSubsystem(String subsystemName) {
+  /** Creates a new TalonFXSubsystem. */
+  public TalonFXSubsystem(String subsystemName) {
     super(subsystemName);
     name = subsystemName;
+    MotorSafetyImplem.checkMotors();
   }
   /**
    * Initializes the construction of the <code>Subsystem</code>. Should be called once at the very
@@ -29,7 +30,6 @@ public abstract class LimelightSubsystem extends SubsystemBase {
     // Initialize status for capturing class construction
     Logger.recordOutput(name + tlmStatusName, false); // red=not OK
   }
-
   /**
    * Finishes the construction of the <code>Subsystem</code>. Should be called once at the very end
    * of the constructor.

@@ -48,6 +48,9 @@ public final class SubsystemConstants {
   public static final boolean useClimber = false;
   public static final String climberName = "Climber";
 
+  public static final boolean useLauncher = false;
+  public static final String launcherName = "Launcher";
+
   /*
    * Standard telemetry names.
    */
