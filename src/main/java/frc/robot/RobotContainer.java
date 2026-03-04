@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.LauncherCommands;
 import frc.robot.commands.TurretCommands;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.SubsystemConstants;
@@ -41,6 +42,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.lift.Lift;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.turret.Turret;
@@ -69,6 +71,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Lift lift;
   private final Climber climber;
+  private final Launcher launcher;
   /** */
   public final List<ISubsystem> subsystems;
 
@@ -195,6 +198,15 @@ public class RobotContainer {
     } else {
       climber = null;
     }
+    useSubsystem = SubsystemConstants.useLauncher;
+    useSubsystemTlmName = SubsystemConstants.launcherName + "/useSubsystem";
+    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+    if (useSubsystem) {
+      launcher = new Launcher();
+      subsystems.add(launcher);
+    } else {
+      launcher = null;
+    }
 
     // Set up auto routines
     /*
@@ -287,6 +299,10 @@ public class RobotContainer {
                   () -> -driverPad.getLeftY(),
                   () -> -driverPad.getLeftX(),
                   () -> getHubCenter()));
+    }
+    if (SubsystemConstants.useLauncher) {
+      launcher.setDefaultCommand(
+          LauncherCommands.joystickDrive(launcher, operPad::getLeftY, hopper));
     }
   }
 
