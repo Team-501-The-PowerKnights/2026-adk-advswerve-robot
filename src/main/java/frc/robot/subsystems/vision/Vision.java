@@ -43,6 +43,7 @@ public class Vision extends LimelightSubsystem implements ISubsystem {
 
   public Vision(String name, VisionConsumer consumer, VisionIO... io) {
     super(name);
+    initConstruction();
     this.consumer = consumer;
     this.io = io;
 
@@ -59,6 +60,7 @@ public class Vision extends LimelightSubsystem implements ISubsystem {
           new Alert(
               "Vision camera " + Integer.toString(i) + " is disconnected.", AlertType.kWarning);
     }
+    finishConstruction();
   }
 
   /**

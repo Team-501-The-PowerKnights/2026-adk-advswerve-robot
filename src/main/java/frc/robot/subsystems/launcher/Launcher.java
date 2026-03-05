@@ -25,6 +25,8 @@ public class Launcher extends TalonFXSubsystem implements ISubsystem {
     initConstruction();
     // Follow leader, inverted relative to leader
     follower.setControl(new Follower(leader.getDeviceID(), MotorAlignmentValue.Opposed));
+
+    finishConstruction();
   }
   /** Percent output: -1.0 to +1.0 */
   public void setPercent(double percent) {
