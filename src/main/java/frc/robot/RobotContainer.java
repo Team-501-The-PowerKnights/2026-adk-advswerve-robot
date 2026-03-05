@@ -69,8 +69,6 @@ public class RobotContainer {
 
   // Controllers
   private final CommandXboxController driverPad;
-
-  @SuppressWarnings("unused")
   private final CommandXboxController operPad;
 
   // Dashboard inputs
@@ -250,7 +248,7 @@ public class RobotContainer {
     if (SubsystemConstants.useIntake) {
       subsystemCount++;
       // Default command, manual control via triggers
-      lift.setDefaultCommand(IntakeCommands.manual(intake, () -> -operPad.getLeftY()));
+      intake.setDefaultCommand(IntakeCommands.debugManual(intake, () -> -operPad.getLeftY()));
     }
 
     /*
@@ -259,7 +257,7 @@ public class RobotContainer {
     if (SubsystemConstants.useHopper) {
       subsystemCount++;
       // Default command, manual control via triggers
-      hopper.setDefaultCommand(HopperCommands.manual(hopper, () -> -operPad.getLeftY()));
+      hopper.setDefaultCommand(HopperCommands.debugManual(hopper, () -> -operPad.getLeftY()));
     }
 
     // How many subsystems were enabled? Is there a problem?
@@ -320,11 +318,11 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useIntake && SubsystemConstants.useHopper) {
-      intake.setDefaultCommand(
-          IntakeCommands.manual(
-              intake,
-              hopper,
-              () -> driverPad.getRightTriggerAxis() - driverPad.getLeftTriggerAxis()));
+      // intake.setDefaultCommand(
+      //     IntakeCommands.manual(
+      //         intake,
+      //         hopper,
+      //         () -> driverPad.getRightTriggerAxis() - driverPad.getLeftTriggerAxis()));
     }
   }
 

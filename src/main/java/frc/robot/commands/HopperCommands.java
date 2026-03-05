@@ -22,7 +22,7 @@ public class HopperCommands extends Command {
   }
 
   /**
-   * Command to do a manual control of the subystem.
+   * Command to do a manual control of the subystem for debugging.
    *
    * <p>Every subsystem <b>has</b> to have this to allow debug.
    *
@@ -30,7 +30,7 @@ public class HopperCommands extends Command {
    * @param speedSupplier
    * @return
    */
-  public static Command manual(Hopper hopper, DoubleSupplier speedSupplier) {
+  public static Command debugManual(Hopper hopper, DoubleSupplier speedSupplier) {
     return Commands.run(
         () -> {
           double speed = MathUtil.applyDeadband(speedSupplier.getAsDouble(), DEADBAND);

@@ -30,7 +30,7 @@ public class IntakeCommands extends Command {
    * @param speedSupplier
    * @return
    */
-  public static Command manual(Intake intake, DoubleSupplier speedSupplier) {
+  public static Command debugManual(Intake intake, DoubleSupplier speedSupplier) {
     return Commands.run(
         () -> {
           double speed = MathUtil.applyDeadband(speedSupplier.getAsDouble(), DEADBAND);

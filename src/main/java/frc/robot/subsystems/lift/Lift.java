@@ -19,6 +19,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.RevRoboticsSubsystem;
 import frc.robot.util.SparkUtil501;
 import org.littletonrobotics.junction.Logger;
@@ -32,7 +33,7 @@ import org.littletonrobotics.junction.Logger;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class Lift extends RevRoboticsSubsystem {
+public class Lift extends RevRoboticsSubsystem implements ISubsystem {
 
   /** */
   private final SparkFlex motor;
