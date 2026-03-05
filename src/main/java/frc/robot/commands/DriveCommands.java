@@ -135,9 +135,10 @@ public class DriveCommands {
                       linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                       linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
                       omega);
+              // STUWASHERE - Added invert to overall sense ala 2025 MA pit fix
               boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
+                  !(DriverStation.getAlliance().isPresent()
+                      && DriverStation.getAlliance().get() == Alliance.Red);
               drive.runVelocity(
                   ChassisSpeeds.fromFieldRelativeSpeeds(
                       speeds,
