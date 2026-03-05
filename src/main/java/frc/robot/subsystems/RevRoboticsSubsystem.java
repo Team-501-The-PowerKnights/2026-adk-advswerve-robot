@@ -55,7 +55,7 @@ public abstract class RevRoboticsSubsystem extends SubsystemBase {
   @SuppressWarnings("resource")
   protected void finishConstruction() {
     // Log this subsystem's status and return global
-    Logger.recordOutput(name + tlmRevLibErrorName, !sparkStickyFault); // green=OK
+    Logger.recordOutput(name + tlmRevLibErrorName, !sparkStickyFault); // green = OK
     if (sparkStickyFault) {
       new Alert(
               "REVLib problems in " + name + " construction (error = " + sparkStickyError + ")",
@@ -67,7 +67,7 @@ public abstract class RevRoboticsSubsystem extends SubsystemBase {
     boolean mySparkStickyFault = sparkStickyFault;
     sparkStickyFault |= origSparkStickyFault;
 
-    boolean constructStatus = true && mySparkStickyFault;
+    boolean constructStatus = !mySparkStickyFault; // false = no faults = green
     Logger.recordOutput(name + tlmStatusName, constructStatus);
   }
 }

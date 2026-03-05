@@ -12,6 +12,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.HopperCommands;
 import frc.robot.commands.TurretCommands;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.SubsystemConstants;
@@ -191,8 +194,16 @@ public class RobotContainer {
      */
     driverPad = new CommandXboxController(0);
     operPad = new CommandXboxController(1);
-    // Configure the button bindings
-    configureButtonBindings();
+    /*
+     *
+     */
+    Logger.recordOutput("SubsystemDebug", SubsystemConstants.RUN_SUBSYSTEM_DEBUG);
+    if (SubsystemConstants.RUN_SUBSYSTEM_DEBUG) {
+      configureSubsystemDebugButtonBindings();
+    } else {
+      // Configure the button bindings
+      configureButtonBindings();
+    }
 
     /*
      * Create and set up the SysId functionality (if enabled).
@@ -214,6 +225,42 @@ public class RobotContainer {
           "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
       autoChooser.addOption(
           "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    }
+  }
+
+  /**
+   * Use this method to define your button->command mappings for the Subystem Debug mode. Every
+   * subsystem has to have at least the manual control. By convention we are using the left joystick
+   * of the Operator gamepad. Since only one subsystem should be enabled at a time this isn't a
+   * problem.
+   *
+   * <p>Buttons can be created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
+   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  @SuppressWarnings("resource")
+  private void configureSubsystemDebugButtonBindings() {
+
+    int subsystemCount = 0;
+
+    /*
+     * Gripper is controlled by Operator
+     */
+    if (SubsystemConstants.useHopper) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      hopper.setDefaultCommand(HopperCommands.manual(hopper, () -> -operPad.getLeftY()));
+    }
+
+    // How many subsystems were enabled? Is there a problem?
+    if (subsystemCount == 0) {
+      new Alert("No Subsystems enabled in DEBUG mode - Is this right?", AlertType.kWarning)
+          .set(true);
+    } else if (subsystemCount > 0) {
+      new Alert(
+              "Multiple Subsystems enabled in DEBUG mode (count = " + subsystemCount + ")",
+              AlertType.kError)
+          .set(true);
     }
   }
 

@@ -22,6 +22,9 @@ public final class SubsystemConstants {
 
   public static final boolean doSysId = false;
 
+  /** */
+  public static final boolean RUN_SUBSYSTEM_DEBUG = false;
+
   /*
    * Subsystem Overall Control Constants
    *
@@ -38,7 +41,7 @@ public final class SubsystemConstants {
   public static final boolean useTurret = false;
   public static final String turretName = "Turret";
 
-  public static final boolean useHopper = false;
+  public static final boolean useHopper = true;
   public static final String hopperName = "Hopper";
   public static final boolean useIntake = false;
   public static final String intakeName = "Intake";
