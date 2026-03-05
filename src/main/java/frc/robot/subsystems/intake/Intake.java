@@ -37,6 +37,8 @@ public class Intake extends RevRoboticsSubsystem {
   /** */
   private final SparkFlex motor;
 
+  private double currentSpeed = 0.0;
+
   /** Constructs a new instance of the subsystem. */
   public Intake() {
     super(intakeName);
@@ -84,7 +86,6 @@ public class Intake extends RevRoboticsSubsystem {
     motor.set(speed);
   }
 
-  @Override
   public void disabledInit() {
     // Ensure any motion stops when we go to <i>disabled</code>
     setSpeed(0);

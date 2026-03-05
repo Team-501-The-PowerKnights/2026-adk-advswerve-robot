@@ -151,7 +151,7 @@ public class RobotContainer {
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
       hopper = new Hopper();
-      subsystems.add(hopper);
+      subsystems.add((ISubsystem) hopper);
     } else {
       hopper = null;
     }
@@ -160,7 +160,7 @@ public class RobotContainer {
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
       intake = new Intake();
-      subsystems.add(intake);
+      subsystems.add((ISubsystem) intake);
     } else {
       intake = null;
     }
@@ -169,7 +169,7 @@ public class RobotContainer {
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
       lift = new Lift();
-      subsystems.add(lift);
+      subsystems.add((ISubsystem) lift);
     } else {
       lift = null;
     }
@@ -307,6 +307,14 @@ public class RobotContainer {
       turret.setDefaultCommand(
           TurretCommands.manual(
               turret, () -> (driverPad.getLeftTriggerAxis() + -driverPad.getRightTriggerAxis())));
+    }
+
+    if (SubsystemConstants.useIntake && SubsystemConstants.useHopper) {
+      intake.setDefaultCommand(
+          IntakeCommands.manual(
+              intake,
+              hopper,
+              () -> driverPad.getRightTriggerAxis() - driverPad.getLeftTriggerAxis()));
     }
   }
 

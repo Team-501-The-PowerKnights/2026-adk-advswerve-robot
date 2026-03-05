@@ -39,6 +39,8 @@ public class Hopper extends RevRoboticsSubsystem {
   /** */
   private final SparkFlex follower;
 
+  private double currentSpeed = 0.0;
+
   /** Constructs a new instance of the subsystem. */
   public Hopper() {
     super(hopperName);
@@ -98,7 +100,6 @@ public class Hopper extends RevRoboticsSubsystem {
     motor.set(speed);
   }
 
-  @Override
   public void disabledInit() {
     // Ensure any motion stops when we go to <i>disabled</code>
     setSpeed(0);
