@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
+import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.TurretCommands;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.SubsystemConstants;
@@ -244,7 +245,16 @@ public class RobotContainer {
     int subsystemCount = 0;
 
     /*
-     * Gripper is controlled by Operator
+     * Intake - Tied to left joystick of operator pad
+     */
+    if (SubsystemConstants.useIntake) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      lift.setDefaultCommand(IntakeCommands.manual(intake, () -> -operPad.getLeftY()));
+    }
+
+    /*
+     * Hopper - Tied to left joystick of operator pad
      */
     if (SubsystemConstants.useHopper) {
       subsystemCount++;
