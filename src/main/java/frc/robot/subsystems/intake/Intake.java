@@ -18,7 +18,6 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.RevRoboticsSubsystem;
 import frc.robot.util.SparkUtil501;
@@ -58,10 +57,20 @@ public class Intake extends RevRoboticsSubsystem implements ISubsystem {
                 motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     // We start stopped
-    currentSpeed = 0;
-    setSpeed(currentSpeed);
+    stop();
 
     finishConstruction();
+  }
+
+  /**
+   * Stops motor movement. Motor can be moved again by calling set without having to re-enable the
+   * motor. Preferred method of stopping the motor - especially if running some kind of PID control.
+   */
+  public void stop() {
+    // Make the subsystem state correct
+    currentSpeed = 0;
+    // Use stop to ensure it stops no matter what control mode is in play
+    motor.stopMotor();
   }
 
   // TODO - Document directions for +/- speed
@@ -71,10 +80,7 @@ public class Intake extends RevRoboticsSubsystem implements ISubsystem {
    *
    * @param speed - The speed to set. Value should be between -1.0 and +1.0.
    */
-  public void acceptTeleopInput(double speed) {
-    if (!DriverStation.isTeleopEnabled()) {
-      return;
-    }
+  public void acceptInput(double speed) {
     currentSpeed = speed;
   }
 
@@ -89,8 +95,7 @@ public class Intake extends RevRoboticsSubsystem implements ISubsystem {
 
   public void disabledInit() {
     // Ensure any motion stops when we go to <i>disabled</code>
-    setSpeed(0);
-    // TODO - Remember why we don't call motor.stop() vs. setting speed to 0 (or else fix)
+    stop();
   }
 
   // TODO - Add code to set the default speed on auto & teleop if running that way

@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeConstants;
 import java.util.function.DoubleSupplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -19,6 +20,34 @@ public class IntakeCommands extends Command {
   /** Private constructor so can't be instantiated externally */
   private IntakeCommands() {
     // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  /**
+   * @param intake
+   * @return
+   */
+  public static Command stop(Intake intake) {
+    return intake.runOnce(intake::stop).withName("IntakeStop");
+  }
+
+  /**
+   * @param intake
+   * @return
+   */
+  public static Command pullIn(Intake intake) {
+    return intake
+        .runEnd(() -> intake.acceptInput(+IntakeConstants.defaultSpeed), intake::stop)
+        .withName("IntakePullIn");
+  }
+
+  /**
+   * @param hopper
+   * @return
+   */
+  public static Command pushOut(Intake intake) {
+    return intake
+        .runEnd(() -> intake.acceptInput(-IntakeConstants.defaultSpeed), intake::stop)
+        .withName("IntakePushOut");
   }
 
   /**
@@ -34,7 +63,7 @@ public class IntakeCommands extends Command {
     return Commands.run(
         () -> {
           double speed = MathUtil.applyDeadband(speedSupplier.getAsDouble(), DEADBAND);
-          intake.acceptTeleopInput(speed);
+          intake.acceptInput(speed);
         },
         intake);
   }

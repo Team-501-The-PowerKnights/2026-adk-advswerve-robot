@@ -310,7 +310,13 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    if (SubsystemConstants.useIntake) {}
+    /*
+     * Intake:  ????
+     */
+    if (SubsystemConstants.useIntake) {
+      // TODO: Tie Intake to commands in Teleop mode.
+      intake.setDefaultCommand(IntakeCommands.stop(intake));
+    }
 
     /*
      * Hopper: Operator Pad: X button - pull in, Y button push out
