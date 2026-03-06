@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.hopper.HopperConstants;
 import java.util.function.DoubleSupplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -19,6 +20,34 @@ public class HopperCommands extends Command {
   /** Private constructor so can't be instantiated externally */
   private HopperCommands() {
     // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  /**
+   * @param hopper
+   * @return
+   */
+  public static Command stop(Hopper hopper) {
+    return hopper.runOnce(hopper::stop).withName("HopperStop");
+  }
+
+  /**
+   * @param hopper
+   * @return
+   */
+  public static Command pullIn(Hopper hopper) {
+    return hopper
+        .runEnd(() -> hopper.acceptInput(+HopperConstants.defaultSpeed), hopper::stop)
+        .withName("HopperPullIn");
+  }
+
+  /**
+   * @param hopper
+   * @return
+   */
+  public static Command pushOut(Hopper hopper) {
+    return hopper
+        .runEnd(() -> hopper.acceptInput(-HopperConstants.defaultSpeed), hopper::stop)
+        .withName("HopperPushOut");
   }
 
   /**
@@ -34,7 +63,7 @@ public class HopperCommands extends Command {
     return Commands.run(
         () -> {
           double speed = MathUtil.applyDeadband(speedSupplier.getAsDouble(), DEADBAND);
-          hopper.acceptTeleopInput(speed);
+          hopper.acceptInput(speed);
         },
         hopper);
   }

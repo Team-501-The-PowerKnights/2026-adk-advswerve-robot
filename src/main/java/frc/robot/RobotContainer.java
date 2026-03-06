@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
 import frc.robot.commands.IntakeCommands;
-import frc.robot.commands.TurretCommands;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.SubsystemConstants;
 import frc.robot.subsystems.climber.Climber;
@@ -243,7 +242,7 @@ public class RobotContainer {
     int subsystemCount = 0;
 
     /*
-     * Intake - Tied to left joystick of operator pad
+     * Intake: Tied to left joystick Y axis of operator pad
      */
     if (SubsystemConstants.useIntake) {
       subsystemCount++;
@@ -252,7 +251,7 @@ public class RobotContainer {
     }
 
     /*
-     * Hopper - Tied to left joystick of operator pad
+     * Hopper: Tied to left joystick Y axis of operator pad
      */
     if (SubsystemConstants.useHopper) {
       subsystemCount++;
@@ -311,18 +310,16 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    if (SubsystemConstants.useTurret) {
-      turret.setDefaultCommand(
-          TurretCommands.manual(
-              turret, () -> (driverPad.getLeftTriggerAxis() + -driverPad.getRightTriggerAxis())));
-    }
+    if (SubsystemConstants.useIntake) {}
 
-    if (SubsystemConstants.useIntake && SubsystemConstants.useHopper) {
-      // intake.setDefaultCommand(
-      //     IntakeCommands.manual(
-      //         intake,
-      //         hopper,
-      //         () -> driverPad.getRightTriggerAxis() - driverPad.getLeftTriggerAxis()));
+    /*
+     * Hopper: Operator Pad: X button - pull in, Y button push out
+     */
+    if (SubsystemConstants.useHopper) {
+      hopper.setDefaultCommand(HopperCommands.stop(hopper));
+
+      operPad.x().whileTrue(HopperCommands.pullIn(hopper));
+      operPad.y().whileTrue(HopperCommands.pushOut(hopper));
     }
   }
 
