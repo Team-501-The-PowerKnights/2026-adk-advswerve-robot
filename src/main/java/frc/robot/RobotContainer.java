@@ -34,7 +34,6 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.LauncherCommands;
-import frc.robot.commands.TurretCommands;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.SubsystemConstants;
 import frc.robot.subsystems.climber.Climber;
@@ -356,6 +355,12 @@ public class RobotContainer {
       operPad.x().whileTrue(HopperCommands.pullIn(hopper));
       operPad.y().whileTrue(HopperCommands.pushOut(hopper));
     }
+      
+    if (SubsystemConstants.useLauncher) {
+      launcher.setDefaultCommand(
+          LauncherCommands.joystickDrive(launcher, operPad::getLeftY, hopper));
+    }
+
     if (SubsystemConstants.useVision) {
       // Auto aim command example
       driverPad
@@ -367,10 +372,7 @@ public class RobotContainer {
                   () -> -driverPad.getLeftX(),
                   () -> getHubCenter()));
     }
-    if (SubsystemConstants.useLauncher) {
-      launcher.setDefaultCommand(
-          LauncherCommands.joystickDrive(launcher, operPad::getLeftY, hopper));
-    }
+
   }
 
   /**
