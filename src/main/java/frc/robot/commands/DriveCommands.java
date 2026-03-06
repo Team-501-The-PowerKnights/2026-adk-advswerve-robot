@@ -290,4 +290,64 @@ public class DriveCommands {
     Rotation2d lastAngle = Rotation2d.kZero;
     double gyroDelta = 0.0;
   }
+
+  /**
+   * Drive field-relative with joystick translation while continuously facing a fixed field point.
+   * This will naturally allow arcing paths while maintaining aim on the target.
+   */
+  public static Command joystickDriveFacingPoint(
+      Drive drive,
+      DoubleSupplier xSupplier,
+      DoubleSupplier ySupplier,
+      Supplier<Translation2d> fieldTargetSupplier) {
+
+    // Same style controller as joystickDriveAtAngle()
+    ProfiledPIDController angleController =
+        new ProfiledPIDController(
+            ANGLE_KP,
+            0.0,
+            ANGLE_KD,
+            new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+    angleController.enableContinuousInput(-Math.PI, Math.PI);
+
+    return Commands.run(
+            () -> {
+              // 1) Translation from sticks (field-relative)
+              Translation2d linearVelocity =
+                  getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+
+              // 2) Compute desired heading to the field target using the *estimated* pose
+              Pose2d pose = drive.getPose();
+              Translation2d target = fieldTargetSupplier.get();
+
+              double dx = target.getX() - pose.getX();
+              double dy = target.getY() - pose.getY();
+              Rotation2d desiredHeading = new Rotation2d(Math.atan2(dy, dx));
+
+              // 3) PID to generate omega to face the target
+              double omega =
+                  angleController.calculate(
+                      drive.getRotation().getRadians(), desiredHeading.getRadians());
+
+              // 4) Convert to field-relative chassis speeds & command the drive
+              ChassisSpeeds speeds =
+                  new ChassisSpeeds(
+                      linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                      linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                      omega);
+
+              boolean isFlipped =
+                  DriverStation.getAlliance().isPresent()
+                      && DriverStation.getAlliance().get() == Alliance.Red;
+
+              drive.runVelocity(
+                  ChassisSpeeds.fromFieldRelativeSpeeds(
+                      speeds,
+                      isFlipped
+                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                          : drive.getRotation()));
+            },
+            drive)
+        .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+  }
 }

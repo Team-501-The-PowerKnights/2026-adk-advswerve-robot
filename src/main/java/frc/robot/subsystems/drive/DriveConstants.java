@@ -15,10 +15,10 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 
 public class DriveConstants {
-  public static final double maxSpeedMetersPerSec = 4.8;
+  public static final double maxSpeedMetersPerSec = 6.77;
   public static final double odometryFrequency = 100.0; // Hz
-  public static final double trackWidth = Units.inchesToMeters(26.5);
-  public static final double wheelBase = Units.inchesToMeters(26.5);
+  public static final double trackWidth = Units.inchesToMeters(27.125 - 3.0);
+  public static final double wheelBase = Units.inchesToMeters(27.125 - 3.0);
   public static final double driveBaseRadius = Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
   public static final Translation2d[] moduleTranslations =
       new Translation2d[] {
@@ -32,7 +32,7 @@ public class DriveConstants {
   public static final Rotation2d frontLeftZeroRotation = new Rotation2d(0.0);
   public static final Rotation2d frontRightZeroRotation = new Rotation2d(0.0);
   public static final Rotation2d backLeftZeroRotation = new Rotation2d(0.0);
-  public static final Rotation2d backRightZeroRotation = new Rotation2d(0.0);
+  public static final Rotation2d backRightZeroRotation = new Rotation2d(Math.toRadians(135.0));
 
   // Device CAN IDs
   public static final int pigeonCanId = 10;

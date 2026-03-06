@@ -28,4 +28,9 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  public static final double kBlueHubAndyMarkX = 181.56;
+  public static final double kBlueHubAndyMarkY = 158.32;
+  public static final double kRedHubAndyMarkX = 650.12 - 181.56;
+  public static final double kRedHubAndyMarkY = 158.32;
 }

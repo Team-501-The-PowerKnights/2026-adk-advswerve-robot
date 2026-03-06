@@ -7,13 +7,20 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.*;
+import static frc.robot.subsystems.vision.VisionConstants.*;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,6 +33,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
 import frc.robot.commands.IntakeCommands;
+import frc.robot.commands.LauncherCommands;
+import frc.robot.commands.TurretCommands;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.SubsystemConstants;
 import frc.robot.subsystems.climber.Climber;
@@ -37,10 +46,13 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.lift.Lift;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOLimelight;
 import java.util.ArrayList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
@@ -63,6 +75,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Lift lift;
   private final Climber climber;
+  private final Launcher launcher;
   /** */
   public final List<ISubsystem> subsystems;
 
@@ -121,10 +134,17 @@ public class RobotContainer {
     useSubsystemTlmName = SubsystemConstants.visionName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
-      vision = new Vision();
+      vision =
+          new Vision(
+              "vision",
+              drive::addVisionMeasurement,
+              new VisionIOLimelight(camera0Name, drive::getRotation),
+              new VisionIOLimelight(camera1Name, drive::getRotation));
       subsystems.add(vision);
     } else {
-      vision = null;
+      vision =
+          new Vision("vision", drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+      ;
     }
     useSubsystem = SubsystemConstants.useShooter;
     useSubsystemTlmName = SubsystemConstants.shooterName + "/useSubsystem";
@@ -179,6 +199,15 @@ public class RobotContainer {
       subsystems.add(climber);
     } else {
       climber = null;
+    }
+    useSubsystem = SubsystemConstants.useLauncher;
+    useSubsystemTlmName = SubsystemConstants.launcherName + "/useSubsystem";
+    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+    if (useSubsystem) {
+      launcher = new Launcher();
+      subsystems.add(launcher);
+    } else {
+      launcher = null;
     }
 
     // Set up auto routines
@@ -327,6 +356,21 @@ public class RobotContainer {
       operPad.x().whileTrue(HopperCommands.pullIn(hopper));
       operPad.y().whileTrue(HopperCommands.pushOut(hopper));
     }
+    if (SubsystemConstants.useVision) {
+      // Auto aim command example
+      driverPad
+          .leftBumper()
+          .whileTrue(
+              DriveCommands.joystickDriveFacingPoint(
+                  drive,
+                  () -> -driverPad.getLeftY(),
+                  () -> -driverPad.getLeftX(),
+                  () -> getHubCenter()));
+    }
+    if (SubsystemConstants.useLauncher) {
+      launcher.setDefaultCommand(
+          LauncherCommands.joystickDrive(launcher, operPad::getLeftY, hopper));
+    }
   }
 
   /**
@@ -430,5 +474,21 @@ public class RobotContainer {
     //     Commands.sequence(
     //         ClimberCommands.unlatch(climber), new WaitCommand(0.5),
     // ClimberCommands.stop(climber)));
+  }
+
+  public static Translation2d getHubCenter() {
+    Translation2d blueHub =
+        new Translation2d(
+            Units.inchesToMeters(kBlueHubAndyMarkX), Units.inchesToMeters(kBlueHubAndyMarkY));
+
+    Translation2d redHub =
+        new Translation2d(
+            Units.inchesToMeters(kRedHubAndyMarkX), Units.inchesToMeters(kRedHubAndyMarkY));
+
+    if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Red) {
+      return redHub;
+    }
+    return blueHub;
   }
 }
