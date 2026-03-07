@@ -22,6 +22,14 @@ public final class SubsystemConstants {
 
   public static final boolean doSysId = false;
 
+  /**
+   * Flag to control debug mode.
+   *
+   * <p>When setting debug mode, only one subsystem at a time should be enabled (the one being
+   * worked). This will enable the special commands used.
+   */
+  public static final boolean RUN_SUBSYSTEM_DEBUG = false;
+
   /*
    * Subsystem Overall Control Constants
    *
