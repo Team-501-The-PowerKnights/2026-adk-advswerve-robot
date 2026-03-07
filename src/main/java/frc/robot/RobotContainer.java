@@ -17,6 +17,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -29,8 +31,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.HopperCommands;
+import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.LauncherCommands;
-import frc.robot.commands.TurretCommands;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.SubsystemConstants;
 import frc.robot.subsystems.climber.Climber;
@@ -77,8 +80,6 @@ public class RobotContainer {
 
   // Controllers
   private final CommandXboxController driverPad;
-
-  @SuppressWarnings("unused")
   private final CommandXboxController operPad;
 
   // Dashboard inputs
@@ -167,7 +168,7 @@ public class RobotContainer {
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
       hopper = new Hopper();
-      subsystems.add(hopper);
+      subsystems.add((ISubsystem) hopper);
     } else {
       hopper = null;
     }
@@ -176,7 +177,7 @@ public class RobotContainer {
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
       intake = new Intake();
-      subsystems.add(intake);
+      subsystems.add((ISubsystem) intake);
     } else {
       intake = null;
     }
@@ -185,7 +186,7 @@ public class RobotContainer {
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
       lift = new Lift();
-      subsystems.add(lift);
+      subsystems.add((ISubsystem) lift);
     } else {
       lift = null;
     }
@@ -219,8 +220,16 @@ public class RobotContainer {
      */
     driverPad = new CommandXboxController(0);
     operPad = new CommandXboxController(1);
-    // Configure the button bindings
-    configureButtonBindings();
+    /*
+     *
+     */
+    Logger.recordOutput("SubsystemDebug", SubsystemConstants.RUN_SUBSYSTEM_DEBUG);
+    if (SubsystemConstants.RUN_SUBSYSTEM_DEBUG) {
+      configureSubsystemDebugButtonBindings();
+    } else {
+      // Configure the button bindings
+      configureButtonBindings();
+    }
 
     /*
      * Create and set up the SysId functionality (if enabled).
@@ -242,6 +251,51 @@ public class RobotContainer {
           "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
       autoChooser.addOption(
           "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    }
+  }
+
+  /**
+   * Use this method to define your button->command mappings for the Subystem Debug mode. Every
+   * subsystem has to have at least the manual control. By convention we are using the left joystick
+   * of the Operator gamepad. Since only one subsystem should be enabled at a time this isn't a
+   * problem.
+   *
+   * <p>Buttons can be created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
+   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  @SuppressWarnings("resource")
+  private void configureSubsystemDebugButtonBindings() {
+
+    int subsystemCount = 0;
+
+    /*
+     * Intake: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useIntake) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      intake.setDefaultCommand(IntakeCommands.debugManual(intake, () -> -operPad.getLeftY()));
+    }
+
+    /*
+     * Hopper: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useHopper) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      hopper.setDefaultCommand(HopperCommands.debugManual(hopper, () -> -operPad.getLeftY()));
+    }
+
+    // How many subsystems were enabled? Is there a problem?
+    if (subsystemCount == 0) {
+      new Alert("No Subsystems enabled in DEBUG mode - Is this right?", AlertType.kWarning)
+          .set(true);
+    } else if (subsystemCount > 0) {
+      new Alert(
+              "Multiple Subsystems enabled in DEBUG mode (count = " + subsystemCount + ")",
+              AlertType.kError)
+          .set(true);
     }
   }
 
@@ -284,11 +338,29 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    if (SubsystemConstants.useTurret) {
-      turret.setDefaultCommand(
-          TurretCommands.manual(
-              turret, () -> (driverPad.getLeftTriggerAxis() + -driverPad.getRightTriggerAxis())));
+    /*
+     * Intake:  ????
+     */
+    if (SubsystemConstants.useIntake) {
+      // TODO: Tie Intake to commands in Teleop mode.
+      intake.setDefaultCommand(IntakeCommands.stop(intake));
     }
+
+    /*
+     * Hopper: Operator Pad: X button - pull in, Y button push out
+     */
+    if (SubsystemConstants.useHopper) {
+      hopper.setDefaultCommand(HopperCommands.stop(hopper));
+
+      operPad.x().whileTrue(HopperCommands.pullIn(hopper));
+      operPad.y().whileTrue(HopperCommands.pushOut(hopper));
+    }
+      
+    if (SubsystemConstants.useLauncher) {
+      launcher.setDefaultCommand(
+          LauncherCommands.joystickDrive(launcher, operPad::getLeftY, hopper));
+    }
+
     if (SubsystemConstants.useVision) {
       // Auto aim command example
       driverPad
@@ -300,10 +372,7 @@ public class RobotContainer {
                   () -> -driverPad.getLeftX(),
                   () -> getHubCenter()));
     }
-    if (SubsystemConstants.useLauncher) {
-      launcher.setDefaultCommand(
-          LauncherCommands.joystickDrive(launcher, operPad::getLeftY, hopper));
-    }
+
   }
 
   /**

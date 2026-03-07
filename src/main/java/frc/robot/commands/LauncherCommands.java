@@ -16,11 +16,11 @@ public class LauncherCommands {
 
           if (left > 0.05 || left < -0.05) {
             launcher.setPercent(left);
-            hopper.acceptTeleopInput(-left);
+            hopper.acceptInput(-left);
 
           } else {
             launcher.stop();
-            hopper.acceptTeleopInput(0.0);
+            hopper.acceptInput(0.0);
           }
         },
         launcher);

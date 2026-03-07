@@ -1,0 +1,542 @@
+{
+  "tabPane": [
+    {
+      "title": "Competition",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Vision",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Shooter",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Turret",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Feeder",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Hopper",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "AdvantageKit/RealOutputs/Hopper/",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,6": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Hopper/Status",
+              "_title": "Status",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,9": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Hopper/isRevLibError",
+              "_title": "isRevLibError",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Hopper/useSubsystem",
+              "_title": "useSubsystem",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,0": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/SubsystemDebug",
+              "_title": "AdvantageKit/RealOutputs/SubsystemDebug",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#000000FF"
+            }
+          },
+          "13,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Hopper/MotorTemp",
+              "_title": "MotorTemp",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,5": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Hopper/MotorOvertemp",
+              "_title": "MotorOvertemp",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "22,5": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Hopper/FollowMotorOvertemp",
+              "_title": "FollowMotorOvertemp",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "16,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Hopper/MotorCurrent",
+              "_title": "MotorCurrent",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Hopper/CurrentSpeed",
+              "_title": "CurrentSpeed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,5": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Hopper/Output",
+              "_title": "Output",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "25,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Hopper/FollowMotorCurrent",
+              "_title": "FollowMotorCurrent",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "22,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Hopper/FollowMotorTemp",
+              "_title": "FollowMotorTemp",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Intake",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "AdvantageKit/RealOutputs/Intake",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,6": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Intake/Status",
+              "_title": "/Status",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Intake/useSubsystem",
+              "_title": "/useSubsystem",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,9": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Intake/isRevLibError",
+              "_title": "/isRevLibError",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "16,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Intake/MotorCurrent",
+              "_title": "/MotorCurrent",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,5": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Intake/Output",
+              "_title": "/Output",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Intake/MotorTemp",
+              "_title": "/MotorTemp",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,5": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Intake/MotorOvertemp",
+              "_title": "/MotorOvertemp",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "9,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Intake/CurrentSpeed",
+              "_title": "/CurrentSpeed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,0": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/SubsystemDebug",
+              "_title": "AdvantageKit/RealOutputs/SubsystemDebug",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#000000FF"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Lift",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Climber",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Drive",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "SmartDashboard",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "SmartDashboard/",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Alerts",
+              "_source0": "network_table:///SmartDashboard/PathPlanner",
+              "_title": "PathPlanner",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Alerts",
+              "_source0": "network_table:///SmartDashboard/Alerts",
+              "_title": "Alerts",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,2": {
+            "size": [
+              5,
+              3
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Auto Choices",
+              "_title": "Auto Choices",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_Interface",
+              "_title": "limelight_Interface",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_Stream",
+              "_title": "limelight_Stream",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_PipelineName",
+              "_title": "limelight_PipelineName",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "LiveWindow",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "LiveWindow/",
+      "widgetPane": {
+        "gridSize": 32.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    }
+  ],
+  "windowGeometry": {
+    "x": 0.0,
+    "y": 0.0,
+    "width": 1920.0,
+    "height": 832.0
+  }
+}
