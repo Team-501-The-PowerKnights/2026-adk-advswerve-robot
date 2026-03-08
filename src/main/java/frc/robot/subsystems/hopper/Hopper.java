@@ -49,7 +49,7 @@ public class Hopper extends RevRoboticsSubsystem implements ISubsystem {
     // Create and configure motor
     motor = new SparkFlex(motorCanId, MotorType.kBrushless);
     SparkFlexConfig motorConfig = new SparkFlexConfig();
-    motorConfig.idleMode(IdleMode.kCoast);
+    motorConfig.idleMode(IdleMode.kCoast).inverted(motorInverted);
     // TODO - Configure additional motor parameters from Constants file
     SparkUtil501.tryUntilOk(
         motor,
@@ -107,6 +107,7 @@ public class Hopper extends RevRoboticsSubsystem implements ISubsystem {
     motor.set(speed);
   }
 
+  @Override
   public void disabledInit() {
     // Ensure any motion stops when we go to <i>disabled</code>
     stop();

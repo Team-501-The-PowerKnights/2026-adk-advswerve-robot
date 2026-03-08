@@ -25,7 +25,9 @@ public final class HopperConstants {
   public static final int followerCanId = 51; // TODO - This is not a follower
 
   /** Whether the <i>follower</i> needs to be reversed from the <i>leader</i>. */
-  public static final boolean followerInverted = false;
+  public static final boolean motorInverted = true;
+  /** Whether the <i>follower</i> needs to be reversed from the <i>leader</i>. */
+  public static final boolean followerInverted = true;
 
   /** Default speed for the subsystem if nothing else is controlling it. */
   public static final double defaultSpeed = 0.75;
