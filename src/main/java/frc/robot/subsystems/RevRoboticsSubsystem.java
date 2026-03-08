@@ -31,7 +31,7 @@ public abstract class RevRoboticsSubsystem extends SubsystemBase {
   private final String name;
 
   /** Original value of sticky fault (so it can be restored at the end) */
-  private boolean origSparkStickyFault;
+  protected boolean origSparkStickyFault;
 
   /** Constructs a new instance of the subsystem. */
   public RevRoboticsSubsystem(String subsystemName) {

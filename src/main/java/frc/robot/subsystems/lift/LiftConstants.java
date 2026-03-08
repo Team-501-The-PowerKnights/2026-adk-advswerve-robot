@@ -20,9 +20,18 @@ package frc.robot.subsystems.lift;
 public final class LiftConstants {
 
   /** CAN ID of the motor. */
-  public static final int motorCanId = 50;
+  public static final int motorCanId = 41; // left
   /** CAN ID of the follower motor. All control is through the leader one. */
-  public static final int followerCanId = 51;
+  public static final int followerCanId = 42; // right
+
+  /** Is the motor inverted? (should be positive going up) */
+  static final boolean motorInverted = false;
+
+  /** Is the encoder inverted? (should be positive going up) */
+  static final boolean encoderInverted = false;
+
+  /** */
+  static final double gearRatio = 2; // little pulley to big pulley w/ belt
 
   /** Whether the <i>follower</i> needs to be reversed from the <i>leader</i>. */
   public static final boolean followerInverted = true;
@@ -39,4 +48,23 @@ public final class LiftConstants {
 
   /** Trigger value for motor overtemp (C) */
   static final double motorOverTemp = 60.0; // seems to be < 50 in the pits
+
+  /** Whether doing PID tuning via Dashboard */
+  static final boolean doPidTuning = false;
+
+  /** PID control loop constants */
+  static final double pidKp = 0.0;
+  //
+  static final double pidKi = 0.0;
+  //
+  static final double pidKd = 0.0;
+  //
+  static final double pidMaxPosOut = 1.0;
+  //
+  static final double pidMaxNegOut = -1.0;
+
+  //
+  static final double minHeight = 0.01; // Should this be higher?
+  //
+  static final double maxHeight = 27436.0;
 }

@@ -34,6 +34,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.LauncherCommands;
+import frc.robot.commands.LiftCommands;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.SubsystemConstants;
 import frc.robot.subsystems.climber.Climber;
@@ -272,6 +273,15 @@ public class RobotContainer {
     /*
      * Intake: Tied to left joystick Y axis of operator pad
      */
+    if (SubsystemConstants.useLift) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      lift.setDefaultCommand(LiftCommands.debugManual(lift, () -> -operPad.getLeftY()));
+    }
+
+    /*
+     * Intake: Tied to left joystick Y axis of operator pad
+     */
     if (SubsystemConstants.useIntake) {
       subsystemCount++;
       // Default command, manual control via triggers
@@ -344,6 +354,14 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
                 .ignoringDisable(true));
+
+    /*
+     * Lift:  ????
+     */
+    if (SubsystemConstants.useLift) {
+      // TODO: Tie Intake to commands in Teleop mode.
+      lift.setDefaultCommand(LiftCommands.stop(lift));
+    }
 
     /*
      * Intake:  ????
