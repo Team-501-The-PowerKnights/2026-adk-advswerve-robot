@@ -297,6 +297,13 @@ public class RobotContainer {
       hopper.setDefaultCommand(HopperCommands.debugManual(hopper, () -> -operPad.getLeftY()));
     }
 
+    /*
+     * Launcher: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useLauncher) {
+      subsystemCount++;
+      launcher.setDefaultCommand(LauncherCommands.debugManual(launcher, () -> -operPad.getLeftY()));
+    }
     // How many subsystems were enabled? Is there a problem?
     if (subsystemCount == 0) {
       new Alert("No Subsystems enabled in DEBUG mode - Is this right?", AlertType.kWarning)
@@ -376,7 +383,8 @@ public class RobotContainer {
 
     if (SubsystemConstants.useLauncher) {
       launcher.setDefaultCommand(
-          LauncherCommands.joystickDrive(launcher, operPad::getLeftY, hopper));
+          // LauncherCommands.joystickDrive(launcher, operPad::getLeftY));
+          LauncherCommands.joystickDrive(launcher, () -> -operPad.getLeftY()));
     }
 
     if (SubsystemConstants.useVision) {
