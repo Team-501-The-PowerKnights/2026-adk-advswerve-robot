@@ -22,6 +22,9 @@ public final class IntakeConstants {
   /** CAN ID of the motor. */
   public static final int motorCanId = 40;
 
+  /** Whether the <i>motor</i> needs to be reversed */
+  public static final boolean motorInverted = true;
+
   /** Default speed for the subsystem if nothing else is controlling it. */
   public static final double defaultSpeed = 0.75;
 
