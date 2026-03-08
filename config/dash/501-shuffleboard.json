@@ -136,7 +136,7 @@
               "Colors/Color when false": "#000000FF"
             }
           },
-          "13,3": {
+          "10,1": {
             "size": [
               3,
               2
@@ -149,7 +149,7 @@
               "_showGlyph": false
             }
           },
-          "13,5": {
+          "10,3": {
             "size": [
               3,
               3
@@ -164,7 +164,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "22,5": {
+          "10,10": {
             "size": [
               3,
               3
@@ -179,7 +179,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "16,3": {
+          "13,1": {
             "size": [
               3,
               2
@@ -192,7 +192,7 @@
               "_showGlyph": false
             }
           },
-          "9,3": {
+          "6,1": {
             "size": [
               3,
               2
@@ -205,7 +205,7 @@
               "_showGlyph": false
             }
           },
-          "9,5": {
+          "6,3": {
             "size": [
               3,
               2
@@ -218,7 +218,7 @@
               "_showGlyph": false
             }
           },
-          "25,3": {
+          "13,8": {
             "size": [
               3,
               2
@@ -231,7 +231,7 @@
               "_showGlyph": false
             }
           },
-          "22,3": {
+          "10,8": {
             "size": [
               3,
               2
@@ -303,7 +303,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "16,3": {
+          "13,1": {
             "size": [
               3,
               2
@@ -316,7 +316,7 @@
               "_showGlyph": false
             }
           },
-          "9,5": {
+          "6,3": {
             "size": [
               3,
               2
@@ -329,7 +329,7 @@
               "_showGlyph": false
             }
           },
-          "13,3": {
+          "10,1": {
             "size": [
               3,
               2
@@ -342,7 +342,7 @@
               "_showGlyph": false
             }
           },
-          "13,5": {
+          "10,3": {
             "size": [
               3,
               3
@@ -357,7 +357,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "9,3": {
+          "6,1": {
             "size": [
               3,
               2
@@ -390,15 +390,331 @@
     },
     {
       "title": "Lift",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "AdvantageKit/RealOutputs/Lift",
       "widgetPane": {
         "gridSize": 32.0,
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
-        "tiles": {}
+        "tiles": {
+          "0,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/useSubsystem",
+              "_title": "/useSubsystem",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,9": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/isRevLibError",
+              "_title": "/isRevLibError",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,6": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/Status",
+              "_title": "/Status",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "6,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/Output",
+              "_title": "/Output",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,1": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/CurrentSpeed",
+              "_title": "/CurrentSpeed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,8": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/FollowMotorCurrent",
+              "_title": "/FollowMotorCurrent",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "27,3": {
+            "size": [
+              12,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/PidConfig",
+              "_title": "/PidConfig",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "27,1": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/DoPidTuning",
+              "_title": "/DoPidTuning",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "22,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/Position",
+              "_title": "/Position",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,1": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/MotorCurrent",
+              "_title": "/MotorCurrent",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,10": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/FollowMotorOvertemp",
+              "_title": "/FollowMotorOvertemp",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "22,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/CurrentTarget",
+              "_title": "/CurrentTarget",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,1": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/MotorTemp",
+              "_title": "/MotorTemp",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "19,8": {
+            "size": [
+              11,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/EncoderConfig",
+              "_title": "/EncoderConfig",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "19,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/CurrentTask",
+              "_title": "/CurrentTask",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/MotorOvertemp",
+              "_title": "/MotorOvertemp",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "19,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/CurrentMode",
+              "_title": "/CurrentMode",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,8": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/FollowMotorTemp",
+              "_title": "/FollowMotorTemp",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "19,1": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/Lift/IsPid",
+              "_title": "/IsPid",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,0": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///AdvantageKit/RealOutputs/SubsystemDebug",
+              "_title": "AdvantageKit/RealOutputs/SubsystemDebug",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#000000FF"
+            }
+          },
+          "30,1": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Tuning/Lift/1_pid_P",
+              "_title": "Tuning/Lift/1_pid_P",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "33,1": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Tuning/Lift/2_pid_I",
+              "_title": "Tuning/Lift/2_pid_I",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "36,1": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Tuning/Lift/3_pid_D",
+              "_title": "Tuning/Lift/3_pid_D",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
       }
     },
     {

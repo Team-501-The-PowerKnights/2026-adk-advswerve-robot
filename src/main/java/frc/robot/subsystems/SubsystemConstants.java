@@ -28,7 +28,7 @@ public final class SubsystemConstants {
    * <p>When setting debug mode, only one subsystem at a time should be enabled (the one being
    * worked). This will enable the special commands used.
    */
-  public static final boolean RUN_SUBSYSTEM_DEBUG = true;
+  public static final boolean RUN_SUBSYSTEM_DEBUG = false;
 
   /*
    * Subsystem Overall Control Constants
@@ -56,7 +56,7 @@ public final class SubsystemConstants {
   public static final boolean useClimber = false;
   public static final String climberName = "Climber";
 
-  public static final boolean useLauncher = true;
+  public static final boolean useLauncher = false;
   public static final String launcherName = "Launcher";
 
   public static final boolean useDrive = false;
