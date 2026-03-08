@@ -16,11 +16,40 @@ public class LauncherCommands {
 
           if (left > 0.05 || left < -0.05) {
             launcher.setPercent(left);
-            hopper.acceptInput(-left);
-
+            // hopper.acceptInput(-left);
           } else {
             launcher.stop();
-            hopper.acceptInput(0.0);
+            // hopper.stop();
+          }
+        },
+        launcher);
+  }
+
+  public static Command joystickDrive(Launcher launcher, DoubleSupplier leftJoystick) {
+
+    return new RunCommand(
+        () -> {
+          double left = leftJoystick.getAsDouble(); // -1..1
+
+          if (left > 0.05 || left < -0.05) {
+            launcher.setPercent(left);
+          } else {
+            launcher.stop();
+          }
+        },
+        launcher);
+  }
+
+  public static Command debugManual(Launcher launcher, DoubleSupplier leftJoystick) {
+
+    return new RunCommand(
+        () -> {
+          double left = leftJoystick.getAsDouble(); // -1..1
+
+          if (left > 0.05 || left < -0.05) {
+            launcher.setPercent(left);
+          } else {
+            launcher.stop();
           }
         },
         launcher);
