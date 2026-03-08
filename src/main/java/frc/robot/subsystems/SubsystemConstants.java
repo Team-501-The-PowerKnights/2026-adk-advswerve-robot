@@ -46,7 +46,7 @@ public final class SubsystemConstants {
   public static final boolean useTurret = false;
   public static final String turretName = "Turret";
 
-  public static final boolean useHopper = true;
+  public static final boolean useHopper = false;
   public static final String hopperName = "Hopper";
   public static final boolean useIntake = false;
   public static final String intakeName = "Intake";
@@ -56,7 +56,7 @@ public final class SubsystemConstants {
   public static final boolean useClimber = false;
   public static final String climberName = "Climber";
 
-  public static final boolean useLauncher = true;
+  public static final boolean useLauncher = false;
   public static final String launcherName = "Launcher";
 
   public static final boolean useDrive = false;
