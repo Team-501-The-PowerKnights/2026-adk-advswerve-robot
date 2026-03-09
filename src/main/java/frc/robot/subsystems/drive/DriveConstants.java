@@ -50,8 +50,8 @@ public class DriveConstants {
   // Drive motor configuration
   public static final int driveMotorCurrentLimit = 50;
   public static final double wheelRadiusMeters = Units.inchesToMeters(1.5);
-  public static final double driveMotorReduction =
-      (45.0 * 20.0) / (15.0 * 15.0); // MAXSwerve with 14 pinion teeth  // and 20 spur teeth
+  //public static final double driveMotorReduction = (45.0 * 20.0) / (15.0 * 15.0); // MAXSwerve with 15 pinion teeth  // and 20 spur teeth
+  public static final double driveMotorReduction = (45.0 * 21.0) / (14.0 * 15.0); // MAXSwerve with 14 pinion teeth  // and 21 spur teeth
   // REV Gear Ratios:
   // Current REV Gear Ratios: Upgrade Extra High 3 (4.00:1) with 15T pinion and 20T spur
   /* https://www.revrobotics.com/rev-21-3008/

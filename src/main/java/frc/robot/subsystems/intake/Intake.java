@@ -93,6 +93,10 @@ public class Intake extends RevRoboticsSubsystem implements ISubsystem {
     motor.set(speed);
   }
 
+  public double getCurrentSpeed() {
+    return currentSpeed;
+  }
+
   @Override
   public void disabledInit() {
     // Ensure any motion stops when we go to <i>disabled</code>

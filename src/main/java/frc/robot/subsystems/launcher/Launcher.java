@@ -15,26 +15,32 @@ import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.TalonFXSubsystem;
 
 public class Launcher extends TalonFXSubsystem implements ISubsystem {
-  private final TalonFX leader = new TalonFX(leaderCanId);
-  private final TalonFX follower = new TalonFX(followerCanId);
+  private final TalonFX leader;// = new TalonFX(leaderCanId);
+  private final TalonFX follower;// = new TalonFX(followerCanId);
 
   private final DutyCycleOut duty = new DutyCycleOut(0).withEnableFOC(true);
   /** Creates a new Launcher. */
   public Launcher() {
     super(launcherName);
     initConstruction();
+
+    leader = new TalonFX(leaderCanId);
+    follower = new TalonFX(followerCanId);
+
     // Follow leader, inverted relative to leader
     follower.setControl(new Follower(leader.getDeviceID(), MotorAlignmentValue.Opposed));
+
 
     finishConstruction();
   }
   /** Percent output: -1.0 to +1.0 */
-  public void setPercent(double percent) {
+  public void acceptInput(double percent) {
     leader.setControl(duty.withOutput(percent));
   }
 
   public void stop() {
-    setPercent(0.0);
+    acceptInput(0.0);
+    leader.stopMotor();
   }
 
   @Override
