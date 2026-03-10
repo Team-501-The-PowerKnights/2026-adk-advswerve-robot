@@ -18,10 +18,10 @@ import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.RevRoboticsSubsystem;
@@ -110,12 +110,12 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
   private final LoggedNetworkNumber pidD;
 
   /** */
-  private final SparkMax motor;
+  private final SparkFlex motor;
 
   private final RelativeEncoder encoder;
   private final SparkClosedLoopController controller;
   /** */
-  private final SparkMax follower;
+  // private final SparkFlex follower;
 
   /** Constructs a new instance of the subsystem. */
   public Lift() {
@@ -128,11 +128,11 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
     pidConfigBuf = new StringBuilder();
 
     // Create and configure motor
-    motor = new SparkMax(motorCanId, MotorType.kBrushless);
+    motor = new SparkFlex(motorCanId, MotorType.kBrushless);
     encoder = motor.getEncoder();
     controller = motor.getClosedLoopController();
 
-    SparkMaxConfig motorConfig = new SparkMaxConfig();
+    SparkFlexConfig motorConfig = new SparkFlexConfig();
     motorConfig
         .inverted(LiftConstants.motorInverted)
         .idleMode(IdleMode.kBrake)
@@ -162,16 +162,16 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
                 motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     // Create and configure follower
-    follower = new SparkMax(followerCanId, MotorType.kBrushless);
-    SparkMaxConfig followerConfig = new SparkMaxConfig();
-    followerConfig.idleMode(IdleMode.kCoast).follow(motor, followerInverted);
-    // TODO - Configure additional follower parameters from Constants file
-    SparkUtil501.tryUntilOk(
-        follower,
-        5,
-        () ->
-            follower.configure(
-                followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+    // follower = new SparkMax(followerCanId, MotorType.kBrushless);
+    // SparkMaxConfig followerConfig = new SparkMaxConfig();
+    // followerConfig.idleMode(IdleMode.kCoast).follow(motor, followerInverted);
+    // // TODO - Configure additional follower parameters from Constants file
+    // SparkUtil501.tryUntilOk(
+    //     follower,
+    //     5,
+    //     () ->
+    //         follower.configure(
+    //             followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     // Initialize encoder based on absolute
     {
@@ -265,7 +265,7 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
   @Override
   public void teleopExit() {
     if (LiftConstants.doPidTuning) {
-      SparkMaxConfig config = new SparkMaxConfig();
+      SparkFlexConfig config = new SparkFlexConfig();
       config.closedLoop.pid(pidP.get(), pidI.get(), pidD.get());
 
       SparkUtil501.tryUntilOk(
@@ -384,7 +384,7 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
 
     Logger.recordOutput(tlmCurrentSpeed, currentSpeed);
     logPIDTelemetry();
-    logMotorTelemetry(motor, follower);
+    //    logMotorTelemetry(motor, follower);
   }
 
   private final String tlmCurrentMode = getSubsystem() + "/CurrentMode";
@@ -417,9 +417,9 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
   private final String tlmMotorTemp = getSubsystem() + "/MotorTemp";
   private final String tlmMotorOvertemp = getSubsystem() + "/MotorOvertemp";
 
-  private final String tlmFollowMotorCurrent = getSubsystem() + "/FollowMotorCurrent";
-  private final String tlmFollowMotorTemp = getSubsystem() + "/FollowMotorTemp";
-  private final String tlmFollowMotorOvertemp = getSubsystem() + "/FollowMotorOvertemp";
+  // private final String tlmFollowMotorCurrent = getSubsystem() + "/FollowMotorCurrent";
+  // private final String tlmFollowMotorTemp = getSubsystem() + "/FollowMotorTemp";
+  // private final String tlmFollowMotorOvertemp = getSubsystem() + "/FollowMotorOvertemp";
 
   /**
    * Log the telemetry so it can be recorded and placed on the dashboard. This version is for a
@@ -428,7 +428,7 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
    * @param motor
    * @param follower
    */
-  private void logMotorTelemetry(SparkBase motor, SparkBase follower) {
+  private void logMotorTelemetry(SparkBase motor) { // }, SparkBase follower) {
     Logger.recordOutput(tlmOutput, motor.get());
 
     Logger.recordOutput(tlmMotorCurrent, motor.getOutputCurrent());
@@ -437,10 +437,10 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
     // Invert so green is OK and red is too hot
     Logger.recordOutput(tlmMotorOvertemp, (!(motorTemp > LiftConstants.motorOverTemp)));
 
-    Logger.recordOutput(tlmFollowMotorCurrent, follower.getOutputCurrent());
-    motorTemp = follower.getMotorTemperature();
-    Logger.recordOutput(tlmFollowMotorTemp, motorTemp);
-    // Invert so green is OK and red is too hot
-    Logger.recordOutput(tlmFollowMotorOvertemp, (!(motorTemp > LiftConstants.motorOverTemp)));
+    // Logger.recordOutput(tlmFollowMotorCurrent, follower.getOutputCurrent());
+    // motorTemp = follower.getMotorTemperature();
+    // Logger.recordOutput(tlmFollowMotorTemp, motorTemp);
+    // // Invert so green is OK and red is too hot
+    // Logger.recordOutput(tlmFollowMotorOvertemp, (!(motorTemp > LiftConstants.motorOverTemp)));
   }
 }

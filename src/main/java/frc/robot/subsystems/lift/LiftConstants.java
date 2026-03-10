@@ -20,9 +20,9 @@ package frc.robot.subsystems.lift;
 public final class LiftConstants {
 
   /** CAN ID of the motor. */
-  public static final int motorCanId = 41; // left
+  public static final int motorCanId = 42; // left
   /** CAN ID of the follower motor. All control is through the leader one. */
-  public static final int followerCanId = 42; // right
+  // public static final int followerCanId = 42; // right
 
   /** Is the motor inverted? (should be positive going up) */
   static final boolean motorInverted = false;
