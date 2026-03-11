@@ -375,6 +375,8 @@ public class RobotContainer {
     if (SubsystemConstants.useIntake) {
       // TODO: Tie Intake to commands in Teleop mode.
       intake.setDefaultCommand(IntakeCommands.stop(intake));
+      operPad.leftTrigger().whileTrue(IntakeCommands.pullIn(intake));
+      operPad.rightTrigger().whileTrue(IntakeCommands.pushOut(intake));
     }
 
     /*
@@ -383,6 +385,8 @@ public class RobotContainer {
     if (SubsystemConstants.useLift) {
       // TODO: Tie Intake to commands in Teleop mode.
       lift.setDefaultCommand(LiftCommands.stop(lift));
+      operPad.a().whileTrue(LiftCommands.raise(lift));
+      operPad.b().whileTrue(LiftCommands.lower(lift));
     }
 
     /*

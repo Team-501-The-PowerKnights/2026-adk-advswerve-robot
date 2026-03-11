@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.lift.Lift;
+import frc.robot.subsystems.lift.LiftConstants;
 import java.util.function.DoubleSupplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -41,7 +42,23 @@ public class LiftCommands extends Command {
         },
         lift);
   }
+  /**
+   * @param intake
+   * @return
+   */
+  public static Command raise(Lift lift) {
+    return lift.runEnd(() -> lift.acceptInput(+LiftConstants.defaultSpeed), lift::stop)
+        .withName("LiftRaise");
+  }
 
+  /**
+   * @param hopper
+   * @return
+   */
+  public static Command lower(Lift lift) {
+    return lift.runEnd(() -> lift.acceptInput(-LiftConstants.defaultSpeed), lift::stop)
+        .withName("LiftLower");
+  }
   /**
    * Command to do a manual control of the subystem for debugging.
    *
