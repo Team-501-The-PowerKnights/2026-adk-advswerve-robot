@@ -37,14 +37,11 @@ public final class SubsystemConstants {
    * name (used for ensuring that telemetry all ends up in the same location in the tree and
    * prevents typos - these are used to auto-populate the dashboard tabs).
    */
-  public static final boolean useVision = true;
-  public static final String visionName = "Vision";
+  public static final boolean useDrive = true;
+  public static final String driveName = "Drive";
 
-  public static final boolean useShooter = false;
-  public static final String shooterName = "Shooter";
-  public static final boolean useTurret = false;
-  public static final String turretName = "Turret";
-
+  public static final boolean useLauncher = true;
+  public static final String launcherName = "Launcher";
   public static final boolean useHopper = true;
   public static final String hopperName = "Hopper";
   public static final boolean useIntake = true;
@@ -55,11 +52,9 @@ public final class SubsystemConstants {
   public static final boolean useClimber = false;
   public static final String climberName = "Climber";
 
-  public static final boolean useLauncher = true;
-  public static final String launcherName = "Launcher";
+  public static final boolean useVision = true;
+  public static final String visionName = "Vision";
 
-  public static final boolean useDrive = true;
-  public static final String driveName = "Drive";
   /*
    * Standard telemetry names.
    */

@@ -48,8 +48,6 @@ import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.lift.Lift;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -67,15 +65,14 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
 
   // Subsystems
-  private final Vision vision;
   private final Drive drive;
-  private final Shooter shooter;
-  private final Turret turret;
+  private final Launcher launcher;
   private final Hopper hopper;
   private final Intake intake;
   private final Lift lift;
   private final Climber climber;
-  private final Launcher launcher;
+  private final Vision vision;
+
   /** */
   public final List<ISubsystem> subsystems;
 
@@ -130,39 +127,14 @@ public class RobotContainer {
     boolean useSubsystem;
     String useSubsystemTlmName;
 
-    useSubsystem = SubsystemConstants.useVision;
-    useSubsystemTlmName = SubsystemConstants.visionName + "/useSubsystem";
+    useSubsystem = SubsystemConstants.useLauncher;
+    useSubsystemTlmName = SubsystemConstants.launcherName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
-      vision =
-          new Vision(
-              "vision",
-              drive::addVisionMeasurement,
-              new VisionIOLimelight(camera0Name, drive::getRotation),
-              new VisionIOLimelight(camera1Name, drive::getRotation));
-      subsystems.add(vision);
+      launcher = new Launcher();
+      subsystems.add(launcher);
     } else {
-      vision =
-          new Vision("vision", drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-      ;
-    }
-    useSubsystem = SubsystemConstants.useShooter;
-    useSubsystemTlmName = SubsystemConstants.shooterName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      shooter = new Shooter();
-      subsystems.add(shooter);
-    } else {
-      shooter = null;
-    }
-    useSubsystem = SubsystemConstants.useTurret;
-    useSubsystemTlmName = SubsystemConstants.turretName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      turret = new Turret();
-      subsystems.add(turret);
-    } else {
-      turret = null;
+      launcher = null;
     }
     useSubsystem = SubsystemConstants.useHopper;
     useSubsystemTlmName = SubsystemConstants.hopperName + "/useSubsystem";
@@ -191,6 +163,7 @@ public class RobotContainer {
     } else {
       lift = null;
     }
+
     useSubsystem = SubsystemConstants.useClimber;
     useSubsystemTlmName = SubsystemConstants.climberName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
@@ -200,14 +173,21 @@ public class RobotContainer {
     } else {
       climber = null;
     }
-    useSubsystem = SubsystemConstants.useLauncher;
-    useSubsystemTlmName = SubsystemConstants.launcherName + "/useSubsystem";
+
+    useSubsystem = SubsystemConstants.useVision;
+    useSubsystemTlmName = SubsystemConstants.visionName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
-      launcher = new Launcher();
-      subsystems.add(launcher);
+      vision =
+          new Vision(
+              "vision",
+              drive::addVisionMeasurement,
+              new VisionIOLimelight(camera0Name, drive::getRotation),
+              new VisionIOLimelight(camera1Name, drive::getRotation));
+      subsystems.add(vision);
     } else {
-      launcher = null;
+      vision =
+          new Vision("vision", drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
     }
 
     // Set up auto routines
