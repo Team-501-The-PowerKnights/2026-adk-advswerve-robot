@@ -384,8 +384,8 @@ public class RobotContainer {
     if (SubsystemConstants.useLauncher) {
       launcher.setDefaultCommand(LauncherCommands.stop(launcher));
 
-      operPad.leftBumper().whileTrue(LauncherCommands.LaunchIn(launcher));
-      operPad.rightBumper().whileTrue(LauncherCommands.launchOut(launcher));
+      operPad.leftBumper().whileTrue(LauncherCommands.pullIn(launcher));
+      operPad.rightBumper().whileTrue(LauncherCommands.pushOut(launcher));
     }
 
     if (SubsystemConstants.useVision) {
