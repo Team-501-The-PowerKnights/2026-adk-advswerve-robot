@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
 import frc.robot.commands.IntakeCommands;
@@ -251,21 +252,11 @@ public class RobotContainer {
     int subsystemCount = 0;
 
     /*
-     * Intake: Tied to left joystick Y axis of operator pad
+     * Launcher: Tied to left joystick Y axis of operator pad
      */
-    if (SubsystemConstants.useLift) {
+    if (SubsystemConstants.useLauncher) {
       subsystemCount++;
-      // Default command, manual control via triggers
-      lift.setDefaultCommand(LiftCommands.debugManual(lift, () -> -operPad.getLeftY()));
-    }
-
-    /*
-     * Intake: Tied to left joystick Y axis of operator pad
-     */
-    if (SubsystemConstants.useIntake) {
-      subsystemCount++;
-      // Default command, manual control via triggers
-      intake.setDefaultCommand(IntakeCommands.debugManual(intake, () -> -operPad.getLeftY()));
+      launcher.setDefaultCommand(LauncherCommands.debugManual(launcher, () -> -operPad.getLeftY()));
     }
 
     /*
@@ -278,12 +269,32 @@ public class RobotContainer {
     }
 
     /*
-     * Launcher: Tied to left joystick Y axis of operator pad
+     * Intake: Tied to left joystick Y axis of operator pad
      */
-    if (SubsystemConstants.useLauncher) {
+    if (SubsystemConstants.useIntake) {
       subsystemCount++;
-      launcher.setDefaultCommand(LauncherCommands.debugManual(launcher, () -> -operPad.getLeftY()));
+      // Default command, manual control via triggers
+      intake.setDefaultCommand(IntakeCommands.debugManual(intake, () -> -operPad.getLeftY()));
     }
+
+    /*
+     * Intake: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useLift) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      lift.setDefaultCommand(LiftCommands.debugManual(lift, () -> -operPad.getLeftY()));
+    }
+
+    /*
+     * Climber: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useClimber) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      climber.setDefaultCommand(ClimberCommands.debugManual(climber, () -> -operPad.getLeftY()));
+    }
+
     // How many subsystems were enabled? Is there a problem?
     if (subsystemCount == 0) {
       new Alert("No Subsystems enabled in DEBUG mode - Is this right?", AlertType.kWarning)
@@ -303,6 +314,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    /*
+     * Drive:  Use standard swerve drive controls
+     */
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
@@ -336,19 +350,13 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     /*
-     * Lift:  ????
+     * Launcher:   ????
      */
-    if (SubsystemConstants.useLift) {
-      // TODO: Tie Intake to commands in Teleop mode.
-      lift.setDefaultCommand(LiftCommands.stop(lift));
-    }
+    if (SubsystemConstants.useLauncher) {
+      launcher.setDefaultCommand(LauncherCommands.stop(launcher));
 
-    /*
-     * Intake:  ????
-     */
-    if (SubsystemConstants.useIntake) {
-      // TODO: Tie Intake to commands in Teleop mode.
-      intake.setDefaultCommand(IntakeCommands.stop(intake));
+      operPad.leftBumper().whileTrue(LauncherCommands.pullIn(launcher));
+      operPad.rightBumper().whileTrue(LauncherCommands.pushOut(launcher));
     }
 
     /*
@@ -361,13 +369,33 @@ public class RobotContainer {
       operPad.y().whileTrue(HopperCommands.pushOut(hopper));
     }
 
-    if (SubsystemConstants.useLauncher) {
-      launcher.setDefaultCommand(LauncherCommands.stop(launcher));
-
-      operPad.leftBumper().whileTrue(LauncherCommands.pullIn(launcher));
-      operPad.rightBumper().whileTrue(LauncherCommands.pushOut(launcher));
+    /*
+     * Intake:  ????
+     */
+    if (SubsystemConstants.useIntake) {
+      // TODO: Tie Intake to commands in Teleop mode.
+      intake.setDefaultCommand(IntakeCommands.stop(intake));
     }
 
+    /*
+     * Lift:  ????
+     */
+    if (SubsystemConstants.useLift) {
+      // TODO: Tie Intake to commands in Teleop mode.
+      lift.setDefaultCommand(LiftCommands.stop(lift));
+    }
+
+    /*
+     * Climber:  ????
+     */
+    if (SubsystemConstants.useClimber) {
+      // TODO: Tie Climber to commands in Teleop mode.
+      climber.setDefaultCommand(ClimberCommands.stop(climber));
+    }
+
+    /*
+     * Vision
+     */
     if (SubsystemConstants.useVision) {
       // Auto aim command example
       driverPad
