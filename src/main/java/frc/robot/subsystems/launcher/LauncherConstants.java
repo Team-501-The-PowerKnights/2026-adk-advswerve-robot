@@ -11,9 +11,12 @@ public class LauncherConstants {
   public static final boolean followerInverted = false;
 
   /** Default speed for the subsystem if nothing else is controlling it. */
-  public static final double defaultSpeed = 0.9;
+  public static final double defaultSpeed = 0.5;
 
   public static final double defaultIdleSpeed = 0.1;
 
+  public static final double kLauncherNearSpeed = 0.3;
+  public static final double kLauncherMidSpeed = 0.32;
+  public static final double kLauncherFarSpeed = 0.36;
   /** */
 }

@@ -246,6 +246,7 @@ public class RobotContainer {
    * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
+  // MARK: Debug Buttons
   @SuppressWarnings("resource")
   private void configureSubsystemDebugButtonBindings() {
 
@@ -314,6 +315,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // MARK: Driver Buttons
     /*
      * Drive:  Use standard swerve drive controls
      */
@@ -323,7 +325,7 @@ public class RobotContainer {
             drive,
             () -> -driverPad.getLeftY(),
             () -> -driverPad.getLeftX(),
-            () -> -driverPad.getRightX()));
+            () -> driverPad.getRightX()));
 
     // Lock to 0° when A button is held
     driverPad
@@ -350,54 +352,6 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     /*
-     * Launcher:   ????
-     */
-    if (SubsystemConstants.useLauncher) {
-      launcher.setDefaultCommand(LauncherCommands.stop(launcher));
-
-      operPad.leftBumper().whileTrue(LauncherCommands.pullIn(launcher));
-      operPad.rightBumper().whileTrue(LauncherCommands.pushOut(launcher));
-    }
-
-    /*
-     * Hopper: Operator Pad: X button - pull in, Y button push out
-     */
-    if (SubsystemConstants.useHopper) {
-      hopper.setDefaultCommand(HopperCommands.stop(hopper));
-
-      operPad.x().whileTrue(HopperCommands.pullIn(hopper));
-      operPad.y().whileTrue(HopperCommands.pushOut(hopper));
-    }
-
-    /*
-     * Intake:  ????
-     */
-    if (SubsystemConstants.useIntake) {
-      // TODO: Tie Intake to commands in Teleop mode.
-      intake.setDefaultCommand(IntakeCommands.stop(intake));
-      operPad.leftTrigger().whileTrue(IntakeCommands.pullIn(intake));
-      operPad.rightTrigger().whileTrue(IntakeCommands.pushOut(intake));
-    }
-
-    /*
-     * Lift:  ????
-     */
-    if (SubsystemConstants.useLift) {
-      // TODO: Tie Intake to commands in Teleop mode.
-      lift.setDefaultCommand(LiftCommands.stop(lift));
-      operPad.a().whileTrue(LiftCommands.raise(lift));
-      operPad.b().whileTrue(LiftCommands.lower(lift));
-    }
-
-    /*
-     * Climber:  ????
-     */
-    if (SubsystemConstants.useClimber) {
-      // TODO: Tie Climber to commands in Teleop mode.
-      climber.setDefaultCommand(ClimberCommands.stop(climber));
-    }
-
-    /*
      * Vision
      */
     if (SubsystemConstants.useVision) {
@@ -410,6 +364,54 @@ public class RobotContainer {
                   () -> -driverPad.getLeftY(),
                   () -> -driverPad.getLeftX(),
                   () -> getHubCenter()));
+    }
+    /*
+     * Intake:  Driver Operated: Left trigger - pull in, Right trigger - push out
+     */
+    if (SubsystemConstants.useIntake) {
+      intake.setDefaultCommand(IntakeCommands.stop(intake));
+      driverPad.leftTrigger().whileTrue(IntakeCommands.pullIn(intake));
+      driverPad.rightTrigger().whileTrue(IntakeCommands.pushOut(intake));
+    }
+    // MARK: Oper Buttons
+    /*
+     * Launcher:   operator pad: Left bumper - pull in, Right bumper - push out
+     */
+    if (SubsystemConstants.useLauncher) {
+      launcher.setDefaultCommand(LauncherCommands.stop(launcher));
+
+      operPad.a().whileTrue(LauncherCommands.pullInNear(launcher));
+      operPad.x().whileTrue(LauncherCommands.pullInMid(launcher));
+      operPad.y().whileTrue(LauncherCommands.pullInFar(launcher));
+      operPad.b().whileTrue(LauncherCommands.pushOut(launcher));
+    }
+
+    /*
+     * Hopper: Operator Pad: X button - pull in, Y button push out
+     */
+    if (SubsystemConstants.useHopper) {
+      hopper.setDefaultCommand(HopperCommands.stop(hopper));
+
+      operPad.rightBumper().whileTrue(HopperCommands.pullIn(hopper));
+      operPad.leftBumper().whileTrue(HopperCommands.pushOut(hopper));
+    }
+
+    /*
+     * Lift:  operator Pad: Left trigger - raise, Right trigger - lower
+     */
+    if (SubsystemConstants.useLift) {
+      // TODO: Tie Intake to commands in Teleop mode.
+      lift.setDefaultCommand(LiftCommands.stop(lift));
+      operPad.leftTrigger().whileTrue(LiftCommands.raise(lift));
+      operPad.rightTrigger().whileTrue(LiftCommands.lower(lift));
+    }
+
+    /*
+     * Climber:  ????
+     */
+    if (SubsystemConstants.useClimber) {
+      // TODO: Tie Climber to commands in Teleop mode.
+      climber.setDefaultCommand(ClimberCommands.stop(climber));
     }
   }
 
