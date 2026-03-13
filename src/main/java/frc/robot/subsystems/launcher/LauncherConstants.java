@@ -16,7 +16,7 @@ public class LauncherConstants {
   public static final double defaultIdleSpeed = 0.1;
 
   public static final double kLauncherNearSpeed = 0.3;
-  public static final double kLauncherMidSpeed = 0.32;
-  public static final double kLauncherFarSpeed = 0.36;
+  public static final double kLauncherMidSpeed = 0.36;
+  public static final double kLauncherFarSpeed = 0.42;
   /** */
 }

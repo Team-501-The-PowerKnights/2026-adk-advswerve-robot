@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import static frc.robot.subsystems.drive.DriveConstants.drivePercent;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -70,7 +72,8 @@ public class DriveCommands {
         () -> {
           // Get linear velocity
           Translation2d linearVelocity =
-              getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+              getLinearVelocityFromJoysticks(
+                  drivePercent * xSupplier.getAsDouble(), drivePercent * ySupplier.getAsDouble());
 
           // Apply rotation deadband
           double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
@@ -122,7 +125,9 @@ public class DriveCommands {
             () -> {
               // Get linear velocity
               Translation2d linearVelocity =
-                  getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+                  getLinearVelocityFromJoysticks(
+                      drivePercent * xSupplier.getAsDouble(),
+                      drivePercent * ySupplier.getAsDouble());
 
               // Calculate angular speed
               double omega =

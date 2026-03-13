@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
@@ -195,8 +196,10 @@ public class RobotContainer {
     /*
      * Create all the subsystems based on whether enabled or not.
      */
+    // MARK: AUTO
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-
+    autoChooser.addOption(
+        "Red Center Hub Auto V1", AutoCommands.redCenterHubAutoV1(drive, launcher, hopper, intake));
     /*
      * Create the controllers and configure them.
      */
