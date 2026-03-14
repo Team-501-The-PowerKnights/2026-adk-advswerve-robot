@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.IntakeLift.IntakeLift;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
@@ -15,10 +16,10 @@ import frc.robot.subsystems.launcher.Launcher;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoCommands extends Command {
   private static final double FIRST_DRIVE_FORWARD_SPEED_MPS = 1.50;
-  private static final double FIRST_DRIVE_FORWARD_TIME_SEC = 1.25;
+  private static final double FIRST_DRIVE_FORWARD_TIME_SEC = 1.2;
 
-  private static final double SHOOT_SPINUP_SEC = 0.75;
-  private static final double SHOOT_FEED_SEC = 3.00;
+  private static final double SHOOT_SPINUP_SEC = 2.00;
+  private static final double SHOOT_FEED_SEC = 5.00;
 
   private static final double COLLECT_FORWARD_SPEED_MPS = 1.75;
   private static final double COLLECT_FORWARD_TIME_SEC = 3.00;
@@ -33,16 +34,16 @@ public class AutoCommands extends Command {
    * collecting 4) Return toward hub 5) Shoot collected fuel
    */
   public static Command redCenterHubAutoV1(
-      Drive drive, Launcher launcher, Hopper hopper, Intake intake) {
+      Drive drive, Launcher launcher, Hopper hopper, Intake intake, IntakeLift intakelift) {
     return Commands.sequence(
         stopDrive(drive),
 
         // 1) Drive forward from the starting line
-        driveRobotRelative(drive, -FIRST_DRIVE_FORWARD_SPEED_MPS, FIRST_DRIVE_FORWARD_TIME_SEC),
+        driveRobotRelative(drive, FIRST_DRIVE_FORWARD_SPEED_MPS, FIRST_DRIVE_FORWARD_TIME_SEC),
         stopDrive(drive),
 
         // 2) Shoot the 8 preloaded fuel
-        shootFuel(launcher, hopper, null),
+        shootFuel(launcher, hopper, null, intakelift),
 
         // // 3) Drive toward midfield and collect
         // Commands.deadline(
@@ -65,12 +66,14 @@ public class AutoCommands extends Command {
   }
 
   /** Spins up launcher, then feeds fuel. */
-  private static Command shootFuel(Launcher launcher, Hopper hopper, Intake intake) {
+  private static Command shootFuel(
+      Launcher launcher, Hopper hopper, Intake intake, IntakeLift intakelift) {
     if (intake == null) {
       return Commands.deadline(
           Commands.waitSeconds(SHOOT_SPINUP_SEC + SHOOT_FEED_SEC),
           LauncherCommands.pullInMid(launcher),
-          Commands.sequence(Commands.waitSeconds(SHOOT_SPINUP_SEC), HopperCommands.pullIn(hopper)));
+          Commands.sequence(Commands.waitSeconds(SHOOT_SPINUP_SEC), HopperCommands.pullIn(hopper)),
+          IntakeLiftCommands.raise(intakelift).withTimeout(1.0));
     }
 
     return Commands.deadline(

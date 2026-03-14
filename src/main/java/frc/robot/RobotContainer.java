@@ -35,9 +35,10 @@ import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
 import frc.robot.commands.IntakeCommands;
+import frc.robot.commands.IntakeLiftCommands;
 import frc.robot.commands.LauncherCommands;
-import frc.robot.commands.LiftCommands;
 import frc.robot.subsystems.ISubsystem;
+import frc.robot.subsystems.IntakeLift.IntakeLift;
 import frc.robot.subsystems.SubsystemConstants;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
@@ -49,7 +50,6 @@ import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
-import frc.robot.subsystems.lift.Lift;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -71,7 +71,8 @@ public class RobotContainer {
   private final Launcher launcher;
   private final Hopper hopper;
   private final Intake intake;
-  private final Lift lift;
+  //  private final Lift lift;
+  private final IntakeLift intakelift;
   private final Climber climber;
   private final Vision vision;
 
@@ -156,14 +157,14 @@ public class RobotContainer {
     } else {
       intake = null;
     }
-    useSubsystem = SubsystemConstants.useLift;
-    useSubsystemTlmName = SubsystemConstants.liftName + "/useSubsystem";
+    useSubsystem = SubsystemConstants.useIntakeLift;
+    useSubsystemTlmName = SubsystemConstants.intakeliftName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
-      lift = new Lift();
-      subsystems.add((ISubsystem) lift);
+      intakelift = new IntakeLift();
+      subsystems.add((ISubsystem) intakelift);
     } else {
-      lift = null;
+      intakelift = null;
     }
 
     useSubsystem = SubsystemConstants.useClimber;
@@ -199,7 +200,9 @@ public class RobotContainer {
     // MARK: AUTO
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     autoChooser.addOption(
-        "Red Center Hub Auto V1", AutoCommands.redCenterHubAutoV1(drive, launcher, hopper, intake));
+        "Red Center Hub Auto V1",
+        AutoCommands.redCenterHubAutoV1(drive, launcher, hopper, intake, intakelift));
+
     /*
      * Create the controllers and configure them.
      */
@@ -284,10 +287,11 @@ public class RobotContainer {
     /*
      * Intake: Tied to left joystick Y axis of operator pad
      */
-    if (SubsystemConstants.useLift) {
+    if (SubsystemConstants.useIntakeLift) {
       subsystemCount++;
       // Default command, manual control via triggers
-      lift.setDefaultCommand(LiftCommands.debugManual(lift, () -> -operPad.getLeftY()));
+      intakelift.setDefaultCommand(
+          IntakeLiftCommands.debugManual(intakelift, () -> -operPad.getLeftY()));
     }
 
     /*
@@ -381,7 +385,7 @@ public class RobotContainer {
      * Launcher:   operator pad: Left bumper - pull in, Right bumper - push out
      */
     if (SubsystemConstants.useLauncher) {
-      launcher.setDefaultCommand(LauncherCommands.stop(launcher));
+      launcher.setDefaultCommand(LauncherCommands.SetIdle(launcher));
 
       operPad.a().whileTrue(LauncherCommands.pullInNear(launcher));
       operPad.x().whileTrue(LauncherCommands.pullInMid(launcher));
@@ -402,15 +406,15 @@ public class RobotContainer {
     /*
      * Lift:  operator Pad: Left trigger - raise, Right trigger - lower
      */
-    if (SubsystemConstants.useLift) {
+    if (SubsystemConstants.useIntakeLift) {
       // TODO: Tie Intake to commands in Teleop mode.
-      lift.setDefaultCommand(LiftCommands.stop(lift));
-      operPad.leftTrigger().whileTrue(LiftCommands.raise(lift));
-      operPad.rightTrigger().whileTrue(LiftCommands.lower(lift));
+      intakelift.setDefaultCommand(IntakeLiftCommands.stop(intakelift));
+      operPad.leftTrigger().whileTrue(IntakeLiftCommands.lower(intakelift));
+      operPad.rightTrigger().whileTrue(IntakeLiftCommands.raise(intakelift));
     }
 
     /*
-     * Climber:  ????
+     * Climber:  ????.
      */
     if (SubsystemConstants.useClimber) {
       // TODO: Tie Climber to commands in Teleop mode.

@@ -1,0 +1,147 @@
+/*------------------------------------------------------------------------*/
+/*- Copyright (c) Team 501 - The PowerKnights. All Rights Reserved.       */
+/*- Open Source Software - may be modified and shared by other FRC teams  */
+/*- under the terms of the Team501 license. The code must be accompanied  */
+/*- by the Team 501 - The PowerKnights license file in the root directory */
+/*- of this project.                                                      */
+/*------------------------------------------------------------------------*/
+
+package frc.robot.subsystems.IntakeLift;
+
+import static frc.robot.subsystems.IntakeLift.IntakeLiftConstants.*;
+import static frc.robot.subsystems.SubsystemConstants.intakeliftName;
+
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkFlexConfig;
+import frc.robot.subsystems.ISubsystem;
+import frc.robot.subsystems.RevRoboticsSubsystem;
+import frc.robot.util.SparkUtil501;
+import org.littletonrobotics.junction.Logger;
+
+/**
+ * This class contains the implementation of the <code>IntakeLift</code> subsystem.
+ *
+ * <p>More detail ...
+ *
+ * @since 2026.0.0
+ * @author first.brian Buzzell
+ * @version 2026.0.0
+ */
+public class IntakeLift extends RevRoboticsSubsystem implements ISubsystem {
+
+  /** */
+  private final SparkFlex motor;
+  /** */
+  private double currentSpeed = 0.0;
+
+  /** Constructs a new instance of the subsystem. */
+  public IntakeLift() {
+    super(intakeliftName);
+    initConstruction();
+
+    // Create and configure motor
+    motor = new SparkFlex(motorCanId, MotorType.kBrushless);
+    SparkFlexConfig motorConfig = new SparkFlexConfig();
+    motorConfig.idleMode(IdleMode.kCoast).inverted(motorInverted);
+    // TODO - Configure additional motor parameters from Constants file
+    SparkUtil501.tryUntilOk(
+        motor,
+        5,
+        () ->
+            motor.configure(
+                motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+
+    // We start stopped
+    stop();
+
+    finishConstruction();
+  }
+
+  /**
+   * Stops motor movement. Motor can be moved again by calling set without having to re-enable the
+   * motor. Preferred method of stopping the motor - especially if running some kind of PID control.
+   */
+  public void stop() {
+    // Make the subsystem state correct
+    currentSpeed = 0;
+    // Use stop to ensure it stops no matter what control mode is in play
+    motor.stopMotor();
+  }
+
+  // TODO - Document directions for +/- speed
+  /**
+   * Accepts a manual override of any defaults or PID controlled set points to allow <i>Operator</i>
+   * adjustment of the position. Positive values ???? and negative values ????.
+   *
+   * @param speed - The speed to set. Value should be between -1.0 and +1.0.
+   */
+  public void acceptInput(double speed) {
+    currentSpeed = speed;
+  }
+
+  /**
+   * Sets the desired speed on the motor.
+   *
+   * @param speed - The speed to set. Value should be between -1.0 and +1.0.
+   */
+  private void setSpeed(double speed) {
+    motor.set(speed);
+  }
+
+  @Override
+  public void disabledInit() {
+    // Ensure any motion stops when we go to <i>disabled</code>
+    stop();
+  }
+
+  // TODO - Add code to set the default speed on auto & teleop if running that way
+
+  private final String tlmCurrentSpeed = getSubsystem() + "/CurrentSpeed";
+
+  @Override
+  public void periodic() {
+    setSpeed(currentSpeed);
+
+    Logger.recordOutput(tlmCurrentSpeed, currentSpeed);
+    logMotorTelemetry(motor);
+  }
+
+  private final String tlmOutput = getSubsystem() + "/Output";
+
+  private final String tlmMotorCurrent = getSubsystem() + "/MotorCurrent";
+  private final String tlmMotorTemp = getSubsystem() + "/MotorTemp";
+  private final String tlmMotorOvertemp = getSubsystem() + "/MotorOvertemp";
+
+  private final String tlmFollowMotorCurrent = getSubsystem() + "/FollowMotorCurrent";
+  private final String tlmFollowMotorTemp = getSubsystem() + "/FollowMotorTemp";
+  private final String tlmFollowMotorOvertemp = getSubsystem() + "/FollowMotorOvertemp";
+
+  /**
+   * Log the telemetry so it can be recorded and placed on the dashboard. This version is for a
+   * <code>Subsystem</code> that has a <i>motor</i> and a <i>follower</i>.
+   *
+   * @param motor
+   * @param follower
+   */
+  private void logMotorTelemetry(SparkBase motor) {
+    Logger.recordOutput(tlmOutput, motor.get());
+
+    Logger.recordOutput(tlmMotorCurrent, motor.getOutputCurrent());
+    double motorTemp = motor.getMotorTemperature();
+    Logger.recordOutput(tlmMotorTemp, motorTemp);
+    // Invert so green is OK and red is too hot
+    // Logger.recordOutput(tlmMotorOvertemp, (!(motorTemp > IntakeLiftConstants.motorOverTemp)));
+
+    // Logger.recordOutput(tlmFollowMotorCurrent, follower.getOutputCurrent());
+    // motorTemp = follower.getMotorTemperature();
+    // Logger.recordOutput(tlmFollowMotorTemp, motorTemp);
+    // // Invert so green is OK and red is too hot
+    // Logger.recordOutput(tlmFollowMotorOvertemp, (!(motorTemp >
+    // IntakeLiftConstants.motorOverTemp)));
+  }
+}

@@ -46,7 +46,10 @@ public final class SubsystemConstants {
   public static final String hopperName = "Hopper";
   public static final boolean useIntake = true;
   public static final String intakeName = "Intake";
-  public static final boolean useLift = true;
+  public static final boolean useIntakeLift = true;
+  public static final String intakeliftName = "IntakeLift";
+
+  public static final boolean useLift = false;
   public static final String liftName = "Lift";
 
   public static final boolean useClimber = false;
