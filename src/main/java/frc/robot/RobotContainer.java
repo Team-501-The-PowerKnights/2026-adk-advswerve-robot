@@ -199,9 +199,8 @@ public class RobotContainer {
      */
     // MARK: AUTO
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-    autoChooser.addOption(
-        "Red Center Hub Auto V1",
-        AutoCommands.redCenterHubAutoV1(drive, launcher, hopper, intake, intakelift));
+    autoChooser.addOption( "Red Center Hub Auto V1", AutoCommands.redCenterHubAutoV1(drive, launcher, hopper, intake, intakelift));
+    autoChooser.addOption( "Red Center Hub Auto V2", AutoCommands.redCenterHubAutoV2(drive, launcher, hopper, intake, intakelift));
 
     /*
      * Create the controllers and configure them.
