@@ -24,8 +24,8 @@ public class AutoCommands extends Command {
   private static final double COLLECT_FORWARD_SPEED_MPS = 1.5;
   private static final double COLLECT_FORWARD_TIME_SEC = .25;
 
-private static final double STRAFE_RIGHT_SPEED_MPS = 1.50;
-private static final double STRAFE_RIGHT_TIME_SEC = 0.2;
+  private static final double STRAFE_RIGHT_SPEED_MPS = 1.50;
+  private static final double STRAFE_RIGHT_TIME_SEC = 0.2;
 
   private static final double RETURN_SPEED_MPS = -1.75;
   private static final double RETURN_TIME_SEC = 3.00;
@@ -68,7 +68,8 @@ private static final double STRAFE_RIGHT_TIME_SEC = 0.2;
         stopDrive(drive));
   }
 
-  public static Command redCenterHubAutoV2(Drive drive, Launcher launcher, Hopper hopper, Intake intake, IntakeLift intakelift) {
+  public static Command redCenterHubAutoV2(
+      Drive drive, Launcher launcher, Hopper hopper, Intake intake, IntakeLift intakelift) {
     return Commands.sequence(
         stopDrive(drive),
 
@@ -79,15 +80,12 @@ private static final double STRAFE_RIGHT_TIME_SEC = 0.2;
         // 2) Shoot the 8 preloaded fuel
         shootFuel(launcher, hopper, null, intakelift),
 
-      // 3 strafe to the right:
+        // 3 strafe to the right:
         strafeRobotRelative(drive, STRAFE_RIGHT_TIME_SEC, STRAFE_RIGHT_SPEED_MPS),
         stopDrive(drive),
-
         driveRobotRelative(drive, COLLECT_FORWARD_SPEED_MPS, COLLECT_FORWARD_TIME_SEC),
-
-    
         stopDrive(drive));
-      }
+  }
   /** Spins up launcher, then feeds fuel. */
   private static Command shootFuel(
       Launcher launcher, Hopper hopper, Intake intake, IntakeLift intakelift) {
@@ -121,15 +119,14 @@ private static final double STRAFE_RIGHT_TIME_SEC = 0.2;
         () -> drive.runVelocity(new ChassisSpeeds(vxMetersPerSec, 0.0, 0.0)), drive);
   }
 
-private static Command strafeRobotRelative(Drive drive, double vyMetersPerSec, double seconds) {
+  private static Command strafeRobotRelative(Drive drive, double vyMetersPerSec, double seconds) {
 
-  return Commands.deadline(
-      Commands.waitSeconds(seconds),
-      Commands.run(
-          () -> drive.runVelocity(new ChassisSpeeds(0.0, vyMetersPerSec, 0.0)),
-          drive))
-      .finallyDo(() -> drive.runVelocity(new ChassisSpeeds()));
-}
+    return Commands.deadline(
+            Commands.waitSeconds(seconds),
+            Commands.run(
+                () -> drive.runVelocity(new ChassisSpeeds(0.0, vyMetersPerSec, 0.0)), drive))
+        .finallyDo(() -> drive.runVelocity(new ChassisSpeeds()));
+  }
 
   /** Stops the drivetrain cleanly. */
   private static Command stopDrive(Drive drive) {

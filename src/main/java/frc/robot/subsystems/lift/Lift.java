@@ -43,8 +43,7 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
 
   public enum Mode {
     /** Operating based on PID set point. (Default) */
-    // RESTORE PID
-    // PID,
+    PID,
     /** Operating with input from joysticks. */
     MANUAL
   }
@@ -195,14 +194,14 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
    * @param position - Encoder position to use
    */
   private void holdAtPositionWithPID(double position) {
-    // RESTORE PID
-    // // Using PID at current location
-    // currentMode = Mode.PID;
-    // // Use task of Joystick
-    // Task.HOLD.setTarget(position);
-    // setTask(Task.HOLD);
-    // // no (manual) speed control
-    // currentSpeed = 0.0;
+
+    // Using PID at current location
+    currentMode = Mode.PID;
+    // Use task of Joystick
+    Task.HOLD.setTarget(position);
+    setTask(Task.HOLD);
+    // no (manual) speed control
+    currentSpeed = 0.0;
   }
 
   private String collectEncoderValues() {
@@ -249,8 +248,8 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
     }
 
     // Set the PID target to be the current position so it doesn't move
-    // Restore PID
-    // holdAtPositionWithPID(getPosition());
+
+    holdAtPositionWithPID(getPosition());
   }
 
   @Override
@@ -307,19 +306,18 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
 
     currentSpeed = speed;
 
-    // if (speed == 0) {
-    //   // No joystick input (so either revert to PID or ignore if currently PID)
-    //   if (currentMode == Mode.MANUAL) {
-    //     // Use current position for hold point
-    //     holdAtPositionWithPID(getPosition());
-    //   }
-    // } else {
-    //   // Valid teleop inputs (so either switch to MANUAL or just update speed)
-    //   if (currentMode == Mode.PID) {
-    //     currentMode = Mode.MANUAL;
-    //   }
-    // }
-    currentMode = Mode.MANUAL;
+    if (speed == 0) {
+      // No joystick input (so either revert to PID or ignore if currently PID)
+      if (currentMode == Mode.MANUAL) {
+        // Use current position for hold point
+        holdAtPositionWithPID(getPosition());
+      }
+    } else {
+      // Valid teleop inputs (so either switch to MANUAL or just update speed)
+      if (currentMode == Mode.PID) {
+        currentMode = Mode.MANUAL;
+      }
+    }
   }
 
   /**
@@ -393,14 +391,14 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
    * <code>Subsystem</code> that has a <i>position PID</i>.
    */
   private void logPIDTelemetry() {
-    // Logger.recordOutput(tlmCurrentMode, currentMode.name());
-    // //    Logger.recordOutput(tlmIsPid, (currentMode == Mode.PID));
-    // //    Logger.recordOutput(tlmCurrentTask, currentTask.getName());
-    // Logger.recordOutput(tlmCurrentTarget, currentTarget);
-    // Logger.recordOutput(tlmPosition, getPosition());
-    // Logger.recordOutput(tlmEncoderConfig, encoderInitBuf.toString());
-    // Logger.recordOutput(tlmDoPidTuning, LiftConstants.doPidTuning);
-    // Logger.recordOutput(tlmPidConfig, pidConfigBuf.toString());
+    Logger.recordOutput(tlmCurrentMode, currentMode.name());
+    Logger.recordOutput(tlmIsPid, (currentMode == Mode.PID));
+    Logger.recordOutput(tlmCurrentTask, currentTask.getName());
+    Logger.recordOutput(tlmCurrentTarget, currentTarget);
+    Logger.recordOutput(tlmPosition, getPosition());
+    Logger.recordOutput(tlmEncoderConfig, encoderInitBuf.toString());
+    Logger.recordOutput(tlmDoPidTuning, LiftConstants.doPidTuning);
+    Logger.recordOutput(tlmPidConfig, pidConfigBuf.toString());
   }
 
   private final String tlmOutput = getSubsystem() + "/Output";
