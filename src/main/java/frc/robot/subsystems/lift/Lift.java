@@ -194,6 +194,7 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
    * @param position - Encoder position to use
    */
   private void holdAtPositionWithPID(double position) {
+
     // Using PID at current location
     currentMode = Mode.PID;
     // Use task of Joystick
@@ -247,6 +248,7 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
     }
 
     // Set the PID target to be the current position so it doesn't move
+
     holdAtPositionWithPID(getPosition());
   }
 

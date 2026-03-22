@@ -6,10 +6,9 @@
 /*- of this project.                                                      */
 /*------------------------------------------------------------------------*/
 
-package frc.robot.subsystems.intake;
-
+package frc.robot.subsystems.IntakeLift;
 /**
- * This class contains the constants for the <code>Intake</code> subsystem.
+ * This class contains the constants for the <code>IntakeLift</code> subsystem.
  *
  * <p>More detail ...
  *
@@ -17,16 +16,16 @@ package frc.robot.subsystems.intake;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public final class IntakeConstants {
+public final class IntakeLiftConstants {
 
   /** CAN ID of the motor. */
-  public static final int motorCanId = 40;
+  public static final int motorCanId = 42;
 
-  /** Whether the <i>motor</i> needs to be reversed */
+  /** Whether the <i>follower</i> needs to be reversed from the <i>leader</i>. */
   public static final boolean motorInverted = true;
 
-  /** Default speed for the subsystem if nothing else is controlling it. */
-  public static final double defaultSpeed = 0.650;
+  /** Default speed for the subsystem if no41thing else is controlling it. */
+  public static final double defaultSpeed = 0.3;
 
   /** */
   // TODO - Set real value for motorCurrentLimit

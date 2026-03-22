@@ -30,13 +30,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
 import frc.robot.commands.IntakeCommands;
+import frc.robot.commands.IntakeLiftCommands;
 import frc.robot.commands.LauncherCommands;
-import frc.robot.commands.LiftCommands;
 import frc.robot.subsystems.ISubsystem;
+import frc.robot.subsystems.IntakeLift.IntakeLift;
 import frc.robot.subsystems.SubsystemConstants;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
@@ -48,7 +50,6 @@ import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
-import frc.robot.subsystems.lift.Lift;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -70,7 +71,8 @@ public class RobotContainer {
   private final Launcher launcher;
   private final Hopper hopper;
   private final Intake intake;
-  private final Lift lift;
+  //  private final Lift lift;
+  private final IntakeLift intakelift;
   private final Climber climber;
   private final Vision vision;
 
@@ -155,14 +157,14 @@ public class RobotContainer {
     } else {
       intake = null;
     }
-    useSubsystem = SubsystemConstants.useLift;
-    useSubsystemTlmName = SubsystemConstants.liftName + "/useSubsystem";
+    useSubsystem = SubsystemConstants.useIntakeLift;
+    useSubsystemTlmName = SubsystemConstants.intakeliftName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
-      lift = new Lift();
-      subsystems.add((ISubsystem) lift);
+      intakelift = new IntakeLift();
+      subsystems.add((ISubsystem) intakelift);
     } else {
-      lift = null;
+      intakelift = null;
     }
 
     useSubsystem = SubsystemConstants.useClimber;
@@ -195,7 +197,14 @@ public class RobotContainer {
     /*
      * Create all the subsystems based on whether enabled or not.
      */
+    // MARK: AUTO
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoChooser.addOption(
+        "Red Center Hub Auto V1",
+        AutoCommands.redCenterHubAutoV1(drive, launcher, hopper, intake, intakelift));
+    autoChooser.addOption(
+        "Red Center Hub Auto V2",
+        AutoCommands.redCenterHubAutoV2(drive, launcher, hopper, intake, intakelift));
 
     /*
      * Create the controllers and configure them.
@@ -246,6 +255,7 @@ public class RobotContainer {
    * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
+  // MARK: Debug Buttons
   @SuppressWarnings("resource")
   private void configureSubsystemDebugButtonBindings() {
 
@@ -280,10 +290,11 @@ public class RobotContainer {
     /*
      * Intake: Tied to left joystick Y axis of operator pad
      */
-    if (SubsystemConstants.useLift) {
+    if (SubsystemConstants.useIntakeLift) {
       subsystemCount++;
       // Default command, manual control via triggers
-      lift.setDefaultCommand(LiftCommands.debugManual(lift, () -> -operPad.getLeftY()));
+      intakelift.setDefaultCommand(
+          IntakeLiftCommands.debugManual(intakelift, () -> -operPad.getLeftY()));
     }
 
     /*
@@ -314,6 +325,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // MARK: Driver Buttons
     /*
      * Drive:  Use standard swerve drive controls
      */
@@ -323,7 +335,7 @@ public class RobotContainer {
             drive,
             () -> -driverPad.getLeftY(),
             () -> -driverPad.getLeftX(),
-            () -> -driverPad.getRightX()));
+            () -> driverPad.getRightX()));
 
     // Lock to 0° when A button is held
     driverPad
@@ -350,50 +362,6 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     /*
-     * Launcher:   ????
-     */
-    if (SubsystemConstants.useLauncher) {
-      launcher.setDefaultCommand(LauncherCommands.stop(launcher));
-
-      operPad.leftBumper().whileTrue(LauncherCommands.pullIn(launcher));
-      operPad.rightBumper().whileTrue(LauncherCommands.pushOut(launcher));
-    }
-
-    /*
-     * Hopper: Operator Pad: X button - pull in, Y button push out
-     */
-    if (SubsystemConstants.useHopper) {
-      hopper.setDefaultCommand(HopperCommands.stop(hopper));
-
-      operPad.x().whileTrue(HopperCommands.pullIn(hopper));
-      operPad.y().whileTrue(HopperCommands.pushOut(hopper));
-    }
-
-    /*
-     * Intake:  ????
-     */
-    if (SubsystemConstants.useIntake) {
-      // TODO: Tie Intake to commands in Teleop mode.
-      intake.setDefaultCommand(IntakeCommands.stop(intake));
-    }
-
-    /*
-     * Lift:  ????
-     */
-    if (SubsystemConstants.useLift) {
-      // TODO: Tie Intake to commands in Teleop mode.
-      lift.setDefaultCommand(LiftCommands.stop(lift));
-    }
-
-    /*
-     * Climber:  ????
-     */
-    if (SubsystemConstants.useClimber) {
-      // TODO: Tie Climber to commands in Teleop mode.
-      climber.setDefaultCommand(ClimberCommands.stop(climber));
-    }
-
-    /*
      * Vision
      */
     if (SubsystemConstants.useVision) {
@@ -406,6 +374,54 @@ public class RobotContainer {
                   () -> -driverPad.getLeftY(),
                   () -> -driverPad.getLeftX(),
                   () -> getHubCenter()));
+    }
+    /*
+     * Intake:  Driver Operated: Left trigger - pull in, Right trigger - push out
+     */
+    if (SubsystemConstants.useIntake) {
+      intake.setDefaultCommand(IntakeCommands.stop(intake));
+      driverPad.leftTrigger().whileTrue(IntakeCommands.pullIn(intake));
+      driverPad.rightTrigger().whileTrue(IntakeCommands.pushOut(intake));
+    }
+    // MARK: Oper Buttons
+    /*
+     * Launcher:   operator pad: Left bumper - pull in, Right bumper - push out
+     */
+    if (SubsystemConstants.useLauncher) {
+      launcher.setDefaultCommand(LauncherCommands.SetIdle(launcher));
+
+      operPad.a().whileTrue(LauncherCommands.pullInNear(launcher));
+      operPad.x().whileTrue(LauncherCommands.pullInMid(launcher));
+      operPad.y().whileTrue(LauncherCommands.pullInFar(launcher));
+      operPad.b().whileTrue(LauncherCommands.pushOut(launcher));
+    }
+
+    /*
+     * Hopper: Operator Pad: X button - pull in, Y button push out
+     */
+    if (SubsystemConstants.useHopper) {
+      hopper.setDefaultCommand(HopperCommands.stop(hopper));
+
+      operPad.rightBumper().whileTrue(HopperCommands.pullIn(hopper));
+      operPad.leftBumper().whileTrue(HopperCommands.pushOut(hopper));
+    }
+
+    /*
+     * Lift:  operator Pad: Left trigger - raise, Right trigger - lower
+     */
+    if (SubsystemConstants.useIntakeLift) {
+      // TODO: Tie Intake to commands in Teleop mode.
+      intakelift.setDefaultCommand(IntakeLiftCommands.stop(intakelift));
+      operPad.leftTrigger().whileTrue(IntakeLiftCommands.lower(intakelift));
+      operPad.rightTrigger().whileTrue(IntakeLiftCommands.raise(intakelift));
+    }
+
+    /*
+     * Climber:  ????.
+     */
+    if (SubsystemConstants.useClimber) {
+      // TODO: Tie Climber to commands in Teleop mode.
+      climber.setDefaultCommand(ClimberCommands.stop(climber));
     }
   }
 

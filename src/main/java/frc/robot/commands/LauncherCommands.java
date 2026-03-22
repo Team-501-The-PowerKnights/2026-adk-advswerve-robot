@@ -25,6 +25,10 @@ public class LauncherCommands {
     return launcher.runOnce(launcher::stop).withName("LauncherStop");
   }
 
+  public static Command SetIdle(Launcher launcher) {
+    return launcher.runOnce(launcher::setIdle).withName("LauncherSetIdle");
+  }
+
   public static Command manual(Launcher launcher, DoubleSupplier speedSupplier) {
     return Commands.run(
         () -> {
@@ -41,6 +45,34 @@ public class LauncherCommands {
   public static Command pullIn(Launcher launcher) {
     return launcher
         .runEnd(() -> launcher.acceptInput(-LauncherConstants.defaultSpeed), launcher::stop)
+        .withName("LauncherPullIn");
+  }
+  /**
+   * @param launcher
+   * @return
+   */
+  public static Command pullInNear(Launcher launcher) {
+    return launcher
+        .runEnd(
+            () -> launcher.acceptInput(-LauncherConstants.kLauncherNearSpeed), launcher::setIdle)
+        .withName("LauncherPullIn");
+  }
+  /**
+   * @param launcher
+   * @return
+   */
+  public static Command pullInMid(Launcher launcher) {
+    return launcher
+        .runEnd(() -> launcher.acceptInput(-LauncherConstants.kLauncherMidSpeed), launcher::setIdle)
+        .withName("LauncherPullIn");
+  }
+  /**
+   * @param launcher
+   * @return
+   */
+  public static Command pullInFar(Launcher launcher) {
+    return launcher
+        .runEnd(() -> launcher.acceptInput(-LauncherConstants.kLauncherFarSpeed), launcher::setIdle)
         .withName("LauncherPullIn");
   }
 

@@ -32,6 +32,12 @@ public class Launcher extends TalonFXSubsystem implements ISubsystem {
 
     finishConstruction();
   }
+
+  public void stop() {
+    acceptInput(0.0);
+    leader.stopMotor();
+  }
+
   /** Percent output: -1.0 to +1.0 */
   public void acceptInput(double speed) {
     currentSpeed = speed;
@@ -51,9 +57,15 @@ public class Launcher extends TalonFXSubsystem implements ISubsystem {
     currentSpeed = LauncherConstants.defaultIdleSpeed;
   }
 
-  public void stop() {
-    acceptInput(0.0);
-    leader.stopMotor();
+  public void setIdle() {
+    currentSpeed = -defaultIdleSpeed;
+    leader.set(-defaultIdleSpeed);
+  }
+
+  @Override
+  public void disabledInit() {
+    // Ensure any motion stops when we go to <i>disabled</code>
+    stop();
   }
 
   @Override
@@ -63,14 +75,23 @@ public class Launcher extends TalonFXSubsystem implements ISubsystem {
     logMotorTelemetry(leader, follower);
   }
 
-  @Override
-  public void disabledInit() {
-    // Ensure any motion stops when we go to <i>disabled</code>
-    stop();
-  }
+  private final String tlmLeaderSpeed = getSubsystem() + "/LeaderSpeed";
+  private final String tlmFollowerSpeed = getSubsystem() + "/FollowerSpeed";
+  // private final String tlmLeaderCurrent = getSubsystem() + "/LeaderCurrent";
+  // private final String tlmLeaderTemp = getSubsystem() + "/LeaderTemp";
+  private final String tlmCurrentSpeed = getSubsystem() + "/CurrentSpeed";
 
-  private void logMotorTelemetry(TalonFX motor, TalonFX follower) {
+  /**
+   * Log the telemetry so it can be recorded and placed on the dashboard. This version is for a
+   * <code>Subsystem</code> that has a <i>motor</i> and a <i>follower</i>.
+   *
+   * @param leader
+   * @param follower
+   */
+  private void logMotorTelemetry(TalonFX leader, TalonFX follower) {
     // TODO - Add telemetry for motors
-    Logger.recordOutput(launcherName, currentSpeed);
+    Logger.recordOutput(tlmCurrentSpeed, currentSpeed);
+    Logger.recordOutput(tlmLeaderSpeed, leader.get());
+    Logger.recordOutput(tlmFollowerSpeed, follower.get());
   }
 }
