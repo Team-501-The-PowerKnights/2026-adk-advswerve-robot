@@ -212,15 +212,15 @@ public class RobotContainer {
     // MARK: AUTO
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     if (SubsystemConstants.useDrive
-        && SubsystemConstants.useLauncher
+        && SubsystemConstants.useLauncherFOC
         && SubsystemConstants.useHopper
         && SubsystemConstants.useIntake) {
       autoChooser.addOption(
           "Red Center Hub Auto V1",
-          AutoCommands.redCenterHubAutoV1(drive, launcher, hopper, intake));
+          AutoCommands.redCenterHubAutoV1(drive, launcherfoc, hopper, intake));
       autoChooser.addOption(
           "Red Center Hub Auto V2",
-          AutoCommands.redCenterHubAutoV2(drive, launcher, hopper, intake));
+          AutoCommands.redCenterHubAutoV2(drive, launcherfoc, hopper, intake));
     }
 
     /*

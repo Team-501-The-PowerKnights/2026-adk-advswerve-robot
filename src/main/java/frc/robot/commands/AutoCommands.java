@@ -10,23 +10,23 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.launcher.Launcher;
+import frc.robot.subsystems.launcherfoc.LauncherFOC;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoCommands extends Command {
   private static final double FIRST_DRIVE_FORWARD_SPEED_MPS = 1.50;
   private static final double FIRST_DRIVE_FORWARD_TIME_SEC = 1.2;
 
-  private static final double SHOOT_SPINUP_SEC = 2.00;
+  private static final double SHOOT_SPINUP_SEC = 4.00;
   private static final double SHOOT_FEED_SEC = 5.00;
 
-  private static final double COLLECT_FORWARD_SPEED_MPS = 1.5;
-  private static final double COLLECT_FORWARD_TIME_SEC = .25;
+  private static final double COLLECT_FORWARD_SPEED_MPS = -1.5;
+  private static final double COLLECT_FORWARD_TIME_SEC = 3.00;
 
   private static final double STRAFE_RIGHT_SPEED_MPS = 1.50;
-  private static final double STRAFE_RIGHT_TIME_SEC = 0.2;
+  private static final double STRAFE_RIGHT_TIME_SEC = 1.4;
 
-  private static final double RETURN_SPEED_MPS = -1.75;
+  private static final double RETURN_SPEED_MPS = 1.75;
   private static final double RETURN_TIME_SEC = 3.00;
 
   private AutoCommands() {}
@@ -36,16 +36,16 @@ public class AutoCommands extends Command {
    * collecting 4) Return toward hub 5) Shoot collected fuel
    */
   public static Command redCenterHubAutoV1(
-      Drive drive, Launcher launcher, Hopper hopper, Intake intake) {
+      Drive drive, LauncherFOC launcherfoc, Hopper hopper, Intake intake) {
     return Commands.sequence(
         stopDrive(drive),
-
+//This moves the robot back 75 inches.
         // 1) Drive forward from the starting line
         driveRobotRelative(drive, FIRST_DRIVE_FORWARD_SPEED_MPS, FIRST_DRIVE_FORWARD_TIME_SEC),
         stopDrive(drive),
 
         // 2) Shoot the 8 preloaded fuel
-        shootFuel(launcher, hopper, null),
+        shootFuel(launcherfoc, hopper, null),
 
         // // 3) Drive toward midfield and collect
         // Commands.deadline(
@@ -68,7 +68,7 @@ public class AutoCommands extends Command {
   }
 
   public static Command redCenterHubAutoV2(
-      Drive drive, Launcher launcher, Hopper hopper, Intake intake) {
+      Drive drive, LauncherFOC launcherfoc, Hopper hopper, Intake intake) {
     return Commands.sequence(
         stopDrive(drive),
 
@@ -77,7 +77,7 @@ public class AutoCommands extends Command {
         stopDrive(drive),
 
         // 2) Shoot the 8 preloaded fuel
-        shootFuel(launcher, hopper, null),
+        shootFuel(launcherfoc, hopper, null),
 
         // 3 strafe to the right:
         strafeRobotRelative(drive, STRAFE_RIGHT_TIME_SEC, STRAFE_RIGHT_SPEED_MPS),
@@ -106,17 +106,17 @@ public class AutoCommands extends Command {
   //           IntakeCommands.pullIn(intake)));
   // }
 
-  private static Command shootFuel(Launcher launcher, Hopper hopper, Intake intake) {
+  private static Command shootFuel(LauncherFOC launcherfoc, Hopper hopper, Intake intake) {
     if (intake == null) {
       return Commands.deadline(
           Commands.waitSeconds(SHOOT_SPINUP_SEC + SHOOT_FEED_SEC),
-          LauncherCommands.pullInMid(launcher),
+          LauncherFOCCommands.pullInMid(launcherfoc),
           Commands.sequence(Commands.waitSeconds(SHOOT_SPINUP_SEC), HopperCommands.pullIn(hopper)));
     }
 
     return Commands.deadline(
         Commands.waitSeconds(SHOOT_SPINUP_SEC + SHOOT_FEED_SEC),
-        LauncherCommands.pullInMid(launcher),
+        LauncherFOCCommands.pullInMid(launcherfoc),
         Commands.sequence(
             Commands.waitSeconds(SHOOT_SPINUP_SEC),
             HopperCommands.pullIn(hopper),
