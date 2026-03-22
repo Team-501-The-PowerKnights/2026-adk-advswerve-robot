@@ -20,9 +20,7 @@ package frc.robot.subsystems.lift;
 public final class LiftConstants {
 
   /** CAN ID of the motor. */
-  public static final int motorCanId = 42; // left
-  /** CAN ID of the follower motor. All control is through the leader one. */
-  // public static final int followerCanId = 42; // right
+  public static final int motorCanId = 42;
 
   /** Is the motor inverted? (should be positive going up) */
   static final boolean motorInverted = false;
@@ -31,10 +29,7 @@ public final class LiftConstants {
   static final boolean encoderInverted = false;
 
   /** */
-  static final double gearRatio = 2; // little pulley to big pulley w/ belt
-
-  /** Whether the <i>follower</i> needs to be reversed from the <i>leader</i>. */
-  public static final boolean followerInverted = true;
+  static final double gearRatio = 9 * 5;
 
   /** Default speed for the subsystem if nothing else is controlling it. */
   public static final double defaultSpeed = 0.75;

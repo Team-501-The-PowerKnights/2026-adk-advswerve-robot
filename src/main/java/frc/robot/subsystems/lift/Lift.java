@@ -161,18 +161,6 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
             motor.configure(
                 motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
-    // Create and configure follower
-    // follower = new SparkMax(followerCanId, MotorType.kBrushless);
-    // SparkMaxConfig followerConfig = new SparkMaxConfig();
-    // followerConfig.idleMode(IdleMode.kCoast).follow(motor, followerInverted);
-    // // TODO - Configure additional follower parameters from Constants file
-    // SparkUtil501.tryUntilOk(
-    //     follower,
-    //     5,
-    //     () ->
-    //         follower.configure(
-    //             followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
-
     // Initialize encoder based on absolute
     {
       double absEncoderPos = motor.getAbsoluteEncoder().getPosition();
@@ -383,8 +371,8 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
     }
 
     Logger.recordOutput(tlmCurrentSpeed, currentSpeed);
+    logMotorTelemetry(motor);
     logPIDTelemetry();
-    //    logMotorTelemetry(motor, follower);
   }
 
   private final String tlmCurrentMode = getSubsystem() + "/CurrentMode";
@@ -417,10 +405,6 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
   private final String tlmMotorTemp = getSubsystem() + "/MotorTemp";
   private final String tlmMotorOvertemp = getSubsystem() + "/MotorOvertemp";
 
-  // private final String tlmFollowMotorCurrent = getSubsystem() + "/FollowMotorCurrent";
-  // private final String tlmFollowMotorTemp = getSubsystem() + "/FollowMotorTemp";
-  // private final String tlmFollowMotorOvertemp = getSubsystem() + "/FollowMotorOvertemp";
-
   /**
    * Log the telemetry so it can be recorded and placed on the dashboard. This version is for a
    * <code>Subsystem</code> that has a <i>motor</i> and a <i>follower</i>.
@@ -428,7 +412,7 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
    * @param motor
    * @param follower
    */
-  private void logMotorTelemetry(SparkBase motor) { // }, SparkBase follower) {
+  private void logMotorTelemetry(SparkBase motor) {
     Logger.recordOutput(tlmOutput, motor.get());
 
     Logger.recordOutput(tlmMotorCurrent, motor.getOutputCurrent());
@@ -436,11 +420,5 @@ public class Lift extends RevRoboticsSubsystem implements ISubsystem {
     Logger.recordOutput(tlmMotorTemp, motorTemp);
     // Invert so green is OK and red is too hot
     Logger.recordOutput(tlmMotorOvertemp, (!(motorTemp > LiftConstants.motorOverTemp)));
-
-    // Logger.recordOutput(tlmFollowMotorCurrent, follower.getOutputCurrent());
-    // motorTemp = follower.getMotorTemperature();
-    // Logger.recordOutput(tlmFollowMotorTemp, motorTemp);
-    // // Invert so green is OK and red is too hot
-    // Logger.recordOutput(tlmFollowMotorOvertemp, (!(motorTemp > LiftConstants.motorOverTemp)));
   }
 }

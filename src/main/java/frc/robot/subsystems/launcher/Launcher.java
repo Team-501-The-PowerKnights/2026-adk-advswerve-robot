@@ -7,7 +7,6 @@ package frc.robot.subsystems.launcher;
 import static frc.robot.subsystems.SubsystemConstants.launcherName;
 import static frc.robot.subsystems.launcher.LauncherConstants.*;
 
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -20,7 +19,6 @@ public class Launcher extends TalonFXSubsystem implements ISubsystem {
   private final TalonFX follower; // = new TalonFX(followerCanId);
   private double currentSpeed = 0.0;
 
-  private final DutyCycleOut duty = new DutyCycleOut(0).withEnableFOC(true);
   /** Creates a new Launcher. */
   public Launcher() {
     super(launcherName);

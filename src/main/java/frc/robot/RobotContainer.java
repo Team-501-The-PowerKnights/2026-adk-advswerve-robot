@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
 import frc.robot.commands.IntakeCommands;
@@ -48,8 +49,6 @@ import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.lift.Lift;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -67,15 +66,14 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
 
   // Subsystems
-  private final Vision vision;
   private final Drive drive;
-  private final Shooter shooter;
-  private final Turret turret;
+  private final Launcher launcher;
   private final Hopper hopper;
   private final Intake intake;
   private final Lift lift;
   private final Climber climber;
-  private final Launcher launcher;
+  private final Vision vision;
+
   /** */
   public final List<ISubsystem> subsystems;
 
@@ -130,39 +128,14 @@ public class RobotContainer {
     boolean useSubsystem;
     String useSubsystemTlmName;
 
-    useSubsystem = SubsystemConstants.useVision;
-    useSubsystemTlmName = SubsystemConstants.visionName + "/useSubsystem";
+    useSubsystem = SubsystemConstants.useLauncher;
+    useSubsystemTlmName = SubsystemConstants.launcherName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
-      vision =
-          new Vision(
-              "vision",
-              drive::addVisionMeasurement,
-              new VisionIOLimelight(camera0Name, drive::getRotation),
-              new VisionIOLimelight(camera1Name, drive::getRotation));
-      subsystems.add(vision);
+      launcher = new Launcher();
+      subsystems.add(launcher);
     } else {
-      vision =
-          new Vision("vision", drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-      ;
-    }
-    useSubsystem = SubsystemConstants.useShooter;
-    useSubsystemTlmName = SubsystemConstants.shooterName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      shooter = new Shooter();
-      subsystems.add(shooter);
-    } else {
-      shooter = null;
-    }
-    useSubsystem = SubsystemConstants.useTurret;
-    useSubsystemTlmName = SubsystemConstants.turretName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      turret = new Turret();
-      subsystems.add(turret);
-    } else {
-      turret = null;
+      launcher = null;
     }
     useSubsystem = SubsystemConstants.useHopper;
     useSubsystemTlmName = SubsystemConstants.hopperName + "/useSubsystem";
@@ -191,6 +164,7 @@ public class RobotContainer {
     } else {
       lift = null;
     }
+
     useSubsystem = SubsystemConstants.useClimber;
     useSubsystemTlmName = SubsystemConstants.climberName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
@@ -200,14 +174,21 @@ public class RobotContainer {
     } else {
       climber = null;
     }
-    useSubsystem = SubsystemConstants.useLauncher;
-    useSubsystemTlmName = SubsystemConstants.launcherName + "/useSubsystem";
+
+    useSubsystem = SubsystemConstants.useVision;
+    useSubsystemTlmName = SubsystemConstants.visionName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
-      launcher = new Launcher();
-      subsystems.add(launcher);
+      vision =
+          new Vision(
+              "vision",
+              drive::addVisionMeasurement,
+              new VisionIOLimelight(camera0Name, drive::getRotation),
+              new VisionIOLimelight(camera1Name, drive::getRotation));
+      subsystems.add(vision);
     } else {
-      launcher = null;
+      vision =
+          new Vision("vision", drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
     }
 
     // Set up auto routines
@@ -271,21 +252,11 @@ public class RobotContainer {
     int subsystemCount = 0;
 
     /*
-     * Intake: Tied to left joystick Y axis of operator pad
+     * Launcher: Tied to left joystick Y axis of operator pad
      */
-    if (SubsystemConstants.useLift) {
+    if (SubsystemConstants.useLauncher) {
       subsystemCount++;
-      // Default command, manual control via triggers
-      lift.setDefaultCommand(LiftCommands.debugManual(lift, () -> -operPad.getLeftY()));
-    }
-
-    /*
-     * Intake: Tied to left joystick Y axis of operator pad
-     */
-    if (SubsystemConstants.useIntake) {
-      subsystemCount++;
-      // Default command, manual control via triggers
-      intake.setDefaultCommand(IntakeCommands.debugManual(intake, () -> -operPad.getLeftY()));
+      launcher.setDefaultCommand(LauncherCommands.debugManual(launcher, () -> -operPad.getLeftY()));
     }
 
     /*
@@ -298,12 +269,32 @@ public class RobotContainer {
     }
 
     /*
-     * Launcher: Tied to left joystick Y axis of operator pad
+     * Intake: Tied to left joystick Y axis of operator pad
      */
-    if (SubsystemConstants.useLauncher) {
+    if (SubsystemConstants.useIntake) {
       subsystemCount++;
-      launcher.setDefaultCommand(LauncherCommands.debugManual(launcher, () -> -operPad.getLeftY()));
+      // Default command, manual control via triggers
+      intake.setDefaultCommand(IntakeCommands.debugManual(intake, () -> -operPad.getLeftY()));
     }
+
+    /*
+     * Intake: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useLift) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      lift.setDefaultCommand(LiftCommands.debugManual(lift, () -> -operPad.getLeftY()));
+    }
+
+    /*
+     * Climber: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useClimber) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      climber.setDefaultCommand(ClimberCommands.debugManual(climber, () -> -operPad.getLeftY()));
+    }
+
     // How many subsystems were enabled? Is there a problem?
     if (subsystemCount == 0) {
       new Alert("No Subsystems enabled in DEBUG mode - Is this right?", AlertType.kWarning)
@@ -323,6 +314,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    /*
+     * Drive:  Use standard swerve drive controls
+     */
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
@@ -356,19 +350,13 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     /*
-     * Lift:  ????
+     * Launcher:   ????
      */
-    if (SubsystemConstants.useLift) {
-      // TODO: Tie Intake to commands in Teleop mode.
-      lift.setDefaultCommand(LiftCommands.stop(lift));
-    }
+    if (SubsystemConstants.useLauncher) {
+      launcher.setDefaultCommand(LauncherCommands.stop(launcher));
 
-    /*
-     * Intake:  ????
-     */
-    if (SubsystemConstants.useIntake) {
-      // TODO: Tie Intake to commands in Teleop mode.
-      intake.setDefaultCommand(IntakeCommands.stop(intake));
+      operPad.leftBumper().whileTrue(LauncherCommands.pullIn(launcher));
+      operPad.rightBumper().whileTrue(LauncherCommands.pushOut(launcher));
     }
 
     /*
@@ -381,13 +369,33 @@ public class RobotContainer {
       operPad.y().whileTrue(HopperCommands.pushOut(hopper));
     }
 
-    if (SubsystemConstants.useLauncher) {
-      launcher.setDefaultCommand(LauncherCommands.stop(launcher));
-
-      operPad.leftBumper().whileTrue(LauncherCommands.LaunchIn(launcher));
-      operPad.rightBumper().whileTrue(LauncherCommands.launchOut(launcher));
+    /*
+     * Intake:  ????
+     */
+    if (SubsystemConstants.useIntake) {
+      // TODO: Tie Intake to commands in Teleop mode.
+      intake.setDefaultCommand(IntakeCommands.stop(intake));
     }
 
+    /*
+     * Lift:  ????
+     */
+    if (SubsystemConstants.useLift) {
+      // TODO: Tie Intake to commands in Teleop mode.
+      lift.setDefaultCommand(LiftCommands.stop(lift));
+    }
+
+    /*
+     * Climber:  ????
+     */
+    if (SubsystemConstants.useClimber) {
+      // TODO: Tie Climber to commands in Teleop mode.
+      climber.setDefaultCommand(ClimberCommands.stop(climber));
+    }
+
+    /*
+     * Vision
+     */
     if (SubsystemConstants.useVision) {
       // Auto aim command example
       driverPad
