@@ -7,12 +7,17 @@
 /*------------------------------------------------------------------------*/
 
 /**
- * This package contains the implementation of the <code>Turret</code> subsystem.
+ * This class contains the implementation of the ...
  *
  * <p>More detail ...
  *
- * @since 2026.0.0
+ * @since 2025.0.0
  * @author first.stu
- * @version 2026.0.0
+ * @version 2025.0.0
  */
-package frc.robot.subsystems.turret;
+package frc.robot.util;
+
+/** Add your docs here. */
+public class TalonFXUtil501 {
+  public static boolean talonFXStatusOK = false;
+}

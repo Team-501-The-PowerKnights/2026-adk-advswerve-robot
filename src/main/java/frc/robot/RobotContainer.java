@@ -7,11 +7,20 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.*;
+import static frc.robot.subsystems.vision.VisionConstants.*;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -21,9 +30,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.AutoCommands;
+import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.TurretCommands;
+import frc.robot.commands.HopperCommands;
+import frc.robot.commands.IntakeCommands;
+import frc.robot.commands.IntakeLiftCommands;
+import frc.robot.commands.LauncherCommands;
 import frc.robot.subsystems.ISubsystem;
+import frc.robot.subsystems.IntakeLift.IntakeLift;
 import frc.robot.subsystems.SubsystemConstants;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
@@ -34,10 +49,10 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.lift.Lift;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.turret.Turret;
+import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOLimelight;
 import java.util.ArrayList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
@@ -52,21 +67,20 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
 
   // Subsystems
-  private final Vision vision;
   private final Drive drive;
-  private final Shooter shooter;
-  private final Turret turret;
+  private final Launcher launcher;
   private final Hopper hopper;
   private final Intake intake;
-  private final Lift lift;
+  //  private final Lift lift;
+  private final IntakeLift intakelift;
   private final Climber climber;
+  private final Vision vision;
+
   /** */
   public final List<ISubsystem> subsystems;
 
   // Controllers
   private final CommandXboxController driverPad;
-
-  @SuppressWarnings("unused")
   private final CommandXboxController operPad;
 
   // Dashboard inputs
@@ -116,39 +130,21 @@ public class RobotContainer {
     boolean useSubsystem;
     String useSubsystemTlmName;
 
-    useSubsystem = SubsystemConstants.useVision;
-    useSubsystemTlmName = SubsystemConstants.visionName + "/useSubsystem";
+    useSubsystem = SubsystemConstants.useLauncher;
+    useSubsystemTlmName = SubsystemConstants.launcherName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
-      vision = new Vision();
-      subsystems.add(vision);
+      launcher = new Launcher();
+      subsystems.add(launcher);
     } else {
-      vision = null;
-    }
-    useSubsystem = SubsystemConstants.useShooter;
-    useSubsystemTlmName = SubsystemConstants.shooterName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      shooter = new Shooter();
-      subsystems.add(shooter);
-    } else {
-      shooter = null;
-    }
-    useSubsystem = SubsystemConstants.useTurret;
-    useSubsystemTlmName = SubsystemConstants.turretName + "/useSubsystem";
-    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
-    if (useSubsystem) {
-      turret = new Turret();
-      subsystems.add(turret);
-    } else {
-      turret = null;
+      launcher = null;
     }
     useSubsystem = SubsystemConstants.useHopper;
     useSubsystemTlmName = SubsystemConstants.hopperName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
       hopper = new Hopper();
-      subsystems.add(hopper);
+      subsystems.add((ISubsystem) hopper);
     } else {
       hopper = null;
     }
@@ -157,19 +153,20 @@ public class RobotContainer {
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
       intake = new Intake();
-      subsystems.add(intake);
+      subsystems.add((ISubsystem) intake);
     } else {
       intake = null;
     }
-    useSubsystem = SubsystemConstants.useLift;
-    useSubsystemTlmName = SubsystemConstants.liftName + "/useSubsystem";
+    useSubsystem = SubsystemConstants.useIntakeLift;
+    useSubsystemTlmName = SubsystemConstants.intakeliftName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
     if (useSubsystem) {
-      lift = new Lift();
-      subsystems.add(lift);
+      intakelift = new IntakeLift();
+      subsystems.add((ISubsystem) intakelift);
     } else {
-      lift = null;
+      intakelift = null;
     }
+
     useSubsystem = SubsystemConstants.useClimber;
     useSubsystemTlmName = SubsystemConstants.climberName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
@@ -180,19 +177,50 @@ public class RobotContainer {
       climber = null;
     }
 
+    useSubsystem = SubsystemConstants.useVision;
+    useSubsystemTlmName = SubsystemConstants.visionName + "/useSubsystem";
+    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+    if (useSubsystem) {
+      vision =
+          new Vision(
+              "vision",
+              drive::addVisionMeasurement,
+              new VisionIOLimelight(camera0Name, drive::getRotation),
+              new VisionIOLimelight(camera1Name, drive::getRotation));
+      subsystems.add(vision);
+    } else {
+      vision =
+          new Vision("vision", drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+    }
+
     // Set up auto routines
     /*
      * Create all the subsystems based on whether enabled or not.
      */
+    // MARK: AUTO
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoChooser.addOption(
+        "Red Center Hub Auto V1",
+        AutoCommands.redCenterHubAutoV1(drive, launcher, hopper, intake, intakelift));
+    autoChooser.addOption(
+        "Red Center Hub Auto V2",
+        AutoCommands.redCenterHubAutoV2(drive, launcher, hopper, intake, intakelift));
 
     /*
      * Create the controllers and configure them.
      */
     driverPad = new CommandXboxController(0);
     operPad = new CommandXboxController(1);
-    // Configure the button bindings
-    configureButtonBindings();
+    /*
+     *
+     */
+    Logger.recordOutput("SubsystemDebug", SubsystemConstants.RUN_SUBSYSTEM_DEBUG);
+    if (SubsystemConstants.RUN_SUBSYSTEM_DEBUG) {
+      configureSubsystemDebugButtonBindings();
+    } else {
+      // Configure the button bindings
+      configureButtonBindings();
+    }
 
     /*
      * Create and set up the SysId functionality (if enabled).
@@ -218,19 +246,96 @@ public class RobotContainer {
   }
 
   /**
+   * Use this method to define your button->command mappings for the Subystem Debug mode. Every
+   * subsystem has to have at least the manual control. By convention we are using the left joystick
+   * of the Operator gamepad. Since only one subsystem should be enabled at a time this isn't a
+   * problem.
+   *
+   * <p>Buttons can be created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
+   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  // MARK: Debug Buttons
+  @SuppressWarnings("resource")
+  private void configureSubsystemDebugButtonBindings() {
+
+    int subsystemCount = 0;
+
+    /*
+     * Launcher: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useLauncher) {
+      subsystemCount++;
+      launcher.setDefaultCommand(LauncherCommands.debugManual(launcher, () -> -operPad.getLeftY()));
+    }
+
+    /*
+     * Hopper: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useHopper) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      hopper.setDefaultCommand(HopperCommands.debugManual(hopper, () -> -operPad.getLeftY()));
+    }
+
+    /*
+     * Intake: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useIntake) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      intake.setDefaultCommand(IntakeCommands.debugManual(intake, () -> -operPad.getLeftY()));
+    }
+
+    /*
+     * Intake: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useIntakeLift) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      intakelift.setDefaultCommand(
+          IntakeLiftCommands.debugManual(intakelift, () -> -operPad.getLeftY()));
+    }
+
+    /*
+     * Climber: Tied to left joystick Y axis of operator pad
+     */
+    if (SubsystemConstants.useClimber) {
+      subsystemCount++;
+      // Default command, manual control via triggers
+      climber.setDefaultCommand(ClimberCommands.debugManual(climber, () -> -operPad.getLeftY()));
+    }
+
+    // How many subsystems were enabled? Is there a problem?
+    if (subsystemCount == 0) {
+      new Alert("No Subsystems enabled in DEBUG mode - Is this right?", AlertType.kWarning)
+          .set(true);
+    } else if (subsystemCount > 0) {
+      new Alert(
+              "Multiple Subsystems enabled in DEBUG mode (count = " + subsystemCount + ")",
+              AlertType.kError)
+          .set(true);
+    }
+  }
+
+  /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // MARK: Driver Buttons
+    /*
+     * Drive:  Use standard swerve drive controls
+     */
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
             () -> -driverPad.getLeftY(),
             () -> -driverPad.getLeftX(),
-            () -> -driverPad.getRightX()));
+            () -> driverPad.getRightX()));
 
     // Lock to 0° when A button is held
     driverPad
@@ -256,10 +361,67 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    if (SubsystemConstants.useTurret) {
-      turret.setDefaultCommand(
-          TurretCommands.manual(
-              turret, () -> (driverPad.getLeftTriggerAxis() + -driverPad.getRightTriggerAxis())));
+    /*
+     * Vision
+     */
+    if (SubsystemConstants.useVision) {
+      // Auto aim command example
+      driverPad
+          .leftBumper()
+          .whileTrue(
+              DriveCommands.joystickDriveFacingPoint(
+                  drive,
+                  () -> -driverPad.getLeftY(),
+                  () -> -driverPad.getLeftX(),
+                  () -> getHubCenter()));
+    }
+    /*
+     * Intake:  Driver Operated: Left trigger - pull in, Right trigger - push out
+     */
+    if (SubsystemConstants.useIntake) {
+      intake.setDefaultCommand(IntakeCommands.stop(intake));
+      driverPad.leftTrigger().whileTrue(IntakeCommands.pullIn(intake));
+      driverPad.rightTrigger().whileTrue(IntakeCommands.pushOut(intake));
+    }
+    // MARK: Oper Buttons
+    /*
+     * Launcher:   operator pad: Left bumper - pull in, Right bumper - push out
+     */
+    if (SubsystemConstants.useLauncher) {
+      launcher.setDefaultCommand(LauncherCommands.SetIdle(launcher));
+
+      operPad.a().whileTrue(LauncherCommands.pullInNear(launcher));
+      operPad.x().whileTrue(LauncherCommands.pullInMid(launcher));
+      operPad.y().whileTrue(LauncherCommands.pullInFar(launcher));
+      operPad.b().whileTrue(LauncherCommands.pushOut(launcher));
+    }
+
+    /*
+     * Hopper: Operator Pad: X button - pull in, Y button push out
+     */
+    if (SubsystemConstants.useHopper) {
+      hopper.setDefaultCommand(HopperCommands.stop(hopper));
+
+      operPad.rightBumper().whileTrue(HopperCommands.pullIn(hopper));
+      operPad.leftBumper().whileTrue(HopperCommands.pushOut(hopper));
+    }
+
+    /*
+     * Lift:  operator Pad: Left trigger - raise, Right trigger - lower
+     */
+    if (SubsystemConstants.useIntakeLift) {
+      // TODO: Tie Intake to commands in Teleop mode.
+      intakelift.setDefaultCommand(IntakeLiftCommands.stop(intakelift));
+      operPad.leftTrigger().whileTrue(IntakeLiftCommands.lower(intakelift));
+      operPad.rightTrigger().whileTrue(IntakeLiftCommands.raise(intakelift));
+    }
+
+    /*
+     * Climber:  ????.
+     */
+    if (SubsystemConstants.useClimber) {
+      // TODO: Tie Climber to commands in Teleop mode.
+      climber.setDefaultCommand(ClimberCommands.stop(climber));
     }
   }
 
@@ -366,5 +528,21 @@ public class RobotContainer {
     //     Commands.sequence(
     //         ClimberCommands.unlatch(climber), new WaitCommand(0.5),
     // ClimberCommands.stop(climber)));
+  }
+
+  public static Translation2d getHubCenter() {
+    Translation2d blueHub =
+        new Translation2d(
+            Units.inchesToMeters(kBlueHubAndyMarkX), Units.inchesToMeters(kBlueHubAndyMarkY));
+
+    Translation2d redHub =
+        new Translation2d(
+            Units.inchesToMeters(kRedHubAndyMarkX), Units.inchesToMeters(kRedHubAndyMarkY));
+
+    if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Red) {
+      return redHub;
+    }
+    return blueHub;
   }
 }

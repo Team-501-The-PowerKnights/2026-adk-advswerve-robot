@@ -6,10 +6,9 @@
 /*- of this project.                                                      */
 /*------------------------------------------------------------------------*/
 
-package frc.robot.subsystems.turret;
-
+package frc.robot.subsystems.IntakeLift;
 /**
- * This package contains the constants for the <code>Turret</code> subsystem.
+ * This class contains the constants for the <code>IntakeLift</code> subsystem.
  *
  * <p>More detail ...
  *
@@ -17,22 +16,24 @@ package frc.robot.subsystems.turret;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public final class TurretConstants {
+public final class IntakeLiftConstants {
 
-  /** CAN ID of the intake speed controller */
-  static final int canId = 32;
+  /** CAN ID of the motor. */
+  public static final int motorCanId = 42;
 
-  /** Is the motor inverted? (should be positive pulling in) */
-  static final boolean turretInverted = false;
+  /** Whether the <i>follower</i> needs to be reversed from the <i>leader</i>. */
+  public static final boolean motorInverted = true;
+
+  /** Default speed for the subsystem if no41thing else is controlling it. */
+  public static final double defaultSpeed = 0.3;
+
   /** */
+  // TODO - Set real value for motorCurrentLimit
   static final int motorCurrentLimit = 30;
   /** */
+  // TODO - Set real value for motorVoltageComp
   static final double motorVoltageComp = 12.0;
 
-  /** */
-  static final double gearRatio = 5 * 5;
-
-  // In (RightTraverse) is +, out (LeftTraverse) is -
-  static final double turretRightTraverseSpeed = 0.40;
-  static final double turretLeftTraverseSpeed = -0.40;
+  /** Trigger value for motor overtemp (C) */
+  static final double motorOverTemp = 60.0; // seems to be < 50 in the pits
 }

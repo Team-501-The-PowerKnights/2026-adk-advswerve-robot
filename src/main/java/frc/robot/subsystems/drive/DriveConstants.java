@@ -15,10 +15,11 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 
 public class DriveConstants {
-  public static final double maxSpeedMetersPerSec = 4.8;
+  public static final double drivePercent = 0.70;
+  public static final double maxSpeedMetersPerSec = 5.5; // Using 4.5 : 1 Gear ratio
   public static final double odometryFrequency = 100.0; // Hz
-  public static final double trackWidth = Units.inchesToMeters(26.5);
-  public static final double wheelBase = Units.inchesToMeters(26.5);
+  public static final double trackWidth = Units.inchesToMeters(27.125 - 3.0);
+  public static final double wheelBase = Units.inchesToMeters(27.125 - 3.0);
   public static final double driveBaseRadius = Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
   public static final Translation2d[] moduleTranslations =
       new Translation2d[] {
@@ -32,7 +33,8 @@ public class DriveConstants {
   public static final Rotation2d frontLeftZeroRotation = new Rotation2d(0.0);
   public static final Rotation2d frontRightZeroRotation = new Rotation2d(0.0);
   public static final Rotation2d backLeftZeroRotation = new Rotation2d(0.0);
-  public static final Rotation2d backRightZeroRotation = new Rotation2d(0.0);
+  public static final Rotation2d backRightZeroRotation =
+      new Rotation2d(0.0); // Math.toRadians(135.0)
 
   // Device CAN IDs
   public static final int pigeonCanId = 10;
@@ -50,8 +52,10 @@ public class DriveConstants {
   // Drive motor configuration
   public static final int driveMotorCurrentLimit = 50;
   public static final double wheelRadiusMeters = Units.inchesToMeters(1.5);
+  // public static final double driveMotorReduction = (45.0 * 20.0) / (15.0 * 15.0); // MAXSwerve
+  // with 15 pinion teeth  // and 20 spur teeth
   public static final double driveMotorReduction =
-      (45.0 * 20.0) / (15.0 * 15.0); // MAXSwerve with 14 pinion teeth  // and 20 spur teeth
+      (45.0 * 21.0) / (14.0 * 15.0); // MAXSwerve with 14 pinion teeth  // and 21 spur teeth
   // REV Gear Ratios:
   // Current REV Gear Ratios: Upgrade Extra High 3 (4.00:1) with 15T pinion and 20T spur
   /* https://www.revrobotics.com/rev-21-3008/
@@ -91,7 +95,7 @@ public class DriveConstants {
 
   // Turn motor configuration
   public static final boolean turnInverted = false;
-  public static final int turnMotorCurrentLimit = 20;
+  public static final int turnMotorCurrentLimit = 30;
   public static final double turnMotorReduction = 9424.0 / 203.0;
   public static final DCMotor turnGearbox = DCMotor.getNeo550(1);
 

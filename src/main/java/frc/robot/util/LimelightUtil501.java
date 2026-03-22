@@ -6,15 +6,16 @@
 /*- of this project.                                                      */
 /*------------------------------------------------------------------------*/
 
-package frc.robot.subsystems.shooter;
-
 /**
- * This class contains the constants for the <code>Shooter</code> subsystem.
+ * This class contains the implementation of the ...
  *
  * <p>More detail ...
  *
- * @since 2026.0.0
- * @author first.brian Buzzell
- * @version 2026.0.0
+ * @since 2025.0.0
+ * @author first.stu
+ * @version 2025.0.0
  */
-public final class ShooterConstants {}
+package frc.robot.util;
+
+/** Add your docs here. */
+public class LimelightUtil501 {}

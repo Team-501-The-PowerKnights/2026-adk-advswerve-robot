@@ -8,37 +8,19 @@
 package frc.robot.subsystems;
 
 import static frc.robot.subsystems.SubsystemConstants.*;
-import static frc.robot.util.SparkUtil501.sparkStickyError;
-import static frc.robot.util.SparkUtil501.sparkStickyFault;
 
-import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-/**
- * This class contains the implementation of a common class for RevRobotics-based subsystems.
- *
- * <p>More detail ...
- *
- * @since 2026.0.0
- * @author first.stu
- * @version 2026.0.0
- */
-public abstract class RevRoboticsSubsystem extends SubsystemBase {
-
+public abstract class LimelightSubsystem extends SubsystemBase {
   /** Name of the subsystem (saved from constructor) */
   private final String name;
 
-  /** Original value of sticky fault (so it can be restored at the end) */
-  protected boolean origSparkStickyFault;
-
-  /** Constructs a new instance of the subsystem. */
-  public RevRoboticsSubsystem(String subsystemName) {
+  /** Creates a new LimelightSubsystem. */
+  public LimelightSubsystem(String subsystemName) {
     super(subsystemName);
     name = subsystemName;
   }
-
   /**
    * Initializes the construction of the <code>Subsystem</code>. Should be called once at the very
    * start of the constructor.
@@ -46,29 +28,22 @@ public abstract class RevRoboticsSubsystem extends SubsystemBase {
   protected void initConstruction() {
     // Initialize status for capturing class construction
     Logger.recordOutput(name + tlmStatusName, false); // red=not OK
-    origSparkStickyFault = sparkStickyFault;
   }
 
   /**
    * Finishes the construction of the <code>Subsystem</code>. Should be called once at the very end
    * of the constructor.
    */
-  @SuppressWarnings("resource")
+  //  @SuppressWarnings("resource")
   protected void finishConstruction() {
     // Log this subsystem's status and return global
-    Logger.recordOutput(name + tlmRevLibErrorName, !sparkStickyFault); // green = OK
-    if (sparkStickyFault) {
-      new Alert(
-              "REVLib problems in " + name + " construction (error = " + sparkStickyError + ")",
-              AlertType.kError)
-          .set(true);
-    } else {
-      new Alert("Successful REVLib " + name + " construction", AlertType.kInfo).set(true);
-    }
-    boolean mySparkStickyFault = sparkStickyFault;
-    sparkStickyFault |= origSparkStickyFault;
 
-    boolean constructStatus = !mySparkStickyFault; // false = no faults = green
+    boolean constructStatus = true;
     Logger.recordOutput(name + tlmStatusName, constructStatus);
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
   }
 }

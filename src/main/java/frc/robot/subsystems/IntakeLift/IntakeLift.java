@@ -6,10 +6,10 @@
 /*- of this project.                                                      */
 /*------------------------------------------------------------------------*/
 
-package frc.robot.subsystems.hopper;
+package frc.robot.subsystems.IntakeLift;
 
-import static frc.robot.subsystems.SubsystemConstants.hopperName;
-import static frc.robot.subsystems.hopper.HopperConstants.*;
+import static frc.robot.subsystems.IntakeLift.IntakeLiftConstants.*;
+import static frc.robot.subsystems.SubsystemConstants.intakeliftName;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
@@ -24,7 +24,7 @@ import frc.robot.util.SparkUtil501;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * This class contains the implementation of the <code>Hopper</code> subsystem.
+ * This class contains the implementation of the <code>IntakeLift</code> subsystem.
  *
  * <p>More detail ...
  *
@@ -32,18 +32,16 @@ import org.littletonrobotics.junction.Logger;
  * @author first.brian Buzzell
  * @version 2026.0.0
  */
-public class Hopper extends RevRoboticsSubsystem implements ISubsystem {
+public class IntakeLift extends RevRoboticsSubsystem implements ISubsystem {
 
   /** */
   private final SparkFlex motor;
   /** */
-  private final SparkFlex follower;
-
   private double currentSpeed = 0.0;
 
   /** Constructs a new instance of the subsystem. */
-  public Hopper() {
-    super(hopperName);
+  public IntakeLift() {
+    super(intakeliftName);
     initConstruction();
 
     // Create and configure motor
@@ -57,18 +55,6 @@ public class Hopper extends RevRoboticsSubsystem implements ISubsystem {
         () ->
             motor.configure(
                 motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
-
-    // Create and configure follower
-    follower = new SparkFlex(followerCanId, MotorType.kBrushless);
-    SparkFlexConfig followerConfig = new SparkFlexConfig();
-    followerConfig.idleMode(IdleMode.kCoast).follow(motor, followerInverted);
-    // TODO - Configure additional follower parameters from Constants file
-    SparkUtil501.tryUntilOk(
-        follower,
-        5,
-        () ->
-            follower.configure(
-                followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
     // We start stopped
     stop();
@@ -122,7 +108,7 @@ public class Hopper extends RevRoboticsSubsystem implements ISubsystem {
     setSpeed(currentSpeed);
 
     Logger.recordOutput(tlmCurrentSpeed, currentSpeed);
-    logMotorTelemetry(motor, follower);
+    logMotorTelemetry(motor);
   }
 
   private final String tlmOutput = getSubsystem() + "/Output";
@@ -142,19 +128,20 @@ public class Hopper extends RevRoboticsSubsystem implements ISubsystem {
    * @param motor
    * @param follower
    */
-  private void logMotorTelemetry(SparkBase motor, SparkBase follower) {
+  private void logMotorTelemetry(SparkBase motor) {
     Logger.recordOutput(tlmOutput, motor.get());
 
     Logger.recordOutput(tlmMotorCurrent, motor.getOutputCurrent());
     double motorTemp = motor.getMotorTemperature();
     Logger.recordOutput(tlmMotorTemp, motorTemp);
     // Invert so green is OK and red is too hot
-    Logger.recordOutput(tlmMotorOvertemp, (!(motorTemp > HopperConstants.motorOverTemp)));
+    // Logger.recordOutput(tlmMotorOvertemp, (!(motorTemp > IntakeLiftConstants.motorOverTemp)));
 
-    Logger.recordOutput(tlmFollowMotorCurrent, follower.getOutputCurrent());
-    motorTemp = follower.getMotorTemperature();
-    Logger.recordOutput(tlmFollowMotorTemp, motorTemp);
-    // Invert so green is OK and red is too hot
-    Logger.recordOutput(tlmFollowMotorOvertemp, (!(motorTemp > HopperConstants.motorOverTemp)));
+    // Logger.recordOutput(tlmFollowMotorCurrent, follower.getOutputCurrent());
+    // motorTemp = follower.getMotorTemperature();
+    // Logger.recordOutput(tlmFollowMotorTemp, motorTemp);
+    // // Invert so green is OK and red is too hot
+    // Logger.recordOutput(tlmFollowMotorOvertemp, (!(motorTemp >
+    // IntakeLiftConstants.motorOverTemp)));
   }
 }
