@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.IntakeLift.IntakeLift;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
@@ -37,7 +36,7 @@ public class AutoCommands extends Command {
    * collecting 4) Return toward hub 5) Shoot collected fuel
    */
   public static Command redCenterHubAutoV1(
-      Drive drive, Launcher launcher, Hopper hopper, Intake intake, IntakeLift intakelift) {
+      Drive drive, Launcher launcher, Hopper hopper, Intake intake) {
     return Commands.sequence(
         stopDrive(drive),
 
@@ -46,7 +45,7 @@ public class AutoCommands extends Command {
         stopDrive(drive),
 
         // 2) Shoot the 8 preloaded fuel
-        shootFuel(launcher, hopper, null, intakelift),
+        shootFuel(launcher, hopper, null),
 
         // // 3) Drive toward midfield and collect
         // Commands.deadline(
@@ -69,7 +68,7 @@ public class AutoCommands extends Command {
   }
 
   public static Command redCenterHubAutoV2(
-      Drive drive, Launcher launcher, Hopper hopper, Intake intake, IntakeLift intakelift) {
+      Drive drive, Launcher launcher, Hopper hopper, Intake intake) {
     return Commands.sequence(
         stopDrive(drive),
 
@@ -78,7 +77,7 @@ public class AutoCommands extends Command {
         stopDrive(drive),
 
         // 2) Shoot the 8 preloaded fuel
-        shootFuel(launcher, hopper, null, intakelift),
+        shootFuel(launcher, hopper, null),
 
         // 3 strafe to the right:
         strafeRobotRelative(drive, STRAFE_RIGHT_TIME_SEC, STRAFE_RIGHT_SPEED_MPS),
@@ -87,14 +86,32 @@ public class AutoCommands extends Command {
         stopDrive(drive));
   }
   /** Spins up launcher, then feeds fuel. */
-  private static Command shootFuel(
-      Launcher launcher, Hopper hopper, Intake intake, IntakeLift intakelift) {
+  // private static Command shootFuel( Launcher launcher, Hopper hopper, Intake intake, IntakeLift
+  // intakelift) {
+  //   if (intake == null) {
+  //     return Commands.deadline(
+  //         Commands.waitSeconds(SHOOT_SPINUP_SEC + SHOOT_FEED_SEC),
+  //         LauncherCommands.pullInMid(launcher),
+  //         Commands.sequence(Commands.waitSeconds(SHOOT_SPINUP_SEC),
+  // HopperCommands.pullIn(hopper)),
+  //         IntakeLiftCommands.raise(intakelift).withTimeout(1.0));
+  //   }
+
+  //   return Commands.deadline(
+  //       Commands.waitSeconds(SHOOT_SPINUP_SEC + SHOOT_FEED_SEC),
+  //       LauncherCommands.pullInMid(launcher),
+  //       Commands.sequence(
+  //           Commands.waitSeconds(SHOOT_SPINUP_SEC),
+  //           HopperCommands.pullIn(hopper),
+  //           IntakeCommands.pullIn(intake)));
+  // }
+
+  private static Command shootFuel(Launcher launcher, Hopper hopper, Intake intake) {
     if (intake == null) {
       return Commands.deadline(
           Commands.waitSeconds(SHOOT_SPINUP_SEC + SHOOT_FEED_SEC),
           LauncherCommands.pullInMid(launcher),
-          Commands.sequence(Commands.waitSeconds(SHOOT_SPINUP_SEC), HopperCommands.pullIn(hopper)),
-          IntakeLiftCommands.raise(intakelift).withTimeout(1.0));
+          Commands.sequence(Commands.waitSeconds(SHOOT_SPINUP_SEC), HopperCommands.pullIn(hopper)));
     }
 
     return Commands.deadline(
@@ -105,7 +122,6 @@ public class AutoCommands extends Command {
             HopperCommands.pullIn(hopper),
             IntakeCommands.pullIn(intake)));
   }
-
   /** Drives robot-relative for a fixed amount of time. */
   private static Command driveRobotRelative(Drive drive, double vxMetersPerSec, double seconds) {
     return Commands.deadline(

@@ -30,7 +30,7 @@ public final class HopperConstants {
   public static final boolean followerInverted = true;
 
   /** Default speed for the subsystem if nothing else is controlling it. */
-  public static final double defaultSpeed = 0.75;
+  public static final double defaultSpeed = 0.9;
 
   /** */
   // TODO - Set real value for motorCurrentLimit

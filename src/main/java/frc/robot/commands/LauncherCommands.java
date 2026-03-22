@@ -25,7 +25,7 @@ public class LauncherCommands {
     return launcher.runOnce(launcher::stop).withName("LauncherStop");
   }
 
-  public static Command SetIdle(Launcher launcher) {
+  public static Command setIdle(Launcher launcher) {
     return launcher.runOnce(launcher::setIdle).withName("LauncherSetIdle");
   }
 

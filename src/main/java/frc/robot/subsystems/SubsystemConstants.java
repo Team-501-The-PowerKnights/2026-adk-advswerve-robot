@@ -40,13 +40,19 @@ public final class SubsystemConstants {
   public static final boolean useDrive = true;
   public static final String driveName = "Drive";
 
-  public static final boolean useLauncher = true;
+  public static final boolean useLauncher = false;
   public static final String launcherName = "Launcher";
+
+  public static final boolean useLauncherFOC = true;
+  public static final String launcherFOCName = "LauncherFOC";
+
   public static final boolean useHopper = true;
   public static final String hopperName = "Hopper";
+
   public static final boolean useIntake = true;
   public static final String intakeName = "Intake";
-  public static final boolean useIntakeLift = true;
+
+  public static final boolean useIntakeLift = false;
   public static final String intakeliftName = "IntakeLift";
 
   public static final boolean useLift = false;
