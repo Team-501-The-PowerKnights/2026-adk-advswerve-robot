@@ -24,7 +24,7 @@ public class AutoCommands extends Command {
   private static final double COLLECT_FORWARD_TIME_SEC = 3.00;
 
   private static final double STRAFE_RIGHT_SPEED_MPS = 1.50;
-  private static final double STRAFE_RIGHT_TIME_SEC = 1.4;
+  private static final double STRAFE_RIGHT_TIME_SEC = 1.1;
 
   private static final double RETURN_SPEED_MPS = 1.75;
   private static final double RETURN_TIME_SEC = 3.00;
