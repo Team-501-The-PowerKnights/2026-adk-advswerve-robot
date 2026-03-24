@@ -37,6 +37,7 @@ import frc.robot.commands.HopperCommands;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.IntakeLiftCommands;
 import frc.robot.commands.LauncherCommands;
+import frc.robot.commands.LauncherFOCCommands;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.IntakeLift.IntakeLift;
 import frc.robot.subsystems.SubsystemConstants;
@@ -50,6 +51,7 @@ import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
+import frc.robot.subsystems.launcherfoc.LauncherFOC;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
@@ -69,6 +71,7 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Launcher launcher;
+  private final LauncherFOC launcherfoc;
   private final Hopper hopper;
   private final Intake intake;
   //  private final Lift lift;
@@ -139,6 +142,15 @@ public class RobotContainer {
     } else {
       launcher = null;
     }
+    useSubsystem = SubsystemConstants.useLauncherFOC;
+    useSubsystemTlmName = SubsystemConstants.launcherFOCName + "/useSubsystem";
+    Logger.recordOutput(useSubsystemTlmName, useSubsystem);
+    if (useSubsystem) {
+      launcherfoc = new LauncherFOC();
+      subsystems.add(launcherfoc);
+    } else {
+      launcherfoc = null;
+    }
     useSubsystem = SubsystemConstants.useHopper;
     useSubsystemTlmName = SubsystemConstants.hopperName + "/useSubsystem";
     Logger.recordOutput(useSubsystemTlmName, useSubsystem);
@@ -185,8 +197,8 @@ public class RobotContainer {
           new Vision(
               "vision",
               drive::addVisionMeasurement,
-              new VisionIOLimelight(camera0Name, drive::getRotation),
-              new VisionIOLimelight(camera1Name, drive::getRotation));
+              new VisionIOLimelight(camera0Name, drive::getRotation)); // ,
+      //              new VisionIOLimelight(camera1Name, drive::getRotation));
       subsystems.add(vision);
     } else {
       vision =
@@ -199,12 +211,17 @@ public class RobotContainer {
      */
     // MARK: AUTO
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-    autoChooser.addOption(
-        "Red Center Hub Auto V1",
-        AutoCommands.redCenterHubAutoV1(drive, launcher, hopper, intake, intakelift));
-    autoChooser.addOption(
-        "Red Center Hub Auto V2",
-        AutoCommands.redCenterHubAutoV2(drive, launcher, hopper, intake, intakelift));
+    if (SubsystemConstants.useDrive
+        && SubsystemConstants.useLauncherFOC
+        && SubsystemConstants.useHopper
+        && SubsystemConstants.useIntake) {
+      autoChooser.addOption(
+          "Red Center Hub Auto V1",
+          AutoCommands.redCenterHubAutoV1(drive, launcherfoc, hopper, intake));
+      autoChooser.addOption(
+          "Red Center Hub Auto V2",
+          AutoCommands.redCenterHubAutoV2(drive, launcherfoc, hopper, intake));
+    }
 
     /*
      * Create the controllers and configure them.
@@ -388,12 +405,23 @@ public class RobotContainer {
      * Launcher:   operator pad: Left bumper - pull in, Right bumper - push out
      */
     if (SubsystemConstants.useLauncher) {
-      launcher.setDefaultCommand(LauncherCommands.SetIdle(launcher));
+      launcher.setDefaultCommand(LauncherCommands.setIdle(launcher));
 
       operPad.a().whileTrue(LauncherCommands.pullInNear(launcher));
       operPad.x().whileTrue(LauncherCommands.pullInMid(launcher));
       operPad.y().whileTrue(LauncherCommands.pullInFar(launcher));
       operPad.b().whileTrue(LauncherCommands.pushOut(launcher));
+    }
+    /*
+     * Launcher:   operator pad: Left bumper - pull in, Right bumper - push out
+     */
+    if (SubsystemConstants.useLauncherFOC) {
+      launcherfoc.setDefaultCommand(LauncherFOCCommands.setIdle(launcherfoc));
+
+      operPad.a().whileTrue(LauncherFOCCommands.pullInNear(launcherfoc));
+      operPad.x().whileTrue(LauncherFOCCommands.pullInMid(launcherfoc));
+      operPad.y().whileTrue(LauncherFOCCommands.pullInFar(launcherfoc));
+      operPad.b().whileTrue(LauncherFOCCommands.pushOut(launcherfoc));
     }
 
     /*
