@@ -58,8 +58,8 @@ public class Launcher extends TalonFXSubsystem implements ISubsystem {
   }
 
   public void setIdle() {
-    currentSpeed = -defaultIdleSpeed;
-    leader.set(-defaultIdleSpeed);
+    currentSpeed = defaultIdleSpeed;
+    leader.set(defaultIdleSpeed);
   }
 
   @Override

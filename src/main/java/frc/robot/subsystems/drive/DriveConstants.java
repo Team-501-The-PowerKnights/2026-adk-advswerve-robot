@@ -15,7 +15,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 
 public class DriveConstants {
-  public static final double drivePercent = 0.70;
+  public static final double drivePercent = 0.65;
   public static final double maxSpeedMetersPerSec = 5.5; // Using 4.5 : 1 Gear ratio
   public static final double odometryFrequency = 100.0; // Hz
   public static final double trackWidth = Units.inchesToMeters(27.125 - 3.0);
