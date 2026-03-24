@@ -43,7 +43,8 @@ public final class SubsystemConstants {
   public static final boolean useLauncher = false;
   public static final String launcherName = "Launcher";
 
-  public static final boolean useLauncherFOC = true;
+  public static final boolean useLauncherFOC =
+      !useLauncher; // Only use one of the launcher subsystems.
   public static final String launcherFOCName = "LauncherFOC";
 
   public static final boolean useHopper = true;

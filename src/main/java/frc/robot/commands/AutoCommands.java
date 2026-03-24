@@ -39,7 +39,7 @@ public class AutoCommands extends Command {
       Drive drive, LauncherFOC launcherfoc, Hopper hopper, Intake intake) {
     return Commands.sequence(
         stopDrive(drive),
-//This moves the robot back 75 inches.
+        // This moves the robot back 75 inches.
         // 1) Drive forward from the starting line
         driveRobotRelative(drive, FIRST_DRIVE_FORWARD_SPEED_MPS, FIRST_DRIVE_FORWARD_TIME_SEC),
         stopDrive(drive),
