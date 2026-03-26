@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Shallow Pickup Path"
+            "pathName": "Left Side Backup Path"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Unused",
+  "folder": null,
   "choreoAuto": false
 }

@@ -12,6 +12,7 @@ import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -27,10 +28,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.AutoCommands;
 import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
@@ -206,38 +207,24 @@ public class RobotContainer {
     }
 
     // Set up auto routines
-    /*
-     * Create all the subsystems based on whether enabled or not.
-     */
-    // MARK: AUTO
+    // Create auto delay chooser
+    createAutoDelayChooser();
+    // Register the commands for Path Planner
+    configurePathPlannerCommands();
+    // Build the auto chooser
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-    if (SubsystemConstants.useDrive
-        && SubsystemConstants.useLauncherFOC
-        && SubsystemConstants.useHopper
-        && SubsystemConstants.useIntake) {
-      autoChooser.addOption(
-          "Red Center Hub Auto V1",
-          AutoCommands.redCenterHubAutoV1(drive, launcherfoc, hopper, intake));
-      autoChooser.addOption(
-          "Red Center Hub Auto V2",
-          AutoCommands.redCenterHubAutoV2(drive, launcherfoc, hopper, intake));
-    }
 
-    /*
-     * Create the controllers and configure them.
-     */
-    driverPad = new CommandXboxController(0);
-    operPad = new CommandXboxController(1);
-    /*
-     *
-     */
-    Logger.recordOutput("SubsystemDebug", SubsystemConstants.RUN_SUBSYSTEM_DEBUG);
-    if (SubsystemConstants.RUN_SUBSYSTEM_DEBUG) {
-      configureSubsystemDebugButtonBindings();
-    } else {
-      // Configure the button bindings
-      configureButtonBindings();
-    }
+    // if (SubsystemConstants.useDrive
+    //     && SubsystemConstants.useLauncherFOC
+    //     && SubsystemConstants.useHopper
+    //     && SubsystemConstants.useIntake) {
+    //   autoChooser.addOption(
+    //       "Red Center Hub Auto V1",
+    //       AutoCommands.redCenterHubAutoV1(drive, launcherfoc, hopper, intake));
+    //   autoChooser.addOption(
+    //       "Red Center Hub Auto V2",
+    //       AutoCommands.redCenterHubAutoV2(drive, launcherfoc, hopper, intake));
+    // }
 
     /*
      * Create and set up the SysId functionality (if enabled).
@@ -260,6 +247,26 @@ public class RobotContainer {
       autoChooser.addOption(
           "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
+
+    /*
+     * Create the controllers and configure them.
+     */
+    driverPad = new CommandXboxController(0);
+    operPad = new CommandXboxController(1);
+    /*
+     *
+     */
+    Logger.recordOutput("SubsystemDebug", SubsystemConstants.RUN_SUBSYSTEM_DEBUG);
+    if (SubsystemConstants.RUN_SUBSYSTEM_DEBUG) {
+      configureSubsystemDebugButtonBindings();
+    } else {
+      // Configure the button bindings
+      configureButtonBindings();
+    }
+
+    // Run through a full path following command to get all Java classes loaded, etc.
+    // FollowPathCommand.warmupCommand().schedule();
+    CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
   }
 
   /**
@@ -547,15 +554,6 @@ public class RobotContainer {
   void configurePathPlannerCommands() {
     //
     NamedCommands.registerCommand("Delay Auto Start", Commands.sequence(new DelayAutoCommand()));
-
-    // NamedCommands.registerCommand("Launch Fuel", getAutonomousCommand());
-
-    //
-    // NamedCommands.registerCommand(
-    //     "Release Climber Latch",
-    //     Commands.sequence(
-    //         ClimberCommands.unlatch(climber), new WaitCommand(0.5),
-    // ClimberCommands.stop(climber)));
   }
 
   public static Translation2d getHubCenter() {
