@@ -175,7 +175,8 @@ public class LauncherFOC extends TalonFXSubsystem implements ISubsystem {
     Logger.recordOutput(tlmFollowerTorqueCurrent, follower.getTorqueCurrent().getValueAsDouble());
 
     Logger.recordOutput(
-        getSubsystem() + "/isLeaderNearTarget", leader.getVelocity().isNear(axleTargetRps, 0.5));
+        getSubsystem() + "/isLeaderNearTarget",
+        leader.getVelocity().isNear(axleTargetRps * 2, 0.5));
   }
 
   private static double clamp(double value, double min, double max) {
