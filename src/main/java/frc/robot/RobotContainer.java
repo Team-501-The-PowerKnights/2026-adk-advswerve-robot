@@ -271,6 +271,16 @@ public class RobotContainer {
   }
 
   /**
+   * Returns indication of whether robot is on the field or in the pit. This can be used to make pit
+   * behavior different (e.g., not spinning up things in their 'idle' mode).
+   *
+   * @return indication of whether robot is in the pit.
+   */
+  public static boolean isInPit() {
+    return !DriverStation.isFMSAttached();
+  }
+
+  /**
    * Use this method to define your button->command mappings for the Subystem Debug mode. Every
    * subsystem has to have at least the manual control. By convention we are using the left joystick
    * of the Operator gamepad. Since only one subsystem should be enabled at a time this isn't a
@@ -479,7 +489,7 @@ public class RobotContainer {
   // Delay that was selected
   private Integer autoDelaySelected;
 
-  public void createAutoDelayChooser() {
+  private void createAutoDelayChooser() {
     autoDelayChooser = new SendableChooser<>();
 
     // Default option is "no delay"
@@ -505,7 +515,7 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Delay Chooser", autoDelayChooser);
   }
 
-  public Integer getAutonomousDelay() {
+  private Integer getAutonomousDelay() {
     autoDelaySelected = autoDelayChooser.getSelected();
     return autoDelaySelected;
   }
@@ -548,31 +558,11 @@ public class RobotContainer {
     }
   }
 
-  private class AutoShoot extends Command {
-
-    public AutoShoot() {}
-
-    @Override
-    public void initialize() {
-      System.out.println("AutoShootCommand initialized");
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-      System.out.println("AutoShootCommand done");
-    }
-
-    @Override
-    public boolean isFinished() {
-      return true;
-    }
-  }
-
   /***************************************************************************
    * Path Planner Stuff
    ***************************************************************************/
 
-  void configurePathPlannerCommands() {
+  private void configurePathPlannerCommands() {
     //
     NamedCommands.registerCommand("Delay Auto Start", Commands.sequence(new DelayAutoCommand()));
     NamedCommands.registerCommand("AutoShoot", Commands.sequence(new DelayAutoCommand()));
