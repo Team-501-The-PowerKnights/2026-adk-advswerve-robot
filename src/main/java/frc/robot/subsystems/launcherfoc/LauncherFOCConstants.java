@@ -48,7 +48,7 @@ public class LauncherFOCConstants {
   public static final double launcherFeedforwardAmps = 0.0;
 
   /** Slot 0 gains for VelocityTorqueCurrentFOC. */
-  public static final double launcherKP = 10.0; // Was .18
+  public static final double launcherKP = 8.0; // Was .18
 
   public static final double launcherKV = 0.6;
   public static final double launcherKI = 0.0;
