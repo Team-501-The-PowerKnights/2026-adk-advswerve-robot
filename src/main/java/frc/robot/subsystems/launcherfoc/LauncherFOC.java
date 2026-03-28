@@ -121,6 +121,7 @@ public class LauncherFOC extends TalonFXSubsystem implements ISubsystem {
   }
 
   public void setIdle() {
+    // System.out.println("****** isInPit " + RobotContainer.isInPit());
     axleTargetRps = RobotContainer.isInPit() ? 0.0 : defaultIdleRps;
   }
 

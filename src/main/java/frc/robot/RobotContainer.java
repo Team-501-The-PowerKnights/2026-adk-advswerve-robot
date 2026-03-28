@@ -253,6 +253,11 @@ public class RobotContainer {
     }
 
     /*
+     * Create items for Drive Team inputs on the dashboard and configure them.
+     */
+    createDashboardItems();
+
+    /*
      * Create the controllers and configure them.
      */
     driverPad = new CommandXboxController(0);
@@ -267,11 +272,6 @@ public class RobotContainer {
       // Configure the button bindings
       configureButtonBindings();
     }
-
-    /*
-     * Create items for Drive Team inputs on the dashboard and configure them.
-     */
-    createDashboardItems();
 
     // Run through a full path following command to get all Java classes loaded, etc.
     // FollowPathCommand.warmupCommand().schedule();
@@ -298,7 +298,8 @@ public class RobotContainer {
     if (DriverStation.isFMSAttached()) {
       return false;
     } else {
-      return overrideFMS.getBoolean(true);
+      // Seem to be the opposite of the display (depressed - dark blue - false)
+      return !overrideFMS.getBoolean(true);
     }
   }
 
