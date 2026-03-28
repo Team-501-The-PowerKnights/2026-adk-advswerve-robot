@@ -24,7 +24,7 @@ public class LauncherFOCConstants {
   public static final double defaultManualInput = 0.30;
 
   /** Idle target in AXLE rotations/sec. */
-  public static final double defaultIdleRps = 10.0;
+  public static final double defaultIdleRps = 5.0;
 
   /** Explicit launcher presets in AXLE rotations/sec. Tune these on the real robot. */
   public static final double kLauncherNearRps = 12.0;
