@@ -17,11 +17,11 @@ public class AutoCommands extends Command {
   private static final double FIRST_DRIVE_FORWARD_SPEED_MPS = 1.50;
   private static final double FIRST_DRIVE_FORWARD_TIME_SEC = 1.2;
 
-  private static final double SHOOT_SPINUP_SEC = 4.00;
-  private static final double SHOOT_FEED_SEC = 5.00;
+  private static final double SHOOT_SPINUP_SEC = 3.00;
+  private static final double SHOOT_FEED_SEC = 3.00;
 
-  private static final double COLLECT_FORWARD_SPEED_MPS = -1.5;
-  private static final double COLLECT_FORWARD_TIME_SEC = 3.00;
+  private static final double COLLECT_FORWARD_SPEED_MPS = -4.5;
+  private static final double COLLECT_FORWARD_TIME_SEC = 1.00;
 
   private static final double STRAFE_RIGHT_SPEED_MPS = 1.50;
   private static final double STRAFE_RIGHT_TIME_SEC = 1.1;

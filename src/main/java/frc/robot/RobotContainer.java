@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
@@ -214,17 +215,17 @@ public class RobotContainer {
     // Build the auto chooser
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    // if (SubsystemConstants.useDrive
-    //     && SubsystemConstants.useLauncherFOC
-    //     && SubsystemConstants.useHopper
-    //     && SubsystemConstants.useIntake) {
-    //   autoChooser.addOption(
-    //       "Red Center Hub Auto V1",
-    //       AutoCommands.redCenterHubAutoV1(drive, launcherfoc, hopper, intake));
-    //   autoChooser.addOption(
-    //       "Red Center Hub Auto V2",
-    //       AutoCommands.redCenterHubAutoV2(drive, launcherfoc, hopper, intake));
-    // }
+    if (SubsystemConstants.useDrive
+        && SubsystemConstants.useLauncherFOC
+        && SubsystemConstants.useHopper
+        && SubsystemConstants.useIntake) {
+      autoChooser.addOption(
+          "Red Center Hub Auto V1",
+          AutoCommands.redCenterHubAutoV1(drive, launcherfoc, hopper, intake));
+      autoChooser.addOption(
+          "Red Center Hub Auto V2",
+          AutoCommands.redCenterHubAutoV2(drive, launcherfoc, hopper, intake));
+    }
 
     /*
      * Create and set up the SysId functionality (if enabled).
@@ -547,6 +548,26 @@ public class RobotContainer {
     }
   }
 
+  private class AutoShoot extends Command {
+
+    public AutoShoot() {}
+
+    @Override
+    public void initialize() {
+      System.out.println("AutoShootCommand initialized");
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+      System.out.println("AutoShootCommand done");
+    }
+
+    @Override
+    public boolean isFinished() {
+      return true;
+    }
+  }
+
   /***************************************************************************
    * Path Planner Stuff
    ***************************************************************************/
@@ -554,6 +575,7 @@ public class RobotContainer {
   void configurePathPlannerCommands() {
     //
     NamedCommands.registerCommand("Delay Auto Start", Commands.sequence(new DelayAutoCommand()));
+    NamedCommands.registerCommand("AutoShoot", Commands.sequence(new DelayAutoCommand()));
   }
 
   public static Translation2d getHubCenter() {
