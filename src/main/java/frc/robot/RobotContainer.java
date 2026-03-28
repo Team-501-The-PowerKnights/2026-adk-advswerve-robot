@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutoCommands;
@@ -548,34 +549,29 @@ public class RobotContainer {
     }
   }
 
-  private class AutoShoot extends Command {
-
-    public AutoShoot() {}
-
-    @Override
-    public void initialize() {
-      System.out.println("AutoShootCommand initialized");
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-      System.out.println("AutoShootCommand done");
-    }
-
-    @Override
-    public boolean isFinished() {
-      return true;
-    }
-  }
-
   /***************************************************************************
    * Path Planner Stuff
    ***************************************************************************/
 
   void configurePathPlannerCommands() {
-    //
-    NamedCommands.registerCommand("Delay Auto Start", Commands.sequence(new DelayAutoCommand()));
-    NamedCommands.registerCommand("AutoShoot", Commands.sequence(new DelayAutoCommand()));
+    // spotless:off
+    // Causes robot to delay at start of auto to coordinate with alliance members
+    NamedCommands.registerCommand(
+      "Delay Auto Start", 
+      Commands.sequence(
+        new DelayAutoCommand()));
+
+    // Implements the generic (auto) shoot command (assumes pre-loaded robot)
+    NamedCommands.registerCommand(
+      "Shoot w/ Pre-Load", 
+      // Run command sequence for spin-up + shoot time
+      Commands.deadline(
+        new WaitCommand(3.0 + 3.0),
+        Commands.sequence(
+          new WaitCommand(3.0),
+          LauncherFOCCommands.pullInMid(launcherfoc),
+          HopperCommands.pullIn(hopper))));
+    // spotless:on
   }
 
   public static Translation2d getHubCenter() {
