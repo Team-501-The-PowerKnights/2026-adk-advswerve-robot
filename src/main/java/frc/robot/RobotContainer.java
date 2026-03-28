@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -25,6 +26,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -265,9 +268,24 @@ public class RobotContainer {
       configureButtonBindings();
     }
 
+    /*
+     * Create items for Drive Team inputs on the dashboard and configure them.
+     */
+    createDashboardItems();
+
     // Run through a full path following command to get all Java classes loaded, etc.
     // FollowPathCommand.warmupCommand().schedule();
     CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+  }
+
+  private static GenericEntry overrideFMS;
+
+  private void createDashboardItems() {
+    RobotContainer.overrideFMS =
+        Shuffleboard.getTab("Competition")
+            .add("OverrideFMSinPit", false)
+            .withWidget(BuiltInWidgets.kToggleButton)
+            .getEntry();
   }
 
   /**
@@ -277,7 +295,11 @@ public class RobotContainer {
    * @return indication of whether robot is in the pit.
    */
   public static boolean isInPit() {
-    return !DriverStation.isFMSAttached();
+    if (DriverStation.isFMSAttached()) {
+      return false;
+    } else {
+      return overrideFMS.getBoolean(true);
+    }
   }
 
   /**
