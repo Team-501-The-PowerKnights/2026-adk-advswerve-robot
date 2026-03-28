@@ -567,9 +567,9 @@ public class RobotContainer {
       // Run command sequence for spin-up + shoot time
       Commands.deadline(
         new WaitCommand(3.0 + 3.0),
+        LauncherFOCCommands.pullInMid(launcherfoc),
         Commands.sequence(
           new WaitCommand(3.0),
-          LauncherFOCCommands.pullInMid(launcherfoc),
           HopperCommands.pullIn(hopper))));
     // spotless:on
   }
