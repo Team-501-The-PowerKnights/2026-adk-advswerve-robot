@@ -433,31 +433,38 @@ public class RobotContainer {
                   () -> -driverPad.getLeftX(),
                   () -> getHubCenter()));
     }
+
     /*
      * Intake:  Driver Operated: Left trigger - pull in, Right trigger - push out
      */
     if (SubsystemConstants.useIntake) {
-      intake.setDefaultCommand(IntakeCommands.stop(intake));
+      // stop on init, do nothing on each iteration, and stop on interrupt
+      intake.setDefaultCommand(intake.startEnd(intake::stop, intake::stop));
+
       driverPad.leftTrigger().whileTrue(IntakeCommands.pullIn(intake));
       driverPad.rightTrigger().whileTrue(IntakeCommands.pushOut(intake));
     }
+
     // MARK: Oper Buttons
     /*
      * Launcher:   operator pad: Left bumper - pull in, Right bumper - push out
      */
     if (SubsystemConstants.useLauncher) {
-      launcher.setDefaultCommand(LauncherCommands.setIdle(launcher));
+      // set speed to idle on init, do nothing on each iteration, and stop on interrupt
+      launcher.setDefaultCommand(launcher.startEnd(launcher::idle, launcher::stop));
 
       operPad.a().whileTrue(LauncherCommands.pullInNear(launcher));
       operPad.x().whileTrue(LauncherCommands.pullInMid(launcher));
       operPad.y().whileTrue(LauncherCommands.pullInFar(launcher));
       operPad.b().whileTrue(LauncherCommands.pushOut(launcher));
     }
+
     /*
      * Launcher:   operator pad: Left bumper - pull in, Right bumper - push out
      */
     if (SubsystemConstants.useLauncherFOC) {
-      launcherfoc.setDefaultCommand(LauncherFOCCommands.setIdle(launcherfoc));
+      // set speed to idle on init, do nothing on each iteration, and stop on interrupt
+      launcherfoc.setDefaultCommand(launcherfoc.startEnd(launcherfoc::idle, launcherfoc::stop));
 
       operPad.a().whileTrue(LauncherFOCCommands.pullInNear(launcherfoc));
       operPad.x().whileTrue(LauncherFOCCommands.pullInMid(launcherfoc));
@@ -469,7 +476,8 @@ public class RobotContainer {
      * Hopper: Operator Pad: X button - pull in, Y button push out
      */
     if (SubsystemConstants.useHopper) {
-      hopper.setDefaultCommand(HopperCommands.stop(hopper));
+      // stop on init, do nothing on each iteration, and stop on interrupt
+      hopper.setDefaultCommand(hopper.startEnd(hopper::stop, hopper::stop));
 
       operPad.rightBumper().whileTrue(HopperCommands.pullIn(hopper));
       operPad.leftBumper().whileTrue(HopperCommands.pushOut(hopper));
@@ -481,6 +489,7 @@ public class RobotContainer {
     if (SubsystemConstants.useIntakeLift) {
       // TODO: Tie Intake to commands in Teleop mode.
       intakelift.setDefaultCommand(IntakeLiftCommands.stop(intakelift));
+
       operPad.leftTrigger().whileTrue(IntakeLiftCommands.lower(intakelift));
       operPad.rightTrigger().whileTrue(IntakeLiftCommands.raise(intakelift));
     }
