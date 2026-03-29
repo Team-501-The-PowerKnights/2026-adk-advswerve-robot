@@ -142,7 +142,7 @@ public class DriveCommands {
                       omega);
               // STUWASHERE - Added invert to overall sense ala 2025 MA pit fix
               boolean isFlipped =
-                  !(DriverStation.getAlliance().isPresent()
+                  (DriverStation.getAlliance().isPresent()
                       && DriverStation.getAlliance().get() == Alliance.Red);
               drive.runVelocity(
                   ChassisSpeeds.fromFieldRelativeSpeeds(
