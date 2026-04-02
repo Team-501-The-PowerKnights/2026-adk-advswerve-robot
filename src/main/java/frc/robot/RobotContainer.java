@@ -451,7 +451,7 @@ public class RobotContainer {
      */
     if (SubsystemConstants.useLauncher) {
       // set speed to idle on init, do nothing on each iteration, and stop on interrupt
-      launcher.setDefaultCommand(launcher.startEnd(launcher::idle, launcher::stop));
+      launcher.setDefaultCommand(launcher.startEnd(launcher::setIdle, launcher::stop));
 
       operPad.a().whileTrue(LauncherCommands.pullInNear(launcher));
       operPad.x().whileTrue(LauncherCommands.pullInMid(launcher));
@@ -464,7 +464,7 @@ public class RobotContainer {
      */
     if (SubsystemConstants.useLauncherFOC) {
       // set speed to idle on init, do nothing on each iteration, and stop on interrupt
-      launcherfoc.setDefaultCommand(launcherfoc.startEnd(launcherfoc::idle, launcherfoc::stop));
+      launcherfoc.setDefaultCommand(launcherfoc.startEnd(launcherfoc::setIdle, launcherfoc::stop));
 
       operPad.a().whileTrue(LauncherFOCCommands.pullInNear(launcherfoc));
       operPad.x().whileTrue(LauncherFOCCommands.pullInMid(launcherfoc));
