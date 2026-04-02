@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -25,6 +26,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.HopperCommands;
@@ -214,17 +218,17 @@ public class RobotContainer {
     // Build the auto chooser
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    // if (SubsystemConstants.useDrive
-    //     && SubsystemConstants.useLauncherFOC
-    //     && SubsystemConstants.useHopper
-    //     && SubsystemConstants.useIntake) {
-    //   autoChooser.addOption(
-    //       "Red Center Hub Auto V1",
-    //       AutoCommands.redCenterHubAutoV1(drive, launcherfoc, hopper, intake));
-    //   autoChooser.addOption(
-    //       "Red Center Hub Auto V2",
-    //       AutoCommands.redCenterHubAutoV2(drive, launcherfoc, hopper, intake));
-    // }
+    if (SubsystemConstants.useDrive
+        && SubsystemConstants.useLauncherFOC
+        && SubsystemConstants.useHopper
+        && SubsystemConstants.useIntake) {
+      autoChooser.addOption(
+          "Red Center Hub Auto V1",
+          AutoCommands.redCenterHubAutoV1(drive, launcherfoc, hopper, intake));
+      autoChooser.addOption(
+          "Red Center Hub Auto V2",
+          AutoCommands.redCenterHubAutoV2(drive, launcherfoc, hopper, intake));
+    }
 
     /*
      * Create and set up the SysId functionality (if enabled).
@@ -249,6 +253,11 @@ public class RobotContainer {
     }
 
     /*
+     * Create items for Drive Team inputs on the dashboard and configure them.
+     */
+    createDashboardItems();
+
+    /*
      * Create the controllers and configure them.
      */
     driverPad = new CommandXboxController(0);
@@ -267,6 +276,31 @@ public class RobotContainer {
     // Run through a full path following command to get all Java classes loaded, etc.
     // FollowPathCommand.warmupCommand().schedule();
     CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+  }
+
+  private static GenericEntry overrideFMS;
+
+  private void createDashboardItems() {
+    RobotContainer.overrideFMS =
+        Shuffleboard.getTab("Competition")
+            .add("OverrideFMSinPit", false)
+            .withWidget(BuiltInWidgets.kToggleButton)
+            .getEntry();
+  }
+
+  /**
+   * Returns indication of whether robot is on the field or in the pit. This can be used to make pit
+   * behavior different (e.g., not spinning up things in their 'idle' mode).
+   *
+   * @return indication of whether robot is in the pit.
+   */
+  public static boolean isInPit() {
+    if (DriverStation.isFMSAttached()) {
+      return false;
+    } else {
+      // Seem to be the opposite of the display (depressed - dark blue - false)
+      return !overrideFMS.getBoolean(true);
+    }
   }
 
   /**
@@ -399,31 +433,38 @@ public class RobotContainer {
                   () -> -driverPad.getLeftX(),
                   () -> getHubCenter()));
     }
+
     /*
      * Intake:  Driver Operated: Left trigger - pull in, Right trigger - push out
      */
     if (SubsystemConstants.useIntake) {
-      intake.setDefaultCommand(IntakeCommands.stop(intake));
+      // stop on init, do nothing on each iteration, and stop on interrupt
+      intake.setDefaultCommand(intake.startEnd(intake::stop, intake::stop));
+
       driverPad.leftTrigger().whileTrue(IntakeCommands.pullIn(intake));
       driverPad.rightTrigger().whileTrue(IntakeCommands.pushOut(intake));
     }
+
     // MARK: Oper Buttons
     /*
      * Launcher:   operator pad: Left bumper - pull in, Right bumper - push out
      */
     if (SubsystemConstants.useLauncher) {
-      launcher.setDefaultCommand(LauncherCommands.setIdle(launcher));
+      // set speed to idle on init, do nothing on each iteration, and stop on interrupt
+      launcher.setDefaultCommand(launcher.startEnd(launcher::idle, launcher::stop));
 
       operPad.a().whileTrue(LauncherCommands.pullInNear(launcher));
       operPad.x().whileTrue(LauncherCommands.pullInMid(launcher));
       operPad.y().whileTrue(LauncherCommands.pullInFar(launcher));
       operPad.b().whileTrue(LauncherCommands.pushOut(launcher));
     }
+
     /*
      * Launcher:   operator pad: Left bumper - pull in, Right bumper - push out
      */
     if (SubsystemConstants.useLauncherFOC) {
-      launcherfoc.setDefaultCommand(LauncherFOCCommands.setIdle(launcherfoc));
+      // set speed to idle on init, do nothing on each iteration, and stop on interrupt
+      launcherfoc.setDefaultCommand(launcherfoc.startEnd(launcherfoc::idle, launcherfoc::stop));
 
       operPad.a().whileTrue(LauncherFOCCommands.pullInNear(launcherfoc));
       operPad.x().whileTrue(LauncherFOCCommands.pullInMid(launcherfoc));
@@ -435,7 +476,8 @@ public class RobotContainer {
      * Hopper: Operator Pad: X button - pull in, Y button push out
      */
     if (SubsystemConstants.useHopper) {
-      hopper.setDefaultCommand(HopperCommands.stop(hopper));
+      // stop on init, do nothing on each iteration, and stop on interrupt
+      hopper.setDefaultCommand(hopper.startEnd(hopper::stop, hopper::stop));
 
       operPad.rightBumper().whileTrue(HopperCommands.pullIn(hopper));
       operPad.leftBumper().whileTrue(HopperCommands.pushOut(hopper));
@@ -447,6 +489,7 @@ public class RobotContainer {
     if (SubsystemConstants.useIntakeLift) {
       // TODO: Tie Intake to commands in Teleop mode.
       intakelift.setDefaultCommand(IntakeLiftCommands.stop(intakelift));
+
       operPad.leftTrigger().whileTrue(IntakeLiftCommands.lower(intakelift));
       operPad.rightTrigger().whileTrue(IntakeLiftCommands.raise(intakelift));
     }
@@ -478,7 +521,7 @@ public class RobotContainer {
   // Delay that was selected
   private Integer autoDelaySelected;
 
-  public void createAutoDelayChooser() {
+  private void createAutoDelayChooser() {
     autoDelayChooser = new SendableChooser<>();
 
     // Default option is "no delay"
@@ -504,7 +547,7 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Delay Chooser", autoDelayChooser);
   }
 
-  public Integer getAutonomousDelay() {
+  private Integer getAutonomousDelay() {
     autoDelaySelected = autoDelayChooser.getSelected();
     return autoDelaySelected;
   }
@@ -551,9 +594,10 @@ public class RobotContainer {
    * Path Planner Stuff
    ***************************************************************************/
 
-  void configurePathPlannerCommands() {
+  private void configurePathPlannerCommands() {
     //
     NamedCommands.registerCommand("Delay Auto Start", Commands.sequence(new DelayAutoCommand()));
+    NamedCommands.registerCommand("AutoShoot", Commands.sequence(new DelayAutoCommand()));
   }
 
   public static Translation2d getHubCenter() {
