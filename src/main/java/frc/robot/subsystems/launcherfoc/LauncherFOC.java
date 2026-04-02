@@ -11,6 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ISubsystem;
 import frc.robot.subsystems.TalonFXSubsystem;
 import org.littletonrobotics.junction.Logger;
@@ -120,7 +121,8 @@ public class LauncherFOC extends TalonFXSubsystem implements ISubsystem {
   }
 
   public void setIdle() {
-    axleTargetRps = defaultIdleRps;
+    // System.out.println("****** isInPit " + RobotContainer.isInPit());
+    axleTargetRps = RobotContainer.isInPit() ? 0.0 : defaultIdleRps;
   }
 
   private double axleRpsToMotorRps(double axleRps) {
