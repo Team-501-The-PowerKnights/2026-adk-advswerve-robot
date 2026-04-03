@@ -27,6 +27,7 @@ public class LauncherFOCConstants {
   public static final double defaultIdleRps = 5.0;
   /** Explicit launcher presets in AXLE rotations/sec. Tune these on the real robot. */
   public static final double kLauncherNearRps = 12.0;
+
   public static final double kLauncherMidRps = 14.0;
   public static final double kLauncherFarRps = 16.0;
 
@@ -46,7 +47,7 @@ public class LauncherFOCConstants {
   public static final double launcherFeedforwardAmps = 0.0;
 
   /** Slot 0 gains for VelocityTorqueCurrentFOC. */
-  public static final double launcherKP = 10.0; // Was .18
+  public static final double launcherKP = 14.0; // Was .18
 
   public static final double launcherKV = 0.6;
   public static final double launcherKI = 0.0;

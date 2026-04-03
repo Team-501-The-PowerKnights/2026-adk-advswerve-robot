@@ -34,7 +34,7 @@ public final class HopperConstants {
 
   /** */
   // TODO - Set real value for motorCurrentLimit
-  static final int motorCurrentLimit = 30;
+  static final int motorCurrentLimit = 25;
   /** */
   // TODO - Set real value for motorVoltageComp
   static final double motorVoltageComp = 12.0;
