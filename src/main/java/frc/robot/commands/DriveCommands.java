@@ -88,8 +88,8 @@ public class DriveCommands {
                   linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
                   omega * drive.getMaxAngularSpeedRadPerSec());
           boolean isFlipped =
-              DriverStation.getAlliance().isPresent()
-                  && DriverStation.getAlliance().get() == Alliance.Red;
+              !(DriverStation.getAlliance().isPresent()
+                  && DriverStation.getAlliance().get() == Alliance.Red);
           drive.runVelocity(
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   speeds,
@@ -342,8 +342,8 @@ public class DriveCommands {
                       omega);
 
               boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
+                  !(DriverStation.getAlliance().isPresent()
+                      && DriverStation.getAlliance().get() == Alliance.Red);
 
               drive.runVelocity(
                   ChassisSpeeds.fromFieldRelativeSpeeds(
