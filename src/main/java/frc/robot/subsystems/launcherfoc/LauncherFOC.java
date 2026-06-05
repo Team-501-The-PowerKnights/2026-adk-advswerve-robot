@@ -48,19 +48,19 @@ public class LauncherFOC extends TalonFXSubsystem implements ISubsystem {
             followerOpposesLeader ? MotorAlignmentValue.Opposed : MotorAlignmentValue.Aligned));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Play Indiana Jones theme on the motors if you can get it working. You will need to create a .chrp file with the music and put it in the deploy directory. Then you can load and play it with the code below. Note that loading the music may take a few seconds, so you might want to do it asynchronously or during initialization.
-Orchestra m_orchestra = new Orchestra();
-// Add a single device to the orchestra
-m_orchestra.addInstrument(leader);
-m_orchestra.addInstrument(follower);
-// Attempt to load the chrp
-var status = m_orchestra.loadMusic("501output.chrp");
-if (!status.isOK()) {
-   // log error
-} // Allow music to play even if the robot is disabled
-m_orchestra.play();
-m_orchestra.stop();
-m_orchestra.clearInstruments();
-m_orchestra.close();
+// Orchestra m_orchestra = new Orchestra();
+// // Add a single device to the orchestra
+// m_orchestra.addInstrument(leader);
+// m_orchestra.addInstrument(follower);
+// // Attempt to load the chrp
+// var status = m_orchestra.loadMusic("501output.chrp");
+// if (!status.isOK()) {
+//    // log error
+// } // Allow music to play even if the robot is disabled
+// m_orchestra.play();
+// m_orchestra.stop();
+// m_orchestra.clearInstruments();
+// m_orchestra.close();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// 
 
