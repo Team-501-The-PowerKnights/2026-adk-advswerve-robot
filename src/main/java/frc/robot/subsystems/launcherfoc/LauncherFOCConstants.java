@@ -2,15 +2,15 @@ package frc.robot.subsystems.launcherfoc;
 
 public class LauncherFOCConstants {
   /** CAN ID of the leader motor. */
-  public static final int leaderCanId = 60;
+  public static final int leaderCanId = 61;
 
   /** CAN ID of the follower motor. */
-  public static final int followerCanId = 61;
+  public static final int followerCanId = 60;
 
   /** Motor inversion settings. */
-  public static final boolean leaderInverted = true;
+  public static final boolean leaderInverted = false;
 
-  public static final boolean followerInverted = false;
+  public static final boolean followerInverted = true;
 
   /**
    * Set true if the follower must oppose the leader because the motors are mirrored mechanically.
